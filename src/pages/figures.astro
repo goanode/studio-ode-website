@@ -32,7 +32,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     </section>
 
     <div class="fg-body">
-    <!-- Sticky filter bar -->
+    <!-- Filter bar -->
     <div class="fg-bar-wrap" id="catalogue">
       <div class="fg-bar">
         <label class="fg-search">
@@ -178,8 +178,8 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* Sticky filter bar */
-  .fg-bar-wrap { position: sticky; top: calc(var(--nav--height-total, 9.5rem) + .5rem); z-index: 50; padding: 0 var(--site--margin); margin: 1.5rem 0 .5rem; }
-  .fg-bar { display: flex; align-items: center; gap: .5rem; padding: .5rem; border-radius: 100vw; background: color-mix(in srgb, white 88%, transparent); border: var(--border-width--main) solid var(--swatch--dark-900-o20); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 12px 30px rgb(31 29 30 / 8%); color: var(--swatch--dark-800); }
+  .fg-bar-wrap { position: relative; z-index: 2; padding: 0 var(--site--margin); margin: 1.5rem 0 .5rem; }
+  .fg-bar { display: flex; align-items: center; gap: .5rem; padding: .5rem; border-radius: 100vw; background: #fff; border: var(--border-width--main) solid var(--swatch--dark-900-o20); color: var(--swatch--dark-800); }
   .fg-search { flex: 1 1 15rem; height: 2.75rem; display: flex; align-items: center; gap: .6rem; padding: 0 1rem; border-radius: 100vw; background: #f2f2f2; }
   .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 1rem; color: var(--swatch--dark-900); }
   .fg-search:focus-within { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
