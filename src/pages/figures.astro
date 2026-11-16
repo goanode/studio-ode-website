@@ -32,17 +32,17 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     </section>
 
     <div class="fg-body">
-    <!-- Filter bar -->
-    <div class="fg-bar-wrap" id="catalogue">
-      <div class="fg-bar">
+    <!-- Filters: same controls as the homepage (Monthly/Yearly switch, "Choisis ton cours" pills) -->
+    <div class="fg-filters" id="catalogue">
+      <div class="fg-filters-row">
         <label class="fg-search">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.5"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5"></path></svg>
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.25"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.25"></path></svg>
           <span class="fg-sr">Rechercher une figure</span>
           <input type="search" id="fg-q" placeholder="Rechercher (ex. papillon, Ayesha)" autocomplete="off" />
         </label>
-        <div class="fg-levels" role="group" aria-label="Niveau">
-          <button type="button" class="fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
-          {LEVELS.map((lv) => <button type="button" class="fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
+        <div class="compare_toggle_pill fg-levels" role="group" aria-label="Niveau">
+          <button type="button" class="compare_toggle_option fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
+          {LEVELS.map((lv) => <button type="button" class="compare_toggle_option fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
         </div>
         <label class="fg-select-wrap fg-level-select"><span class="fg-sr">Niveau</span>
           <select id="fg-level-sel" class="fg-select">
@@ -50,18 +50,16 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
             {LEVELS.map((lv) => <option value={lv}>{lv}</option>)}
           </select>
         </label>
-        <label class="fg-select-wrap"><span class="fg-sr">Catégorie</span>
-          <select id="fg-cat" class="fg-select">
-            <option value="Toutes">Catégories</option>
-            {CATEGORIES.map((c) => <option value={c}>{c}</option>)}
-          </select>
-        </label>
-        <label class="fg-select-wrap"><span class="fg-sr">Trier</span>
+        <label class="fg-select-wrap fg-sort-wrap"><span class="fg-sr">Trier</span>
           <select id="fg-sort" class="fg-select">
-            <option value="niveau">Trier : niveau</option>
-            <option value="az">Trier : A–Z</option>
+            <option value="niveau">Trier par niveau</option>
+            <option value="az">Trier de A à Z</option>
           </select>
         </label>
+      </div>
+      <div class="fg-cats" role="group" aria-label="Catégorie">
+        <button type="button" class="fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
+        {CATEGORIES.map((c) => <button type="button" class="fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
       </div>
     </div>
 
@@ -119,7 +117,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   const grid = document.getElementById("fg-grid")!;
   const cards = Array.from(grid.querySelectorAll<HTMLAnchorElement>(".fg-card"));
   const q = document.getElementById("fg-q") as HTMLInputElement;
-  const catSel = document.getElementById("fg-cat") as HTMLSelectElement;
+  const catBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".fg-cat"));
   const sortSel = document.getElementById("fg-sort") as HTMLSelectElement;
   const levelBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".fg-level"));
   const more = document.getElementById("fg-more") as HTMLButtonElement;
@@ -128,12 +126,12 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   const empty = document.getElementById("fg-empty")!;
   const featuredBlock = document.getElementById("fg-featured")!;
   const gridTitle = document.getElementById("fg-grid-title")!;
-  const state = { level: "Tous", limit: PAGE };
+  const state = { level: "Tous", cat: "Toutes", limit: PAGE };
   const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
   function render() {
     const nq = norm(q.value.trim());
-    const cat = catSel.value;
+    const cat = state.cat;
     const matches = cards.filter((c) =>
       (state.level === "Tous" || c.dataset.level === state.level) &&
       (cat === "Toutes" || c.dataset.cat === cat) &&
@@ -153,17 +151,19 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     empty.hidden = matches.length > 0;
     levelBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.level === state.level)));
     levelSel.value = state.level;
+    catBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.cat === state.cat)));
+    levelBtns.forEach((b) => b.classList.toggle("is-active", b.dataset.level === state.level));
     (window as any).ScrollTrigger?.refresh?.();
   }
   const reset = (o: Partial<typeof state> = {}) => { Object.assign(state, { limit: PAGE }, o); render(); };
 
   q.addEventListener("input", () => reset());
-  catSel.addEventListener("change", () => reset());
+  catBtns.forEach((b) => b.addEventListener("click", () => reset({ cat: b.dataset.cat! })));
   sortSel.addEventListener("change", () => render());
   levelSel.addEventListener("change", () => reset({ level: levelSel.value }));
   levelBtns.forEach((b) => b.addEventListener("click", () => reset({ level: b.dataset.level! })));
   more.addEventListener("click", () => { state.limit += PAGE; render(); });
-  document.getElementById("fg-reset")!.addEventListener("click", () => { q.value = ""; catSel.value = "Toutes"; reset({ level: "Tous" }); });
+  document.getElementById("fg-reset")!.addEventListener("click", () => { q.value = ""; reset({ level: "Tous", cat: "Toutes" }); });
 
   render();
 </script>
@@ -177,19 +177,28 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
   .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
-  /* Sticky filter bar */
-  .fg-bar-wrap { position: relative; z-index: 2; padding: 0 var(--site--margin); margin: 1.5rem 0 .5rem; }
-  .fg-bar { display: flex; align-items: center; gap: .5rem; padding: .5rem; border-radius: 100vw; background: #fff; border: var(--border-width--main) solid var(--swatch--dark-900-o20); color: var(--swatch--dark-800); }
-  .fg-search { flex: 1 1 15rem; height: 2.75rem; display: flex; align-items: center; gap: .6rem; padding: 0 1rem; border-radius: 100vw; background: #f2f2f2; }
-  .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 1rem; color: var(--swatch--dark-900); }
-  .fg-search:focus-within { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
-  .fg-levels { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
-  .fg-level { flex: none; height: 2.75rem; padding: 0 1rem; border-radius: 100vw; font-size: .95rem; color: var(--swatch--dark-800); transition: background .2s, color .2s; }
-  .fg-level[aria-pressed="true"] { background: var(--swatch--dark-800); color: #fff; }
-  .fg-level:not([aria-pressed="true"]):hover { background: #f2f2f2; }
+  /* Filters — copied from the homepage controls */
+  .fg-filters { position: relative; z-index: 2; padding: 3rem var(--site--margin) 1rem; display: flex; flex-direction: column; gap: .75rem; }
+  .fg-filters-row { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+  .fg-search, .fg-select, .fg-cat { border: 1px solid var(--swatch--dark-900-o20); border-radius: var(--radius--round); background: color-mix(in srgb, white 20%, transparent); color: var(--swatch--dark-800); font-family: inherit; font-size: 1.125rem; line-height: 1; transition: border-color .2s, background-color .2s, color .2s; }
+  .fg-search { flex: 1 1 18rem; height: 3.1875rem; display: flex; align-items: center; gap: .75rem; padding: 0 1.5rem; }
+  .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; color: var(--swatch--dark-900); }
+  .fg-search input::placeholder { color: var(--swatch--dark-800); opacity: .6; }
+  .fg-search:hover, .fg-select:hover, .fg-cat:hover { border-color: var(--swatch--dark-800); }
+  .fg-search:focus-within { border-color: var(--swatch--dark-900); }
+  /* Level switch: the homepage Monthly / 6-Monthly / Yearly pill, on white */
+  .fg-levels { flex: none; gap: 0; }
+  .fg-level { height: 3.1875rem; padding: 0 1rem; font-size: 1.125rem; color: var(--swatch--dark-900); transition: background-color .25s, color .25s; }
+  .fg-level.is-active { color: #fff; }
   .fg-select-wrap { display: flex; min-width: 0; }
   .fg-level-select { display: none; }
-  .fg-select { height: 2.75rem; padding: 0 .9rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-900-o20); background: #fff; font: inherit; font-size: .95rem; color: var(--swatch--dark-900); cursor: pointer; }
+  .fg-sort-wrap, .fg-level-select { flex: none; }
+  .fg-select { height: 3.1875rem; padding: 0 3rem 0 1.5rem; appearance: none; -webkit-appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='8' fill='none'%3E%3Cpath d='M1 1l6 6 6-6' stroke='%233b3b3b' stroke-width='1.25'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1.25rem center; }
+  /* Category pills: the homepage "Choisis ton cours" buttons */
+  .fg-cats { display: flex; flex-wrap: wrap; gap: .75rem; }
+  .fg-cat { height: 2.75rem; padding: 0 1.5rem; }
+  .fg-cat[aria-pressed="true"] { background-color: var(--swatch--dark-800); border-color: var(--swatch--dark-800); color: #fff; }
+  .fg-search:focus-within, .fg-select:focus-visible, .fg-cat:focus-visible, .fg-level:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
 
   /* Sections */
   .fg-section { padding: 2rem var(--site--margin) 0; }
@@ -233,16 +242,24 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-empty-title { font-size: 1.375rem; color: var(--swatch--dark-900); }
 
   @media (max-width: 1000px) { .fg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 1100px) {
+    .fg-levels { display: none; }
+    .fg-level-select { display: flex; }
+  }
   @media (max-width: 900px) {
     .fg-featgrid { grid-template-columns: 1fr 1fr; grid-template-rows: 22rem 15rem 15rem; grid-template-areas: "big big" "tall s1" "tall s2"; }
   }
   @media (max-width: 700px) {
     .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem .75rem; }
-    .fg-bar { border-radius: 1.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .375rem; }
-    .fg-search { grid-column: 1 / -1; height: 2.5rem; }
+    .fg-filters { padding-top: 2rem; }
+    .fg-filters-row { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+    .fg-search { grid-column: 1 / -1; height: 2.75rem; padding: 0 1.125rem; font-size: 1rem; }
     .fg-levels { display: none; }
     .fg-level-select { display: flex; }
-    .fg-select { width: 100%; height: 2.5rem; padding: 0 .6rem; font-size: .875rem; text-overflow: ellipsis; }
+    .fg-select { width: 100%; height: 2.75rem; padding: 0 2.25rem 0 1.125rem; font-size: 1rem; background-position: right 1rem center; text-overflow: ellipsis; }
+    .fg-cats { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; gap: .5rem; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
+    .fg-cats::-webkit-scrollbar { display: none; }
+    .fg-cat { flex: none; height: 2.5rem; padding: 0 1.125rem; font-size: 1rem; }
     .fg-card-row { flex-direction: column; align-items: flex-start; gap: .4rem; }
     .fg-card-name { font-size: 1.0625rem; }
     .fg-card-cat { margin-top: -.25rem; }
