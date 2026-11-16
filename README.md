@@ -33,7 +33,8 @@ public/
 
 - **Animations** still run on `public/vendor/webflow.js` (Webflow's interaction engine) together with GSAP.
   Each page passes its original Webflow page id (`wfPage`) to the layout so webflow.js can find that page's interactions.
-- **Hosting**: Cloudflare Pages. Build command `npm run build`, output directory `dist`.
+- **Hosting**: Cloudflare Workers (static assets), configured in `wrangler.jsonc`. Build command `npm run build`, deploy command `npx wrangler deploy`.
+  Staging URL: https://studio-ode-website.goanrobert.workers.dev/
 - **Waitlist form** sends each sign-up by email through [Web3Forms](https://web3forms.com) (free, 250 submissions/month).
   The access key lives in `src/config.ts`.
 - **Staging mode**: `public/_headers` and `public/robots.txt` tell search engines not to index the site.
