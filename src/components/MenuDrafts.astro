@@ -1,0 +1,660 @@
+---
+// Three full-screen menu drafts, opened by the existing burger button.
+// A small switcher at the bottom of the page lets you compare them. Draft only — not used on the live pages.
+const links = [
+  { label: "Accueil", note: "Retour en haut", href: "/", img: "please-keep-the-background--the-233555-iP0-p-800.webp" },
+  { label: "Le concept", note: "Notre approche du mouvement", href: "/concept", img: "please-look-at-the-first-pose----265877-w4L-p-800.webp" },
+  { label: "Les cours", note: "Pole, souplesse, flow, force", href: "#cours", img: "Hello-please-take-the-style-of-t-11755-EU2-p-800.webp" },
+  { label: "Formules", note: "À partir de 100 € par mois", href: "#formules", img: "7053819a90a239bb9f6686d8d1df9a9d-p-800.avif" },
+  { label: "Le studio", note: "La fondatrice et l'équipe", href: "#studio", img: "ac743b8e553553c0be56bc5dbaabf5b6-p-800.avif" },
+  { label: "Questions", note: "Tout ce qu'il faut savoir", href: "#faq", img: "f830ef2fd533f1f45b6d4d1beba1face.avif" },
+];
+const info = {
+  email: "bonjour@ode-studio.fr",
+  instagram: "@ode.studio",
+  place: "Lille, adresse dévoilée bientôt",
+  opening: "Ouverture en 2027",
+};
+---
+
+<!-- Draft A: dark, big serif list + photo that changes with the hovered link -->
+<div class="md md-a" data-menu="a" role="dialog" aria-modal="true" aria-label="Menu" hidden data-lenis-prevent>
+  <div class="md-a-grid">
+    <nav class="md-a-links" aria-label="Menu principal">
+      {
+        links.map((l, i) => (
+          <a href={l.href} data-img={i} class="md-link">
+            <span class="md-a-label">{l.label}</span>
+            <span class="md-a-note">{l.note}</span>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="md-a-visual" aria-hidden="true">
+      {links.map((l, i) => <img src={`/images/${l.img}`} alt="" data-img={i} class:list={[{ "is-on": i === 0 }]} loading="lazy" />)}
+    </div>
+  </div>
+  <div class="md-a-foot">
+    <div><p class="md-k">Contact</p><a href={`mailto:${info.email}`}>{info.email}</a><a href="https://instagram.com/">{info.instagram}</a></div>
+    <div><p class="md-k">Adresse</p><p>{info.place}</p></div>
+    <div><p class="md-k">Statut</p><p class="md-status"><span></span>{info.opening}</p></div>
+    <button type="button" class="md-cta" data-modal-trigger="waitlist">Rejoins la liste d'attente</button>
+  </div>
+</div>
+
+<!-- Draft B: light, full-width rows like a project list; the row fills with colour and shows a photo on hover -->
+<div class="md md-b" data-menu="b" role="dialog" aria-modal="true" aria-label="Menu" hidden data-lenis-prevent>
+  <div class="md-b-top">
+    <p>Studio de pole dance à Lille</p>
+    <p>{info.opening}</p>
+  </div>
+  <nav class="md-b-rows" aria-label="Menu principal">
+    {
+      links.map((l) => (
+        <a href={l.href} class="md-link md-b-row">
+          <span class="md-b-label">{l.label}</span>
+          <span class="md-b-note">{l.note}</span>
+          <img src={`/images/${l.img}`} alt="" loading="lazy" />
+        </a>
+      ))
+    }
+  </nav>
+  <div class="md-b-foot">
+    <a href={`mailto:${info.email}`}>{info.email}</a>
+    <a href="https://instagram.com/">Instagram</a>
+    <button type="button" class="md-cta md-cta--dark" data-modal-trigger="waitlist">Rejoins la liste d'attente</button>
+  </div>
+</div>
+
+<!-- Draft C: split screen — photo with the chrome logo on the left, menu panel on the right -->
+<div class="md md-c" data-menu="c" role="dialog" aria-modal="true" aria-label="Menu" hidden data-lenis-prevent>
+  <div class="md-c-photo" aria-hidden="true">
+    <img src="/images/Hello-please-take-the-style-of-t-391374-HCn-p-800.webp" alt="" loading="lazy" />
+    <div class="md-c-flutes"></div>
+    <img src="/images/odestudiotestsmall2x-p-800.webp" alt="" class="md-c-logo" loading="lazy" />
+  </div>
+  <div class="md-c-panel">
+    <nav class="md-c-links" aria-label="Menu principal">
+      {
+        links.map((l) => (
+          <a href={l.href} class="md-link">
+            <span class="md-c-label">{l.label}</span>
+            <span class="md-c-note">{l.note}</span>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="md-c-wait">
+      <p>Les inscrites de la liste d'attente réservent leur premier cours avant tout le monde.</p>
+      <button type="button" class="md-cta" data-modal-trigger="waitlist">Rejoins la liste d'attente</button>
+    </div>
+    <div class="md-c-foot">
+      <a href="https://instagram.com/">Instagram</a>
+      <a href={`mailto:${info.email}`}>E-mail</a>
+      <span>{info.opening}</span>
+    </div>
+  </div>
+</div>
+
+<!-- Draft switcher -->
+<div class="md-switch" role="group" aria-label="Choisir un brouillon de menu">
+  <span>Menu</span>
+  <button type="button" data-pick="a" aria-pressed="true">A</button>
+  <button type="button" data-pick="b" aria-pressed="false">B</button>
+  <button type="button" data-pick="c" aria-pressed="false">C</button>
+  <button type="button" data-open class="md-switch-open">Ouvrir</button>
+</div>
+
+<script is:inline>
+  (function () {
+    var current = "a";
+    var openMenu = null;
+    var burgers = document.querySelectorAll(".nav_component .w-nav-button");
+    var menus = {};
+    document.querySelectorAll("[data-menu]").forEach(function (m) { menus[m.dataset.menu] = m; });
+
+    function setBurger(open) {
+      burgers.forEach(function (b) {
+        b.classList.toggle("w--open", open);
+        b.setAttribute("aria-expanded", open ? "true" : "false");
+      });
+    }
+    function open(id) {
+      if (openMenu) close(true);
+      var m = menus[id];
+      m.hidden = false;
+      // force reflow so the opening transition runs
+      void m.offsetWidth;
+      m.classList.add("is-open");
+      document.documentElement.classList.add("md-locked");
+      document.documentElement.classList.toggle("md-light", id === "b");
+      if (window.lenis) window.lenis.stop();
+      setBurger(true);
+      openMenu = m;
+      var first = m.querySelector("a, button");
+      if (first) first.focus({ preventScroll: true });
+    }
+    function close(instant) {
+      var m = openMenu;
+      if (!m) return;
+      openMenu = null;
+      m.classList.remove("is-open");
+      document.documentElement.classList.remove("md-locked", "md-light");
+      if (window.lenis) window.lenis.start();
+      setBurger(false);
+      setTimeout(function () { if (!m.classList.contains("is-open")) m.hidden = true; }, instant ? 0 : 650);
+    }
+
+    // Take over the existing burger button (capture phase, before webflow.js sees the click)
+    burgers.forEach(function (b) {
+      b.setAttribute("role", "button");
+      b.setAttribute("tabindex", "0");
+      b.setAttribute("aria-label", "Menu");
+      ["click", "keydown"].forEach(function (type) {
+        b.addEventListener(type, function (e) {
+          if (type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+          e.preventDefault();
+          e.stopImmediatePropagation();
+          openMenu ? close() : open(current);
+        }, true);
+      });
+    });
+
+    document.addEventListener("keydown", function (e) { if (e.key === "Escape") close(); });
+
+    // Links: close the menu, then scroll to the section
+    document.querySelectorAll(".md .md-link").forEach(function (a) {
+      a.addEventListener("click", function (e) {
+        var href = a.getAttribute("href");
+        var target = href === "/" ? document.body : href.startsWith("#") ? document.querySelector(href) : null;
+        if (!target) return; // other pages: normal navigation
+        e.preventDefault();
+        close();
+        setTimeout(function () {
+          if (window.lenis) window.lenis.scrollTo(target === document.body ? 0 : target, { offset: -40 });
+          else if (target === document.body) window.scrollTo({ top: 0, behavior: "smooth" });
+          else target.scrollIntoView({ behavior: "smooth" });
+        }, 350);
+      });
+    });
+    document.querySelectorAll(".md [data-modal-trigger]").forEach(function (b) {
+      b.addEventListener("click", function () { close(true); });
+    });
+
+    // Draft A: swap the photo to match the hovered/focused link
+    var a = menus.a;
+    a.querySelectorAll(".md-link").forEach(function (link) {
+      ["mouseenter", "focus"].forEach(function (ev) {
+        link.addEventListener(ev, function () {
+          a.querySelectorAll(".md-a-visual img").forEach(function (img) {
+            img.classList.toggle("is-on", img.dataset.img === link.dataset.img);
+          });
+        });
+      });
+    });
+
+    // Switcher
+    document.querySelectorAll(".md-switch [data-pick]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        current = btn.dataset.pick;
+        document.querySelectorAll(".md-switch [data-pick]").forEach(function (b) { b.setAttribute("aria-pressed", b === btn ? "true" : "false"); });
+        open(current);
+      });
+    });
+    document.querySelector(".md-switch [data-open]").addEventListener("click", function () { open(current); });
+  })();
+</script>
+
+<style is:global>
+  /* Hide the old Webflow dropdown menu on this draft page */
+  .nav_component .w-nav-menu,
+  .nav_component .nav_menu_backdrop,
+  .w-nav-overlay {
+    display: none !important;
+  }
+  html.md-locked,
+  html.md-locked body {
+    overflow: hidden;
+  }
+  /* Light menu (B): dark burger and logo */
+  html.md-light .nav_mobile_wrap .w-nav-button {
+    border-color: rgba(35, 23, 26, 0.25) !important;
+  }
+  html.md-light .nav_mobile_wrap .nav_button_line {
+    background-color: #23171a !important;
+  }
+  html.md-light .nav_mobile_logo {
+    filter: brightness(0.35);
+  }
+
+  .md {
+    --md-serif: var(--_typography---font--secondary-family, Georgia, serif);
+    --md-sans: var(--_typography---font--primary-family, system-ui, sans-serif);
+    --md-pad: clamp(1.25rem, 3vw, 3rem);
+    position: fixed;
+    inset: 0;
+    z-index: 999; /* just under the nav bar, so logo + burger stay visible */
+    overflow-y: auto;
+    font-family: var(--md-sans);
+  }
+  .md[hidden] {
+    display: none;
+  }
+  .md a {
+    color: inherit;
+    text-decoration: none;
+  }
+  .md p {
+    margin: 0;
+  }
+  .md-k {
+    margin-bottom: 0.5rem !important;
+    opacity: 0.55;
+    font-size: 0.875rem;
+  }
+  .md-cta {
+    font: inherit;
+    font-size: 0.9375rem;
+    padding: 0.9rem 1.5rem;
+    border-radius: 999px;
+    border: 0;
+    cursor: pointer;
+    background: #f1e4e2;
+    color: #2a0c11;
+    transition: background 0.2s;
+  }
+  .md-cta:hover {
+    background: #fff;
+  }
+  .md-cta--dark {
+    background: #5c111b;
+    color: #f6eceb;
+  }
+  .md-cta--dark:hover {
+    background: #3a0a11;
+  }
+
+  /* ---------- A ---------- */
+  .md-a {
+    background: #1d0a0e;
+    color: #f1e4e2;
+    padding: calc(var(--nav--height-total, 7rem) + 2.5rem) var(--md-pad) 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 3rem;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path 0.65s cubic-bezier(0.7, 0, 0.2, 1);
+  }
+  .md-a.is-open {
+    clip-path: inset(0 0 0 0);
+  }
+  .md-a-grid {
+    display: grid;
+    grid-template-columns: 7fr 4fr;
+    gap: clamp(2rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .md-a-links {
+    display: flex;
+    flex-direction: column;
+  }
+  .md-a-links .md-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1.5rem;
+    padding: 0.35rem 0;
+    border-bottom: 1px solid rgba(241, 228, 226, 0.14);
+    opacity: 0;
+    transform: translateY(1.25rem);
+    transition: opacity 0.5s, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1), color 0.2s;
+  }
+  .md-a.is-open .md-link {
+    opacity: 1;
+    transform: none;
+  }
+  .md-a.is-open .md-link:nth-child(1) { transition-delay: 0.25s; }
+  .md-a.is-open .md-link:nth-child(2) { transition-delay: 0.3s; }
+  .md-a.is-open .md-link:nth-child(3) { transition-delay: 0.35s; }
+  .md-a.is-open .md-link:nth-child(4) { transition-delay: 0.4s; }
+  .md-a.is-open .md-link:nth-child(5) { transition-delay: 0.45s; }
+  .md-a.is-open .md-link:nth-child(6) { transition-delay: 0.5s; }
+  .md-a-label {
+    font-family: var(--md-serif);
+    font-weight: 300;
+    font-size: clamp(2.4rem, 5.6vw, 5.5rem);
+    line-height: 1.05;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .md-a-note {
+    font-size: 0.875rem;
+    opacity: 0.5;
+    text-align: right;
+  }
+  .md-a-links .md-link:hover .md-a-label,
+  .md-a-links .md-link:focus-visible .md-a-label {
+    transform: translateX(0.75rem);
+  }
+  .md-a-links:hover .md-link:not(:hover) {
+    color: rgba(241, 228, 226, 0.4);
+  }
+  .md-a-visual {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .md-a-visual img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0;
+    transform: scale(1.06);
+    transition: opacity 0.5s, transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .md-a-visual img.is-on {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .md-a-foot {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr) auto;
+    gap: 2rem;
+    align-items: start;
+    font-size: 0.9375rem;
+  }
+  .md-a-foot .md-cta {
+    align-self: end;
+  }
+  .md-a-foot > div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+  }
+  .md-status {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .md-status span {
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #d9475a;
+    box-shadow: 0 0 0 4px rgba(217, 71, 90, 0.2);
+  }
+
+  /* ---------- B ---------- */
+  .md-b {
+    background: #e7e3e0;
+    color: #23171a;
+    padding: calc(var(--nav--height-total, 7rem) + 1.5rem) var(--md-pad) 2rem;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    transform: translateY(-2%);
+    transition: opacity 0.4s, transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .md-b.is-open {
+    opacity: 1;
+    transform: none;
+  }
+  .md-b-top {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.875rem;
+    opacity: 0.6;
+    margin-bottom: 1.5rem;
+  }
+  .md-b-rows {
+    border-top: 1px solid rgba(35, 23, 26, 0.2);
+    margin-bottom: auto;
+  }
+  .md-b-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 0.9rem 1rem;
+    margin: 0 -1rem;
+    border-bottom: 1px solid rgba(35, 23, 26, 0.2);
+    transition: background 0.3s, color 0.3s;
+  }
+  .md-b-label {
+    font-family: var(--md-serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 4.6vw, 4.4rem);
+    line-height: 1;
+  }
+  .md-b-note {
+    font-size: 0.9375rem;
+    opacity: 0.6;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+  }
+  .md-b-row img {
+    position: absolute;
+    right: 32%;
+    top: 50%;
+    width: 7.5rem;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 4px;
+    opacity: 0;
+    transform: translateY(-50%) rotate(-4deg) scale(0.8);
+    transition: opacity 0.3s, transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+    pointer-events: none;
+  }
+  @media (hover: hover) {
+    .md-b-row:hover {
+      background: #5c111b;
+      color: #f6eceb;
+    }
+    .md-b-row:hover img {
+      opacity: 1;
+      transform: translateY(-50%) rotate(-4deg) scale(1);
+    }
+    .md-b-row:hover .md-b-note {
+      transform: translateX(-0.5rem);
+    }
+  }
+  .md-b-foot {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    margin-top: 2rem;
+    font-size: 0.9375rem;
+  }
+  .md-b-foot .md-cta {
+    margin-left: auto;
+  }
+
+  /* ---------- C ---------- */
+  .md-c {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    pointer-events: none;
+  }
+  .md-c.is-open {
+    pointer-events: auto;
+  }
+  .md-c-photo {
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 0.6s;
+  }
+  .md-c.is-open .md-c-photo {
+    opacity: 1;
+  }
+  .md-c-photo > img:first-child {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .md-c-flutes {
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.08) 0 1px, rgba(0, 0, 0, 0) 1px 14px, rgba(0, 0, 0, 0.16) 14px 22px);
+    backdrop-filter: blur(3px);
+  }
+  .md-c-logo {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 8%;
+    width: 84%;
+    filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.4));
+  }
+  .md-c-panel {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    padding: calc(var(--nav--height-total, 7rem) + 2rem) var(--md-pad) 2rem;
+    background: #3e0c14;
+    color: #f6eceb;
+    transform: translateX(100%);
+    transition: transform 0.65s cubic-bezier(0.7, 0, 0.2, 1);
+    overflow-y: auto;
+  }
+  .md-c.is-open .md-c-panel {
+    transform: none;
+  }
+  .md-c-links {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+  .md-c-links .md-link {
+    display: flex;
+    flex-direction: column;
+  }
+  .md-c-label {
+    font-family: var(--md-serif);
+    font-weight: 300;
+    font-size: clamp(2rem, 3.4vw, 3.4rem);
+    line-height: 1;
+    transition: opacity 0.2s;
+  }
+  .md-c-note {
+    font-size: 0.875rem;
+    opacity: 0.55;
+    margin-top: 0.3rem;
+  }
+  .md-c-links:hover .md-link:not(:hover) .md-c-label {
+    opacity: 0.4;
+  }
+  .md-c-wait {
+    margin-top: auto;
+    padding: 1.5rem;
+    border-radius: 8px;
+    background: rgba(246, 236, 235, 0.07);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    font-size: 0.9375rem;
+  }
+  .md-c-foot {
+    display: flex;
+    gap: 1.5rem;
+    font-size: 0.875rem;
+    opacity: 0.7;
+  }
+  .md-c-foot span {
+    margin-left: auto;
+  }
+
+  /* ---------- Switcher ---------- */
+  .md-switch {
+    position: fixed;
+    left: 50%;
+    bottom: 1.25rem;
+    z-index: 1001;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.4rem 0.35rem 1rem;
+    border-radius: 999px;
+    background: rgba(20, 8, 10, 0.85);
+    backdrop-filter: blur(10px);
+    color: #f6eceb;
+    font-family: var(--_typography---font--primary-family, system-ui, sans-serif);
+    font-size: 0.875rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  }
+  .md-switch span {
+    margin-right: 0.5rem;
+    opacity: 0.7;
+  }
+  .md-switch button {
+    font: inherit;
+    min-width: 2.2rem;
+    height: 2.2rem;
+    padding: 0 0.8rem;
+    border-radius: 999px;
+    border: 0;
+    background: transparent;
+    color: inherit;
+    cursor: pointer;
+  }
+  .md-switch button[aria-pressed="true"] {
+    background: #f6eceb;
+    color: #2a0c11;
+  }
+  .md-switch .md-switch-open {
+    border: 1px solid rgba(246, 236, 235, 0.3);
+    margin-left: 0.25rem;
+  }
+
+  /* ---------- Mobile ---------- */
+  @media (max-width: 800px) {
+    .md-a,
+    .md-b,
+    .md-c-panel {
+      padding-bottom: 5.5rem;
+    }
+    .md-a-grid {
+      grid-template-columns: 1fr;
+    }
+    .md-a-visual {
+      display: none;
+    }
+    .md-a-note {
+      display: none;
+    }
+    .md-a-foot {
+      grid-template-columns: 1fr 1fr;
+    }
+    .md-a-foot .md-cta {
+      grid-column: 1 / -1;
+    }
+    .md-b-note,
+    .md-b-row img {
+      display: none;
+    }
+    .md-b-foot {
+      flex-wrap: wrap;
+    }
+    .md-b-foot .md-cta {
+      margin-left: 0;
+      width: 100%;
+    }
+    .md-c {
+      grid-template-columns: 1fr;
+    }
+    .md-c-photo {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .md,
+    .md * {
+      transition: none !important;
+    }
+  }
+</style>
