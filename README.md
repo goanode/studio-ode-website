@@ -43,3 +43,8 @@ public/
   *freight-big-pro* comes from the Adobe Fonts kit `xbu1shi`. Add the new domain to that kit's allowed domains in Adobe Fonts,
   or the serif headings will fall back to a default font.
 - Set `site` in `astro.config.mjs` to the live domain once it's known (it enables canonical URLs).
+
+## Design variants
+
+Draft home-page directions live at `/variantes` (`src/pages/variantes/`). They use a lighter layout
+(`src/layouts/VariantLayout.astro`: no Webflow runtime, self-hosted fonts) and shared draft copy in `src/data/ode.ts`.
