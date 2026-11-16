@@ -1,0 +1,285 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WaitlistModal from "../components/WaitlistModal.astro";
+import { tricks, LEVELS, CATEGORIES, FEATURED } from "../data/tricks";
+
+const ORDER = { "Débutante": 0, "Intermédiaire": 1, "Avancée": 2 };
+const featured = FEATURED.map((f, i) => ({ ...f, trick: tricks.find((t) => t.slug === f.slug)!, area: ["big", "tall", "s1", "s2"][i] }));
+const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1000w`;
+---
+
+<!-- Uses the home page's Webflow page id so the hero gets the exact same load animation (title letters rising, intro fading in) -->
+<BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
+  <main id="main" class="page_main">
+    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark">
+      <div class="u-background-slot">
+        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-look-at-the-first-pose----820406-SN7.webp" alt="" sizes="100vw" loading="eager" srcset="/images/please-look-at-the-first-pose----820406-SN7-p-500.webp 500w, /images/please-look-at-the-first-pose----820406-SN7-p-800.webp 800w, /images/please-look-at-the-first-pose----820406-SN7.webp 1024w" tlg-fluted-glass-image=""></div>
+        <div data-wf--media-overlay--variant="gradient" data-number="20" class="u-overlay w-variant-9653c0cc-21fc-fb82-1373-c98b1644e5a8"></div>
+      </div>
+      <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
+        <div data-wf--layout--variant="breakout-reversed" class="u-layout-wrapper w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
+          <div class="u-layout w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
+            <div class="u-layout-column-1 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7 u-padding-bottom-0">
+              <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
+                <div class="u-display-contents">
+                  <div fade-in="" class="fg-hero-levels" role="group" aria-label="Aller directement à un niveau">
+                    {LEVELS.map((lv) => (
+                      <button type="button" class="fg-hero-level" data-level-jump={lv}>{lv} · {tricks.filter((t) => t.level === lv).length}</button>
+                    ))}
+                  </div>
+                  <div fade-in="" data-number="40" data-wf--typography-paragraph--variant="text-main" class="u-text w-variant-61d538b2-709c-eb7a-4258-8c0890dc07fc u-rich-text w-richtext">
+                    <p>{tricks.length} figures de pole dance, de la première rotation aux inversions avancées, avec leurs prérequis et les étapes pour les réussir.</p>
+                  </div>
+                  <div fade-in="" class="u-button-wrapper">
+                    <div class="u-display-contents">
+                      <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+                        <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+                        <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
+                          <div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
+              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
+                <div class="u-display-contents">
+                  <h1 class="heading fg-heading">Figures</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Sticky filter bar -->
+    <div class="fg-bar-wrap" id="catalogue">
+      <div class="fg-bar">
+        <label class="fg-search">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.5"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.5"></path></svg>
+          <span class="fg-sr">Rechercher une figure</span>
+          <input type="search" id="fg-q" placeholder="Rechercher (ex. papillon, Ayesha)" autocomplete="off" />
+        </label>
+        <div class="fg-levels" role="group" aria-label="Niveau">
+          <button type="button" class="fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
+          {LEVELS.map((lv) => <button type="button" class="fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
+        </div>
+        <label class="fg-select-wrap fg-level-select"><span class="fg-sr">Niveau</span>
+          <select id="fg-level-sel" class="fg-select">
+            <option value="Tous">Tous niveaux</option>
+            {LEVELS.map((lv) => <option value={lv}>{lv}</option>)}
+          </select>
+        </label>
+        <label class="fg-select-wrap"><span class="fg-sr">Catégorie</span>
+          <select id="fg-cat" class="fg-select">
+            <option value="Toutes">Catégories</option>
+            {CATEGORIES.map((c) => <option value={c}>{c}</option>)}
+          </select>
+        </label>
+        <label class="fg-select-wrap"><span class="fg-sr">Trier</span>
+          <select id="fg-sort" class="fg-select">
+            <option value="niveau">Trier : niveau</option>
+            <option value="az">Trier : A–Z</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <!-- À la une (hidden while searching or filtering) -->
+    <section class="fg-section" id="fg-featured">
+      <div class="fg-head">
+        <h2 class="fg-h2">À la une</h2>
+        <p class="fg-note">Choisies par Justine ce mois-ci</p>
+      </div>
+      <div class="fg-featgrid">
+        {featured.map((f) => (
+          <a href="#" class="fg-feat" style={`grid-area: ${f.area}`}>
+            <img src={`${f.trick.image}.webp`} srcset={srcset(f.trick.image)} sizes="(max-width: 900px) 100vw, 50vw" alt="" loading="lazy" style={`object-position: ${f.trick.imagePosition}; ${f.trick.mirrored ? "transform: scaleX(-1);" : ""}`} />
+            <span class="fg-feat-shade" aria-hidden="true"></span>
+            <span class="fg-tag">{f.tag}</span>
+            <span class="fg-feat-text">
+              <span class={`fg-feat-name fg-feat-name--${f.area}`}>{f.trick.name}</span>
+              <span class="fg-feat-meta">{f.trick.level} · {f.trick.category}</span>
+            </span>
+          </a>
+        ))}
+      </div>
+    </section>
+
+    <!-- Catalogue -->
+    <section class="fg-section fg-section--grid">
+      <div class="fg-head">
+        <h2 class="fg-h2" id="fg-grid-title">Toutes les figures</h2>
+        <p class="fg-note" id="fg-count" aria-live="polite">{tricks.length} figures</p>
+      </div>
+      <div class="fg-grid" id="fg-grid">
+        {tricks.map((t) => (
+          <a href="#" class="fg-card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category} data-order={ORDER[t.level]}>
+            <span class="fg-card-img"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}; ${t.mirrored ? "transform: scaleX(-1);" : ""}`} /></span>
+            <span class="fg-card-row"><span class="fg-card-name">{t.name}</span><span class="fg-pill">{t.level}</span></span>
+            <span class="fg-card-cat">{t.category}</span>
+          </a>
+        ))}
+      </div>
+      <div class="fg-more-wrap"><button type="button" class="fg-btn" id="fg-more">Voir plus</button></div>
+      <div class="fg-empty" id="fg-empty" hidden>
+        <p class="fg-empty-title">Aucune figure ne correspond à ta recherche.</p>
+        <p>Essaie un autre nom, ou retire un filtre.</p>
+        <button type="button" class="fg-btn" id="fg-reset">Voir toutes les figures</button>
+      </div>
+    </section>
+  </main>
+
+  <WaitlistModal slot="after-footer" />
+</BaseLayout>
+
+<script>
+  const PAGE = 12;
+  const grid = document.getElementById("fg-grid")!;
+  const cards = Array.from(grid.querySelectorAll<HTMLAnchorElement>(".fg-card"));
+  const q = document.getElementById("fg-q") as HTMLInputElement;
+  const catSel = document.getElementById("fg-cat") as HTMLSelectElement;
+  const sortSel = document.getElementById("fg-sort") as HTMLSelectElement;
+  const levelBtns = Array.from(document.querySelectorAll<HTMLButtonElement>(".fg-level"));
+  const more = document.getElementById("fg-more") as HTMLButtonElement;
+  const levelSel = document.getElementById("fg-level-sel") as HTMLSelectElement;
+  const count = document.getElementById("fg-count")!;
+  const empty = document.getElementById("fg-empty")!;
+  const featuredBlock = document.getElementById("fg-featured")!;
+  const gridTitle = document.getElementById("fg-grid-title")!;
+  const state = { level: "Tous", limit: PAGE };
+  const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+  function render() {
+    const nq = norm(q.value.trim());
+    const cat = catSel.value;
+    const matches = cards.filter((c) =>
+      (state.level === "Tous" || c.dataset.level === state.level) &&
+      (cat === "Toutes" || c.dataset.cat === cat) &&
+      (!nq || norm(`${c.dataset.name} ${c.dataset.alias}`).includes(nq)));
+    matches.sort((a, b) => sortSel.value === "az"
+      ? a.dataset.name!.localeCompare(b.dataset.name!)
+      : Number(a.dataset.order) - Number(b.dataset.order) || a.dataset.name!.localeCompare(b.dataset.name!));
+    cards.forEach((c) => (c.hidden = true));
+    matches.forEach((c, i) => { grid.appendChild(c); c.hidden = i >= state.limit; });
+    const browsing = state.level === "Tous" && cat === "Toutes" && !nq;
+    featuredBlock.hidden = !browsing;
+    gridTitle.textContent = browsing ? "Toutes les figures" : "Résultats";
+    count.textContent = matches.length === 1 ? "1 figure" : `${matches.length} figures`;
+    const remaining = matches.length - Math.min(matches.length, state.limit);
+    more.hidden = remaining <= 0;
+    more.textContent = `Voir plus (${remaining} ${remaining === 1 ? "figure restante" : "figures restantes"})`;
+    empty.hidden = matches.length > 0;
+    levelBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.level === state.level)));
+    levelSel.value = state.level;
+    (window as any).ScrollTrigger?.refresh?.();
+  }
+  const reset = (o: Partial<typeof state> = {}) => { Object.assign(state, { limit: PAGE }, o); render(); };
+
+  q.addEventListener("input", () => reset());
+  catSel.addEventListener("change", () => reset());
+  sortSel.addEventListener("change", () => render());
+  levelSel.addEventListener("change", () => reset({ level: levelSel.value }));
+  levelBtns.forEach((b) => b.addEventListener("click", () => reset({ level: b.dataset.level! })));
+  more.addEventListener("click", () => { state.limit += PAGE; render(); });
+  document.getElementById("fg-reset")!.addEventListener("click", () => { q.value = ""; catSel.value = "Toutes"; reset({ level: "Tous" }); });
+
+  // Level shortcuts in the hero: filter, then glide down to the catalogue
+  document.querySelectorAll<HTMLButtonElement>("[data-level-jump]").forEach((b) =>
+    b.addEventListener("click", () => {
+      reset({ level: b.dataset.levelJump! });
+      // land on the results, just below the sticky bar
+      const bar = document.getElementById("catalogue")!;
+      const target = gridTitle.closest("section")!;
+      const offset = -(parseFloat(getComputedStyle(bar).top) + bar.offsetHeight);
+      const lenis = (window as any).lenis;
+      lenis ? lenis.scrollTo(target, { offset }) : scrollTo({ top: target.getBoundingClientRect().top + scrollY + offset, behavior: "smooth" });
+    }));
+
+  render();
+</script>
+
+<style>
+  /* Hero: the home page's .heading is sized for "ODE"; fit "Figures" */
+  .fg-heading { width: auto; white-space: nowrap; font-size: clamp(5rem, 19vw, 19rem); }
+  .fg-hero-levels { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
+  .fg-hero-level { height: 2.25rem; padding: 0 .9rem; border-radius: 100vw; background: color-mix(in srgb, white 20%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #fff; font-size: .875rem; transition: background .2s, color .2s; }
+  .fg-hero-level:hover { background: #fff; color: var(--swatch--dark-900); }
+
+  .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+  /* Sticky filter bar */
+  .fg-bar-wrap { position: sticky; top: calc(var(--nav--height-total, 9.5rem) + .5rem); z-index: 50; padding: 0 var(--site--margin); margin: 1.5rem 0 .5rem; }
+  .fg-bar { display: flex; align-items: center; gap: .5rem; padding: .5rem; border-radius: 100vw; background: color-mix(in srgb, white 88%, transparent); border: var(--border-width--main) solid var(--swatch--dark-900-o20); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); box-shadow: 0 12px 30px rgb(31 29 30 / 8%); color: var(--swatch--dark-800); }
+  .fg-search { flex: 1 1 15rem; height: 2.75rem; display: flex; align-items: center; gap: .6rem; padding: 0 1rem; border-radius: 100vw; background: #f2f2f2; }
+  .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 1rem; color: var(--swatch--dark-900); }
+  .fg-search:focus-within { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
+  .fg-levels { display: flex; gap: .25rem; overflow-x: auto; scrollbar-width: none; }
+  .fg-level { flex: none; height: 2.75rem; padding: 0 1rem; border-radius: 100vw; font-size: .95rem; color: var(--swatch--dark-800); transition: background .2s, color .2s; }
+  .fg-level[aria-pressed="true"] { background: var(--swatch--dark-800); color: #fff; }
+  .fg-level:not([aria-pressed="true"]):hover { background: #f2f2f2; }
+  .fg-select-wrap { display: flex; min-width: 0; }
+  .fg-level-select { display: none; }
+  .fg-select { height: 2.75rem; padding: 0 .9rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-900-o20); background: #fff; font: inherit; font-size: .95rem; color: var(--swatch--dark-900); cursor: pointer; }
+
+  /* Sections */
+  .fg-section { padding: 2rem var(--site--margin) 0; }
+  .fg-section--grid { padding-bottom: var(--_spacing---section-space--large); }
+  .fg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
+  .fg-h2 { margin: 0; font-size: clamp(1.75rem, 2.6vw, 2.5rem); font-weight: 600; line-height: 1; letter-spacing: -.02em; color: var(--swatch--dark-900); }
+  .fg-note { margin: 0; font-size: .875rem; color: var(--swatch--dark-800); }
+
+  /* À la une */
+  .fg-featgrid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 18rem 18rem; grid-template-areas: "big tall s1" "big tall s2"; gap: 1rem; }
+  .fg-feat { position: relative; display: block; border-radius: var(--radius--main); overflow: hidden; color: #fff; background: var(--swatch--dark-800); }
+  .fg-feat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
+  .fg-feat:hover img { scale: 1.05; }
+  .fg-feat-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(31 29 30 / 0) 45%, rgb(31 29 30 / 70%)); }
+  .fg-tag { position: absolute; top: .75rem; left: .75rem; padding: .375rem .75rem; border-radius: 100vw; background: color-mix(in srgb, white 20%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); font-size: .8125rem; }
+  .fg-feat-text { position: absolute; left: 1.125rem; right: 1.125rem; bottom: 1rem; display: flex; flex-direction: column; gap: .25rem; }
+  .fg-feat-name { font-size: 1.5rem; line-height: 1; letter-spacing: -.02em; }
+  .fg-feat-name--big { font-size: clamp(2.5rem, 4.4vw, 4.25rem); }
+  .fg-feat-name--tall { font-size: 2.125rem; }
+  .fg-feat-meta { font-size: .875rem; opacity: .85; }
+
+  /* Grid */
+  .fg-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 2.25rem 1rem; }
+  .fg-card { display: flex; flex-direction: column; gap: .75rem; color: var(--swatch--dark-900); }
+  .fg-card[hidden] { display: none; }
+  .fg-card-img { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: var(--radius--main); overflow: hidden; background: var(--swatch--light-200); }
+  .fg-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
+  .fg-card:hover img { scale: 1.05; }
+  .fg-card:focus-visible, .fg-feat:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; border-radius: var(--radius--main); }
+  .fg-card-row { display: flex; justify-content: space-between; align-items: baseline; gap: .6rem; }
+  .fg-card-name { font-size: 1.25rem; line-height: 1.1; letter-spacing: -.01em; }
+  .fg-pill { flex: none; padding: .25rem .6rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-900-o20); font-size: .8125rem; color: var(--swatch--dark-800); }
+  .fg-card-cat { margin-top: -.4rem; font-size: .875rem; color: var(--swatch--dark-800); }
+
+  .fg-more-wrap { display: flex; justify-content: center; margin-top: 3rem; }
+  .fg-btn { height: var(--button-size--medium); padding: 0 1.5rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-800); background: var(--swatch--dark-800); color: #fff; font-size: 1rem; transition: background .3s, color .3s; }
+  .fg-btn:hover { background: #fff; color: var(--swatch--dark-800); }
+  .fg-btn[hidden], .fg-empty[hidden], #fg-featured[hidden] { display: none; }
+  .fg-empty { padding: 4.5rem 1.5rem; border: var(--border-width--main) solid var(--swatch--dark-900-o20); border-radius: var(--radius--main); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
+  .fg-empty p { margin: 0; }
+  .fg-empty-title { font-size: 1.375rem; color: var(--swatch--dark-900); }
+
+  @media (max-width: 1000px) { .fg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  @media (max-width: 900px) {
+    .fg-featgrid { grid-template-columns: 1fr 1fr; grid-template-rows: 22rem 15rem 15rem; grid-template-areas: "big big" "tall s1" "tall s2"; }
+  }
+  @media (max-width: 767px) { .fg-heading { font-size: 27vw; } }
+  @media (max-width: 700px) {
+    .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem .75rem; }
+    .fg-bar { border-radius: 1.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .375rem; }
+    .fg-search { grid-column: 1 / -1; height: 2.5rem; }
+    .fg-levels { display: none; }
+    .fg-level-select { display: flex; }
+    .fg-select { width: 100%; height: 2.5rem; padding: 0 .6rem; font-size: .875rem; text-overflow: ellipsis; }
+    .fg-card-row { flex-direction: column; align-items: flex-start; gap: .4rem; }
+    .fg-card-name { font-size: 1.0625rem; }
+    .fg-card-cat { margin-top: -.25rem; }
+  }
+</style>
