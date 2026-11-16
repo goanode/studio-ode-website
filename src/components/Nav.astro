@@ -1,0 +1,646 @@
+---
+const isHome = Astro.url.pathname === "/";
+---
+<div style="position: fixed;" class="nav_component">
+  <div class="u-embed-css w-embed">
+    <style is:inline>
+:root {
+--nav--menu-open-duration: 400ms;
+--nav--menu-close-duration: 400ms;
+--nav--dropdown-open-duration: 400ms;
+--nav--dropdown-close-duration: 400ms;
+}
+body:has(.nav_component .w-nav-button.w--open):not(:has(.nav_desktop_wrap:not(.w-condition-invisible))) { overflow: hidden; }
+/* on smaller screens */
+@media (width < 65em) {
+/* disable scroll when mobile menu is open */
+body:has(.nav_component .w-nav-button.w--open) { overflow: hidden; }
+}
+/* on larger screens */
+/*@container (min-width: 65em) {
+/* show desktop nav & dropdown backdrop */
+/*.nav_desktop_wrap, .nav_dropdown_backdrop { display: block; }
+/* hide mobile nav & mobile menu backdrop */
+/*.nav_desktop_wrap:not(.w-condition-invisible) ~ .nav_mobile_wrap, .nav_desktop_wrap:not(.w-condition-invisible) ~ .nav_menu_backdrop { display: none; }
+} 
+/* dropdown list: initial state */
+html:not(.wf-design-mode) .nav_dropdown_component > .w-dropdown-list {
+/* removes display none to enable css transitions */
+display: grid !important;
+grid-template-columns: minmax(0, 1fr);
+/* sets list to 0 height by default */
+grid-template-rows: 0fr;
+transition: grid-template-rows var(--nav--dropdown-close-duration);
+/* makes list content not focusable when closed */
+visibility: hidden;
+opacity: 0;
+}
+/* makes list content focusable when opened */
+html:not(.wf-design-mode) .nav_dropdown_component > .w-dropdown-list.w--open {
+visibility: visible;
+opacity: 1;
+}
+/* sets list child to overflow hidden to enable css height transition */
+.nav_dropdown_component > .w-dropdown-list > * {
+overflow: hidden;
+}
+/* set open state of dropdown list */
+.nav_dropdown_component:has(> .w-dropdown-toggle[aria-expanded="true"]) > .w-dropdown-list {
+--nav--dropdown-close-duration: var(--nav--dropdown-open-duration);
+grid-template-rows: 1fr;
+}
+/* on desktop, delay dropdown opening if another dropdown is open */
+.nav_desktop_wrap:has(.nav_dropdown_component > .w-dropdown-toggle.w--open[aria-expanded="false"]) .nav_dropdown_component:has(> .w--open[aria-expanded="true"]) > .w-dropdown-list {
+transition-delay: var(--nav--dropdown-close-duration);
+}
+/* reveal dropdown backdrop when dropdown open */
+.nav_dropdown_backdrop {
+transition: opacity var(--nav--dropdown-close-duration);
+}
+.nav_component:has(.nav_dropdown_component > [aria-expanded="true"]) .nav_dropdown_backdrop {
+opacity: 1;
+}
+/* reveal mobile menu backdrop on menu open */
+.nav_menu_backdrop {
+transition: opacity var(--nav--menu-close-duration);
+}
+.nav_component:has(.w-nav-button.w--open) .nav_menu_backdrop {
+opacity: 1;
+}
+/* menu animations */
+@keyframes menuOpen {
+from { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+}
+@keyframes menuClose {
+from { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
+to { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+}
+/* menu open */
+.nav_component:has(.w-nav-button.w--open) .w-nav-menu {
+animation: menuOpen var(--nav--menu-open-duration) ease-in-out forwards;
+}
+/* menu close */
+.nav_component:has(.w-nav-button:not(.w--open)) .w-nav-menu {
+animation: menuClose var(--nav--menu-close-duration) ease-in-out forwards;
+}
+/* position overflow to top of screen */
+.nav_component .w-nav-overlay {
+top: 0;
+min-height: 100vh;
+}
+/* open dropdown on mobile */
+.nav_mobile_wrap [data-open-on-mobile] > .w-dropdown-toggle {
+display: none;
+}
+.nav_mobile_wrap [data-open-on-mobile] > .w-dropdown-list {
+visibility: visible !important;
+opacity: 1 !important;
+display: block !important;
+grid-template-rows: 1fr !important;
+}
+/* nav banner */
+html:has(.nav_banner_wrap:not(.w-condition-invisible)):not(.hide-nav-banner) {
+--nav--height-total: calc(var(--nav--banner-height) + var(--nav--height) + var(--nav--spacing-outer-vertical));
+}
+.hide-nav-banner .nav_banner_wrap {
+display: none;
+}
+.wf-design-mode .nav_mobile_menu_wrap {
+width: 100%;
+}
+</style>
+  </div>
+  <a href="#main" class="nav_skip_wrap w-inline-block">
+    <div class="nav_skip_text u-text-style-small">Skip to main content</div>
+  </a>
+  <div aria-label="Announcement" role="region" class="nav_banner_wrap">
+    <div class="nav_banner_contain">
+      <a data-state="external" href="#" class="nav_banner_link w-inline-block">
+        <div class="nav_banner_text u-line-clamp-1">ODE ARRIVE BIENTÔT, REJOINS LA LISTE D&#x27;ATTENTE</div>
+        <div class="nav_banner_icon">
+          <div data-wf--icon-arrow-full--variant="right" class="u-svg">
+            <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="240" height="188" viewbox="0 0 240 188" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M135 184.805L234 93.8053L135 2.80469" stroke="black" stroke-width="7.61538"></path>
+                <path d="M234 93.8047H0" stroke="black" stroke-width="7.66941"></path>
+              </svg></div>
+          </div>
+        </div>
+      </a><button role="button" class="nav_banner_close_wrap"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 20 19" fill="none" aria-hidden="true" class="nav_banner_close_svg">
+          <path d="M1.51471 1.01465L18.4853 17.9852" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></path>
+          <path d="M1.51471 17.9851L18.4853 1.01454" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></path>
+        </svg><span class="nav_screen-reader-text">Close Announcement Banner</span></button>
+    </div>
+  </div>
+  <header class="nav_desktop_wrap">
+    <div class="nav_desktop_contain">
+      <div class="nav_desktop_layout">
+        <a aria-label="Home Page" href="/" aria-current={isHome ? "page" : undefined} class:list={["nav_desktop_logo w-inline-block", { "w--current": isHome }]}>
+          <div style="" class="u-max-width-full">
+            <div class="u-icon logo w-embed"><svg width="100%" height="100%" viewbox="0 0 908 184" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M176.11 120.7L119.28 105.47L134.5 162.3L106.42 169.82L91.19 113.01L20.56 183.63L0 163.07L70.63 92.44L13.81 77.22L21.33 49.13L78.16 64.36L62.93 7.53L91.02 0L106.25 56.83L148.86 14.21L169.42 34.77L126.81 77.39L183.63 92.62L176.11 120.7Z" fill="currentColor"></path>
+                <path d="M224.24 174.1V7.62988H255.87V146.75H333.63V174.1H224.24Z" fill="currentColor"></path>
+                <path d="M455.47 54.2402V174.1H426.22V155.55C419.56 168.63 406.01 176 388.88 176C362.01 176 344.41 156.5 344.41 128.44V54.2402H373.42V122.25C373.42 138.66 383.65 150.07 398.39 150.07C414.8 150.07 426.21 137.23 426.21 119.63V54.2402H455.46H455.47Z" fill="currentColor"></path>
+                <path d="M476.25 174.1V54.2403H505.5V73.0303C511.44 60.9003 523.34 52.3403 540.22 52.3403C559.25 52.3403 572.32 60.4303 577.56 75.1703C583.03 62.8003 598.25 52.3403 617.28 52.3403C643.2 52.3403 659.85 71.1303 659.85 96.5703V174.1H630.84V105.37C630.84 88.4803 622.04 77.3103 608.01 77.3103C592.31 77.3103 582.56 88.4903 582.56 105.37V174.1H553.55V105.37C553.55 88.4803 544.75 77.3103 530.72 77.3103C515.26 77.3103 505.51 88.4903 505.51 105.37V174.1H476.26H476.25Z" fill="currentColor"></path>
+                <path d="M676.2 114.17C676.2 78.5003 702.36 52.3403 738.98 52.3403C775.6 52.3403 801.52 78.5003 801.52 114.17C801.52 149.84 775.36 176 738.98 176C702.6 176 676.2 149.84 676.2 114.17ZM772.04 114.17C772.04 92.5303 758.72 77.5503 738.98 77.5503C719.24 77.5503 705.69 92.5303 705.69 114.17C705.69 135.81 719.01 150.79 738.98 150.79C758.95 150.79 772.04 135.81 772.04 114.17Z" fill="currentColor"></path>
+                <path d="M811.46 134.15H838.1C839.29 145.57 848.09 152.7 861.17 152.7C872.59 152.7 880.2 146.99 880.2 139.86C880.2 113.22 814.56 138.67 814.56 88.0201C814.56 67.0901 832.87 52.3501 857.6 52.3501C885.66 52.3501 904.93 67.8101 906.11 91.1101H879.47C877.81 79.9301 867.58 74.2201 858.31 74.2201C847.85 74.2201 840.95 78.9801 840.95 87.0601C840.95 112.98 907.54 84.4401 907.54 138.67C907.54 161.26 889.23 176.01 861.17 176.01C833.11 176.01 812.89 159.84 811.47 134.15H811.46Z" fill="currentColor"></path>
+              </svg></div><img src="/images/odestudiotestsmall2x.png" loading="lazy" sizes="(max-width: 2018px) 100vw, 2018px" srcset="/images/odestudiotestsmall2x-p-500.png 500w, /images/odestudiotestsmall2x-p-800.png 800w, /images/odestudiotestsmall2x-p-1080.png 1080w, /images/odestudiotestsmall2x-p-1600.png 1600w, /images/odestudiotestsmall2x-p-2000.png 2000w, /images/odestudiotestsmall2x.png 2018w" alt="">
+          </div>
+        </a>
+        <nav aria-label="Main" data-wf--menu--variant="desktop" class="nav_links_component w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+          <div role="list" class="nav_links_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+            <div role="listitem" class="nav_links_item">
+              <div data-delay="400" data-hover="true" class="nav_dropdown_component w-dropdown">
+                <div data-state="expanded" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-toggle">
+                  <div class="nav_links_text">Services</div>
+                  <div class="nav_links_svg">
+                    <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                      <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                        </svg></div>
+                    </div>
+                  </div>
+                </div>
+                <nav class="nav_dropdown_main_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-list">
+                  <div class="nav_dropdown_main_content">
+                    <div data-lenis-prevent="" class="nav_dropdown_main_scroll w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                      <ul role="list" class="nav_dropdown_list">
+                        <li class="nav_dropdown_item">
+                          <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                            <div class="nav_dropdown_text">Branding</div>
+                          </a>
+                        </li>
+                        <li class="nav_dropdown_item">
+                          <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                            <div class="nav_dropdown_text">Website Design</div>
+                          </a>
+                        </li>
+                        <li class="nav_dropdown_item">
+                          <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                            <div class="nav_dropdown_text">Development</div>
+                          </a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div role="listitem" class="nav_links_item">
+              <div data-delay="400" data-hover="true" class="nav_dropdown_component w-dropdown">
+                <div data-state="expanded" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-toggle">
+                  <div class="nav_links_text">Work</div>
+                  <div class="nav_links_svg">
+                    <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                      <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                        </svg></div>
+                    </div>
+                  </div>
+                </div>
+                <nav class="nav_dropdown_mega_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-list">
+                  <div class="nav_dropdown_mega_content w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                    <div data-lenis-prevent="" class="nav_dropdown_mega_scroll w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                      <div class="nav_dropdown_mega_contain w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                        <div class="nav_dropdown_mega_layout w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                          <ul role="list" class="nav_dropdown_list">
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Branding</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Website Design</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Development</div>
+                              </a>
+                            </li>
+                          </ul>
+                          <ul role="list" class="nav_dropdown_list">
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Branding</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Website Design</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Development</div>
+                              </a>
+                            </li>
+                          </ul>
+                          <ul role="list" class="nav_dropdown_list">
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Branding</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Website Design</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Development</div>
+                              </a>
+                            </li>
+                          </ul>
+                          <ul role="list" class="nav_dropdown_list">
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Branding</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Website Design</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                                <div class="nav_dropdown_text">Development</div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div role="listitem" class="nav_links_item">
+              <a href="#" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                <div class="nav_links_text">About</div>
+              </a>
+            </div>
+            <div role="listitem" class="nav_links_item">
+              <a href="#" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                <div class="nav_links_text">Contact</div>
+              </a>
+            </div>
+          </div>
+          <div role="list" class="nav_actions_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+            <div role="listitem" class="nav_links_item">
+              <div data-delay="400" data-hover="false" class="nav_dropdown_component w-dropdown">
+                <div data-state="expanded" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-toggle">
+                  <div class="w-locales-list">
+                    <div class="nav_links_text u-text-transform-uppercase">EN</div>
+                    <div role="list" class="nav_links_locales_hide w-locales-items">
+                      <div role="listitem" class="w-locales-item"></div>
+                    </div>
+                  </div>
+                  <div class="nav_links_svg">
+                    <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                      <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                        </svg></div>
+                    </div>
+                  </div>
+                </div>
+                <nav class="nav_dropdown_main_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-list">
+                  <div class="nav_dropdown_main_content">
+                    <div data-lenis-prevent="" class="nav_dropdown_main_scroll w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-locales-list">
+                      <div role="list" class="nav_dropdown_list w-locales-items">
+                        <div role="listitem" class="nav_dropdown_item w-locales-item">
+                          <a href="#" class="nav_dropdown_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-inline-block">
+                            <div class="nav_dropdown_text">This is some text inside of a div block.</div>
+                          </a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div role="listitem" class="nav_links_item">
+              <div data-delay="400" data-hover="false" data-open-on-mobile="" class="nav_dropdown_component w-dropdown">
+                <div data-state="expanded" class="nav_links_link w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-toggle">
+                  <div class="nav_links_search_icon">
+                    <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="400" height="400" viewbox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M171 17C191.224 17 211.249 20.9834 229.934 28.7227C248.618 36.4619 265.594 47.8053 279.895 62.1055C294.195 76.4056 305.538 93.3824 313.277 112.066C321.017 130.751 325 150.776 325 171C325 191.224 321.017 211.249 313.277 229.934C305.538 248.618 294.195 265.594 279.895 279.895C265.594 294.195 248.618 305.538 229.934 313.277C211.249 321.017 191.224 325 171 325C150.776 325 130.751 321.017 112.066 313.277C93.3824 305.538 76.4056 294.195 62.1055 279.895C47.8053 265.594 36.4619 248.618 28.7227 229.934C20.9834 211.249 17 191.224 17 171C17 150.776 20.9834 130.751 28.7227 112.066C36.4619 93.3824 47.8053 76.4056 62.1055 62.1055C76.4056 47.8053 93.3824 36.4619 112.066 28.7227C130.751 20.9834 150.776 17 171 17Z" stroke="black" stroke-width="2"></path>
+                        <path d="M280.602 280.602L388.602 388.602" stroke="black" stroke-width="2"></path>
+                      </svg></div>
+                  </div>
+                  <div class="u-sr-only">Search</div>
+                </div>
+                <nav class="nav_dropdown_mega_wrap w-variant-23049969-09ac-2789-520b-3c6ae895bbc6 w-dropdown-list">
+                  <div class="nav_dropdown_mega_content w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                    <div data-lenis-prevent="" class="nav_dropdown_mega_scroll w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                      <div class="nav_dropdown_mega_contain w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+                        <form action="/search" class="nav_search_wrap w-form"><button type="submit" tabindex="-1" class="nav_search_btn_wrap"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 400 400" fill="none" aria-hidden="true" class="nav_search_btn_icon">
+                              <circle cx="171" cy="171" r="155" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></circle>
+                              <path d="M280.602 280.602L388.602 388.602" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></path>
+                            </svg>
+                            <div class="u-sr-only">Search</div>
+                          </button><label class="nav_search_label"><span class="u-sr-only">Search</span><input class="nav_search_field w-input" maxlength="256" name="query" placeholder="Search…" type="search" id="search-2" required=""></label><input type="submit" class="u-display-none w-button" value="Search"></form>
+                      </div>
+                    </div>
+                  </div>
+                </nav>
+              </div>
+            </div>
+            <div role="listitem" class="nav_buttons_item is-main w-variant-23049969-09ac-2789-520b-3c6ae895bbc6">
+              <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+                <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Button Text" class="clickable_btn"></button></div>
+                <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
+                  <div aria-hidden="true" class="button_main_text u-text-style-main">Button Text</div>
+                </div>
+              </div>
+            </div>
+            <div role="listitem" class="nav_buttons_item">
+              <div data-wf--button-main--variant="primary" data-trigger="hover focus" class="button_main_wrap">
+                <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Button Text" class="clickable_btn"></button></div>
+                <div data-button="" class="button_main_element">
+                  <div aria-hidden="true" class="button_main_text u-text-style-main">Button Text</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </header>
+  <div data-animation="default" data-collapse="all" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="nav_mobile_wrap w-nav">
+    <div class="nav_mobile_contain">
+      <div class="nav_mobile_layout">
+        <a aria-label="Home Page" href="/" aria-current={isHome ? "page" : undefined} class:list={["nav_mobile_logo w-inline-block", { "w--current": isHome }]}>
+          <div style="" class="u-max-width-full">
+            <div class="u-icon logo w-embed"><svg width="100%" height="100%" viewbox="0 0 908 184" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M176.11 120.7L119.28 105.47L134.5 162.3L106.42 169.82L91.19 113.01L20.56 183.63L0 163.07L70.63 92.44L13.81 77.22L21.33 49.13L78.16 64.36L62.93 7.53L91.02 0L106.25 56.83L148.86 14.21L169.42 34.77L126.81 77.39L183.63 92.62L176.11 120.7Z" fill="currentColor"></path>
+                <path d="M224.24 174.1V7.62988H255.87V146.75H333.63V174.1H224.24Z" fill="currentColor"></path>
+                <path d="M455.47 54.2402V174.1H426.22V155.55C419.56 168.63 406.01 176 388.88 176C362.01 176 344.41 156.5 344.41 128.44V54.2402H373.42V122.25C373.42 138.66 383.65 150.07 398.39 150.07C414.8 150.07 426.21 137.23 426.21 119.63V54.2402H455.46H455.47Z" fill="currentColor"></path>
+                <path d="M476.25 174.1V54.2403H505.5V73.0303C511.44 60.9003 523.34 52.3403 540.22 52.3403C559.25 52.3403 572.32 60.4303 577.56 75.1703C583.03 62.8003 598.25 52.3403 617.28 52.3403C643.2 52.3403 659.85 71.1303 659.85 96.5703V174.1H630.84V105.37C630.84 88.4803 622.04 77.3103 608.01 77.3103C592.31 77.3103 582.56 88.4903 582.56 105.37V174.1H553.55V105.37C553.55 88.4803 544.75 77.3103 530.72 77.3103C515.26 77.3103 505.51 88.4903 505.51 105.37V174.1H476.26H476.25Z" fill="currentColor"></path>
+                <path d="M676.2 114.17C676.2 78.5003 702.36 52.3403 738.98 52.3403C775.6 52.3403 801.52 78.5003 801.52 114.17C801.52 149.84 775.36 176 738.98 176C702.6 176 676.2 149.84 676.2 114.17ZM772.04 114.17C772.04 92.5303 758.72 77.5503 738.98 77.5503C719.24 77.5503 705.69 92.5303 705.69 114.17C705.69 135.81 719.01 150.79 738.98 150.79C758.95 150.79 772.04 135.81 772.04 114.17Z" fill="currentColor"></path>
+                <path d="M811.46 134.15H838.1C839.29 145.57 848.09 152.7 861.17 152.7C872.59 152.7 880.2 146.99 880.2 139.86C880.2 113.22 814.56 138.67 814.56 88.0201C814.56 67.0901 832.87 52.3501 857.6 52.3501C885.66 52.3501 904.93 67.8101 906.11 91.1101H879.47C877.81 79.9301 867.58 74.2201 858.31 74.2201C847.85 74.2201 840.95 78.9801 840.95 87.0601C840.95 112.98 907.54 84.4401 907.54 138.67C907.54 161.26 889.23 176.01 861.17 176.01C833.11 176.01 812.89 159.84 811.47 134.15H811.46Z" fill="currentColor"></path>
+              </svg></div><img src="/images/odestudiotestsmall2x.png" loading="lazy" sizes="(max-width: 2018px) 100vw, 2018px" srcset="/images/odestudiotestsmall2x-p-500.png 500w, /images/odestudiotestsmall2x-p-800.png 800w, /images/odestudiotestsmall2x-p-1080.png 1080w, /images/odestudiotestsmall2x-p-1600.png 1600w, /images/odestudiotestsmall2x-p-2000.png 2000w, /images/odestudiotestsmall2x.png 2018w" alt="">
+          </div>
+        </a>
+        <nav role="navigation" class="nav_mobile_menu_wrap w-nav-menu">
+          <div data-lenis-prevent="" class="nav_mobile_menu_scroll">
+            <nav aria-label="Main" data-wf--menu--variant="mobile" class="nav_links_component">
+              <div role="list" class="nav_links_wrap">
+                <div role="listitem" class="nav_links_item">
+                  <div data-delay="400" data-hover="true" class="nav_dropdown_component w-dropdown">
+                    <div data-state="expanded" class="nav_links_link w-dropdown-toggle">
+                      <div class="nav_links_text">Services</div>
+                      <div class="nav_links_svg">
+                        <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                          <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                            </svg></div>
+                        </div>
+                      </div>
+                    </div>
+                    <nav class="nav_dropdown_main_wrap w-dropdown-list">
+                      <div class="nav_dropdown_main_content">
+                        <div data-lenis-prevent="" class="nav_dropdown_main_scroll">
+                          <ul role="list" class="nav_dropdown_list">
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-inline-block">
+                                <div class="nav_dropdown_text">Branding</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-inline-block">
+                                <div class="nav_dropdown_text">Website Design</div>
+                              </a>
+                            </li>
+                            <li class="nav_dropdown_item">
+                              <a href="#" class="nav_dropdown_link w-inline-block">
+                                <div class="nav_dropdown_text">Development</div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <div role="listitem" class="nav_links_item">
+                  <div data-delay="400" data-hover="true" class="nav_dropdown_component w-dropdown">
+                    <div data-state="expanded" class="nav_links_link w-dropdown-toggle">
+                      <div class="nav_links_text">Work</div>
+                      <div class="nav_links_svg">
+                        <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                          <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                            </svg></div>
+                        </div>
+                      </div>
+                    </div>
+                    <nav class="nav_dropdown_mega_wrap w-dropdown-list">
+                      <div class="nav_dropdown_mega_content">
+                        <div data-lenis-prevent="" class="nav_dropdown_mega_scroll">
+                          <div class="nav_dropdown_mega_contain">
+                            <div class="nav_dropdown_mega_layout">
+                              <ul role="list" class="nav_dropdown_list">
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Branding</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Website Design</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Development</div>
+                                  </a>
+                                </li>
+                              </ul>
+                              <ul role="list" class="nav_dropdown_list">
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Branding</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Website Design</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Development</div>
+                                  </a>
+                                </li>
+                              </ul>
+                              <ul role="list" class="nav_dropdown_list">
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Branding</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Website Design</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Development</div>
+                                  </a>
+                                </li>
+                              </ul>
+                              <ul role="list" class="nav_dropdown_list">
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Branding</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Website Design</div>
+                                  </a>
+                                </li>
+                                <li class="nav_dropdown_item">
+                                  <a href="#" class="nav_dropdown_link w-inline-block">
+                                    <div class="nav_dropdown_text">Development</div>
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <div role="listitem" class="nav_links_item">
+                  <a href="#" class="nav_links_link w-inline-block">
+                    <div class="nav_links_text">About</div>
+                  </a>
+                </div>
+                <div role="listitem" class="nav_links_item">
+                  <a href="#" class="nav_links_link w-inline-block">
+                    <div class="nav_links_text">Contact</div>
+                  </a>
+                </div>
+              </div>
+              <div role="list" class="nav_actions_wrap">
+                <div role="listitem" class="nav_links_item">
+                  <div data-delay="400" data-hover="false" class="nav_dropdown_component w-dropdown">
+                    <div data-state="expanded" class="nav_links_link w-dropdown-toggle">
+                      <div class="w-locales-list">
+                        <div class="nav_links_text u-text-transform-uppercase">EN</div>
+                        <div role="list" class="nav_links_locales_hide w-locales-items">
+                          <div role="listitem" class="w-locales-item"></div>
+                        </div>
+                      </div>
+                      <div class="nav_links_svg">
+                        <div data-wf--icon-arrow--direction="bottom" class="u-svg w-variant-caa8b8e9-e8ec-6eb3-4526-30f19f7326f5">
+                          <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="66" height="70" viewbox="0 0 66 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                              <path d="M17 2L50 34.9999L17 68" stroke="white" stroke-width="2"></path>
+                            </svg></div>
+                        </div>
+                      </div>
+                    </div>
+                    <nav class="nav_dropdown_main_wrap w-dropdown-list">
+                      <div class="nav_dropdown_main_content">
+                        <div data-lenis-prevent="" class="nav_dropdown_main_scroll w-locales-list">
+                          <div role="list" class="nav_dropdown_list w-locales-items">
+                            <div role="listitem" class="nav_dropdown_item w-locales-item">
+                              <a href="#" class="nav_dropdown_link w-inline-block">
+                                <div class="nav_dropdown_text">This is some text inside of a div block.</div>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <div role="listitem" class="nav_links_item">
+                  <div data-delay="400" data-hover="false" data-open-on-mobile="" class="nav_dropdown_component w-dropdown">
+                    <div data-state="expanded" class="nav_links_link w-dropdown-toggle">
+                      <div class="nav_links_search_icon">
+                        <div aria-hidden="true" data-wf--icon--variant="full" class="u-icon w-embed"><svg width="400" height="400" viewbox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M171 17C191.224 17 211.249 20.9834 229.934 28.7227C248.618 36.4619 265.594 47.8053 279.895 62.1055C294.195 76.4056 305.538 93.3824 313.277 112.066C321.017 130.751 325 150.776 325 171C325 191.224 321.017 211.249 313.277 229.934C305.538 248.618 294.195 265.594 279.895 279.895C265.594 294.195 248.618 305.538 229.934 313.277C211.249 321.017 191.224 325 171 325C150.776 325 130.751 321.017 112.066 313.277C93.3824 305.538 76.4056 294.195 62.1055 279.895C47.8053 265.594 36.4619 248.618 28.7227 229.934C20.9834 211.249 17 191.224 17 171C17 150.776 20.9834 130.751 28.7227 112.066C36.4619 93.3824 47.8053 76.4056 62.1055 62.1055C76.4056 47.8053 93.3824 36.4619 112.066 28.7227C130.751 20.9834 150.776 17 171 17Z" stroke="black" stroke-width="2"></path>
+                            <path d="M280.602 280.602L388.602 388.602" stroke="black" stroke-width="2"></path>
+                          </svg></div>
+                      </div>
+                      <div class="u-sr-only">Search</div>
+                    </div>
+                    <nav class="nav_dropdown_mega_wrap w-dropdown-list">
+                      <div class="nav_dropdown_mega_content">
+                        <div data-lenis-prevent="" class="nav_dropdown_mega_scroll">
+                          <div class="nav_dropdown_mega_contain">
+                            <form action="/search" class="nav_search_wrap w-form"><button type="submit" tabindex="-1" class="nav_search_btn_wrap"><svg xmlns="http://www.w3.org/2000/svg" width="100%" viewbox="0 0 400 400" fill="none" aria-hidden="true" class="nav_search_btn_icon">
+                                  <circle cx="171" cy="171" r="155" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></circle>
+                                  <path d="M280.602 280.602L388.602 388.602" stroke="currentColor" stroke-width="var(--nav--icon-thickness)" vector-effect="non-scaling-stroke"></path>
+                                </svg>
+                                <div class="u-sr-only">Search</div>
+                              </button><label class="nav_search_label"><span class="u-sr-only">Search</span><input class="nav_search_field w-input" maxlength="256" name="query" placeholder="Search…" type="search" id="search-2" required=""></label><input type="submit" class="u-display-none w-button" value="Search"></form>
+                          </div>
+                        </div>
+                      </div>
+                    </nav>
+                  </div>
+                </div>
+                <div role="listitem" class="nav_buttons_item is-main">
+                  <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+                    <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Button Text" class="clickable_btn"></button></div>
+                    <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
+                      <div aria-hidden="true" class="button_main_text u-text-style-main">Button Text</div>
+                    </div>
+                  </div>
+                </div>
+                <div role="listitem" class="nav_buttons_item">
+                  <div data-wf--button-main--variant="primary" data-trigger="hover focus" class="button_main_wrap">
+                    <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Button Text" class="clickable_btn"></button></div>
+                    <div data-button="" class="button_main_element">
+                      <div aria-hidden="true" class="button_main_text u-text-style-main">Button Text</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </nav>
+          </div>
+        </nav>
+        <div data-state="open" class="nav_button_wrap w-nav-button">
+          <div class="nav_button_layout">
+            <div class="nav_button_line is-1"></div>
+            <div class="nav_button_line is-2"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="nav_dropdown_backdrop"></div>
+  <div class="nav_menu_backdrop"></div>
+  <div class="u-embed-js w-embed w-script">
+    <script is:inline>
+if (sessionStorage.getItem("hide-nav-banner") === "true") {
+document.documentElement.classList.add("hide-nav-banner");
+}
+document.addEventListener("DOMContentLoaded", function () {
+document.querySelectorAll(".nav_banner_close_wrap").forEach((button) => {
+button.addEventListener("click", function () {
+  sessionStorage.setItem("hide-nav-banner", "true");
+  document.documentElement.classList.add("hide-nav-banner");
+});
+});
+document.querySelectorAll(".nav_skip_wrap").forEach(function (link) {
+const target = document.querySelector("main");
+if (!target) return;
+link.addEventListener("click", function () {
+  target.setAttribute("tabindex", "-1");
+  target.focus();
+});
+});
+});
+</script>
+  </div>
+</div>
