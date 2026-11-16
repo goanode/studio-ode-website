@@ -33,8 +33,11 @@ public/
 
 - **Animations** still run on `public/vendor/webflow.js` (Webflow's interaction engine) together with GSAP.
   Each page passes its original Webflow page id (`wfPage`) to the layout so webflow.js can find that page's interactions.
-- **Waitlist form** posts to [Netlify Forms](https://docs.netlify.com/forms/setup/) (`name="waitlist"`).
-  Submissions show up in the Netlify dashboard under *Forms*. If you host somewhere else, change the `fetch` in `WaitlistModal.astro`.
+- **Hosting**: Cloudflare Pages. Build command `npm run build`, output directory `dist`.
+- **Waitlist form** sends each sign-up by email through [Web3Forms](https://web3forms.com) (free, 250 submissions/month).
+  The access key lives in `src/config.ts`.
+- **Staging mode**: `public/_headers` and `public/robots.txt` tell search engines not to index the site.
+  Remove/relax both on launch day.
 - **Fonts**: PP Mori is self-hosted. Instrument Sans and the other Google fonts load from Google.
   *freight-big-pro* comes from the Adobe Fonts kit `xbu1shi`. Add the new domain to that kit's allowed domains in Adobe Fonts,
   or the serif headings will fall back to a default font.

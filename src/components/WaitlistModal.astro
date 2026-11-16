@@ -1,3 +1,6 @@
+---
+import { WEB3FORMS_ACCESS_KEY } from "../config";
+---
 <dialog data-wf--modal--variant="side-panel" data-modal-target="waitlist" class="modal_dialog w-variant-ce8c84b8-072d-28eb-fa41-e255213771e0">
   <div class="u-embed-css w-embed">
     <style is:inline>
@@ -34,9 +37,11 @@ display: block;
           </div>
           <div class="form_component">
             <div class="form_wrap w-form">
-              <form id="waitlist-form" name="waitlist" method="POST" action="/" data-netlify="true" data-netlify-honeypot="bot-field" data-waitlist-form="" class="form_element">
-  <input type="hidden" name="form-name" value="waitlist">
-  <p hidden><label>Leave this empty: <input name="bot-field"></label></p>
+              <form id="waitlist-form" name="waitlist" method="POST" action="https://api.web3forms.com/submit" data-waitlist-form="" class="form_element">
+                <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY}>
+                <input type="hidden" name="subject" value="Nouvelle inscription — liste d'attente Ode">
+                <input type="hidden" name="from_name" value="Ode website">
+                <input type="checkbox" name="botcheck" class="u-display-none" tabindex="-1" autocomplete="off" aria-hidden="true">
                 <fieldset data-wf--form-fieldset--layout="flex-horizontal" class="form_fieldset_wrap">
                   <legend data-wf--form-label-text--variant="hidden" class="form_label_text w-variant-46933b79-cf19-81b4-bc00-8af5c19b08b3"><span>Contact Details</span></legend>
                   <div role="none" class="form_fieldset_list w-variant-ccbf2df7-16d0-30d7-0afb-0df098785596"><label data-trigger="focus" class="form_label_wrap"><span data-wf--form-label-text--variant="visible" class="form_label_text"><span>Your name </span><span>*</span></span><input name="name" type="text" required="" inputmode="text" autocomplete="given-name" placeholder=" " class="form_field"></label><label data-trigger="focus" class="form_label_wrap"><span data-wf--form-label-text--variant="visible" class="form_label_text"><span>E-mail </span><span>*</span></span><input name="email" type="email" required="" inputmode="email" autocomplete="email" placeholder=" " class="form_field"></label></div>
@@ -169,7 +174,7 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
 </dialog>
 
 <script>
-  // Waitlist form: submit to Netlify Forms instead of Webflow's form backend.
+  // Waitlist form: sends each sign-up to your inbox via Web3Forms (https://web3forms.com).
   // Listening on the form itself stops webflow.js (which listens on document) from taking over.
   document.querySelectorAll<HTMLFormElement>("form[data-waitlist-form]").forEach((form) => {
     const wrap = form.closest(".w-form");
@@ -179,17 +184,19 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
       event.preventDefault();
       event.stopPropagation();
       if (fail) fail.style.display = "none";
-      const body = new URLSearchParams(new FormData(form) as unknown as Record<string, string>).toString();
+      const data = Object.fromEntries(new FormData(form));
       try {
-        const res = await fetch("/", {
+        const res = await fetch(form.action, {
           method: "POST",
-          headers: { "Content-Type": "application/x-www-form-urlencoded" },
-          body,
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify(data),
         });
-        if (!res.ok) throw new Error(String(res.status));
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.success) throw new Error(json.message || String(res.status));
         form.style.display = "none";
         if (done) done.style.display = "block";
-      } catch {
+      } catch (err) {
+        console.error("Waitlist submission failed:", err);
         if (fail) fail.style.display = "block";
       }
     });

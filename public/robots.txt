@@ -1,0 +1,3 @@
+# STAGING: blocks all crawlers. Replace with "Allow: /" on launch day.
+User-agent: *
+Disallow: /
