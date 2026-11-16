@@ -19,34 +19,10 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
       <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
         <div data-wf--layout--variant="breakout-reversed" class="u-layout-wrapper w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
           <div class="u-layout w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
-            <div class="u-layout-column-1 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7 u-padding-bottom-0">
-              <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
-                <div class="u-display-contents">
-                  <div fade-in="" class="fg-hero-levels" role="group" aria-label="Aller directement à un niveau">
-                    {LEVELS.map((lv) => (
-                      <button type="button" class="fg-hero-level" data-level-jump={lv}>{lv} · {tricks.filter((t) => t.level === lv).length}</button>
-                    ))}
-                  </div>
-                  <div fade-in="" data-number="40" data-wf--typography-paragraph--variant="text-main" class="u-text w-variant-61d538b2-709c-eb7a-4258-8c0890dc07fc u-rich-text w-richtext">
-                    <p>{tricks.length} figures de pole dance, de la première rotation aux inversions avancées, avec leurs prérequis et les étapes pour les réussir.</p>
-                  </div>
-                  <div fade-in="" class="u-button-wrapper">
-                    <div class="u-display-contents">
-                      <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-                        <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
-                        <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
-                          <div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
+            <div class="fg-hero-col u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
               <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
                 <div class="u-display-contents">
-                  <h1 class="heading fg-heading">Figures</h1>
+                  <h1 class="heading fg-heading">FIGURES</h1>
                 </div>
               </div>
             </div>
@@ -55,6 +31,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
       </div>
     </section>
 
+    <div class="fg-body">
     <!-- Sticky filter bar -->
     <div class="fg-bar-wrap" id="catalogue">
       <div class="fg-bar">
@@ -131,6 +108,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         <button type="button" class="fg-btn" id="fg-reset">Voir toutes les figures</button>
       </div>
     </section>
+    </div>
   </main>
 
   <WaitlistModal slot="after-footer" />
@@ -187,27 +165,15 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   more.addEventListener("click", () => { state.limit += PAGE; render(); });
   document.getElementById("fg-reset")!.addEventListener("click", () => { q.value = ""; catSel.value = "Toutes"; reset({ level: "Tous" }); });
 
-  // Level shortcuts in the hero: filter, then glide down to the catalogue
-  document.querySelectorAll<HTMLButtonElement>("[data-level-jump]").forEach((b) =>
-    b.addEventListener("click", () => {
-      reset({ level: b.dataset.levelJump! });
-      // land on the results, just below the sticky bar
-      const bar = document.getElementById("catalogue")!;
-      const target = gridTitle.closest("section")!;
-      const offset = -(parseFloat(getComputedStyle(bar).top) + bar.offsetHeight);
-      const lenis = (window as any).lenis;
-      lenis ? lenis.scrollTo(target, { offset }) : scrollTo({ top: target.getBoundingClientRect().top + scrollY + offset, behavior: "smooth" });
-    }));
-
   render();
 </script>
 
 <style>
   /* Hero: the home page's .heading is sized for "ODE"; fit "Figures" */
-  .fg-heading { width: auto; white-space: nowrap; font-size: clamp(5rem, 19vw, 19rem); }
-  .fg-hero-levels { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 1rem; }
-  .fg-hero-level { height: 2.25rem; padding: 0 .9rem; border-radius: 100vw; background: color-mix(in srgb, white 20%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #fff; font-size: .875rem; transition: background .2s, color .2s; }
-  .fg-hero-level:hover { background: #fff; color: var(--swatch--dark-900); }
+  .fg-hero-col { grid-column: 1 / -1; width: 100%; }
+  .fg-heading { width: auto; white-space: nowrap; font-size: 21vw; letter-spacing: -.02em; }
+  /* Everything below the hero sits on a white layer that slides over it, like the homepage sections */
+  .fg-body { position: relative; z-index: 1; background: var(--_theme---background, #fff); padding-top: 1px; }
 
   .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
@@ -270,7 +236,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   @media (max-width: 900px) {
     .fg-featgrid { grid-template-columns: 1fr 1fr; grid-template-rows: 22rem 15rem 15rem; grid-template-areas: "big big" "tall s1" "tall s2"; }
   }
-  @media (max-width: 767px) { .fg-heading { font-size: 27vw; } }
   @media (max-width: 700px) {
     .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem .75rem; }
     .fg-bar { border-radius: 1.5rem; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .375rem; }
