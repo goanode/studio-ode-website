@@ -571,10 +571,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
             </div>
             <div class="u-layout-column-2 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
               <div class="compare_toggle_wrapper">
-                <div class="compare_toggle_pill">
-                  <a href="#" class="compare_toggle_option">Monthly</a>
-                  <a href="#" class="compare_toggle_option">6-Monthly</a>
-                  <a href="#" class="compare_toggle_option is-active">Yearly</a>
+                <div class="compare_toggle_pill ode-toggle" role="radiogroup" aria-label="Durée de la formule" data-active="2">
+                  <button type="button" role="radio" aria-checked="false" class="compare_toggle_option" data-key="Monthly">Mensuel</button>
+                  <button type="button" role="radio" aria-checked="false" class="compare_toggle_option" data-key="6-Monthly">6 mois</button>
+                  <button type="button" role="radio" aria-checked="true" class="compare_toggle_option is-active" data-key="Yearly">Annuel</button>
+                  <span class="ode-toggle-thumb" aria-hidden="true"></span>
                 </div>
               </div>
               <div class="w-embed w-script">
@@ -590,9 +591,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   options.forEach(function (opt) {
     opt.addEventListener('click', function (e) {
       e.preventDefault();
-      options.forEach(function (x) { x.classList.remove('is-active'); });
+      options.forEach(function (x) { x.classList.remove('is-active'); x.setAttribute('aria-checked', 'false'); });
       opt.classList.add('is-active');
-      var selected = opt.textContent.trim();
+      opt.setAttribute('aria-checked', 'true');
+      opt.parentElement.setAttribute('data-active', Array.prototype.indexOf.call(options, opt));
+      var selected = opt.getAttribute('data-key') || opt.textContent.trim();
       Object.keys(titles).forEach(function (key) {
         titles[key].forEach(function (el) {
           el.style.display = (key === selected) ? 'flex' : 'none';
@@ -991,6 +994,19 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   </main>
 
   <WaitlistModal slot="after-footer" />
+  <style is:global>
+    /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
+    .ode-toggle { position: relative; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 0 !important; padding: 5px !important; border-radius: 9999px; background: rgb(255 255 255 / 14%) !important; border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+    .ode-toggle .compare_toggle_option { position: relative; z-index: 1; margin: 0; padding: .75rem 1.625rem !important; border: 0; border-radius: 9999px; background: none !important; font: inherit; font-size: 1rem; color: #fff !important; text-align: center; cursor: pointer; transition: color .35s; }
+    .ode-toggle .compare_toggle_option.is-active { color: #1f1d1e !important; }
+    .ode-toggle .compare_toggle_option:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .ode-toggle-thumb { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 10px) / 3); border-radius: 9999px; background: #fff; transition: transform .45s cubic-bezier(.3, 1.3, .5, 1); }
+    .ode-toggle[data-active="1"] .ode-toggle-thumb { transform: translateX(100%); }
+    .ode-toggle[data-active="2"] .ode-toggle-thumb { transform: translateX(200%); }
+    @media (max-width: 479px) { .ode-toggle .compare_toggle_option { padding: .6875rem .875rem !important; font-size: .875rem; } }
+    @media (prefers-reduced-motion: reduce) { .ode-toggle-thumb { transition: none; } }
+  </style>
+
 
 
   <Fragment slot="scripts">
