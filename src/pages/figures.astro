@@ -11,7 +11,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 <!-- Uses the home page's Webflow page id so the hero gets the exact same load animation (title letters rising, intro fading in) -->
 <BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <main id="main" class="page_main">
-    <FigureHero title="Figures" image="/images/please-look-at-the-first-pose----820406-SN7" labels={[`${tricks.length} figures`, `${LEVELS.length} niveaux`]} intro="De la première rotation aux inversions avancées." />
+    <FigureHero title="Figures" image="/images/please-look-at-the-first-pose----820406-SN7" labels={[`${tricks.length} figures`, `${CATEGORIES.length} types`, `${LEVELS.length} niveaux`]} intro="De la première rotation aux inversions avancées." />
 
     <div class="fg-body">
     <!-- Filters (design G5): centred like the homepage "Choisis ton cours" -->

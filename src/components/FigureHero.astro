@@ -41,9 +41,10 @@ const size = short
         </div>
       </div>
       {!short && (labels.length > 0 || intro) && (
+        <div fade-in="" class="fh-labels">{labels.map((l) => <span class="card_classes_btn u-text-style-small">{l}</span>)}</div>
         <div fade-in="" class="fh-aside">
-          {labels.length > 0 && <div class="fh-labels">{labels.map((l) => <span class="card_classes_btn u-text-style-small">{l}</span>)}</div>}
           {intro && <p>{intro}</p>}
+          <a href="#catalogue" class="fh-down" aria-label="Voir les figures"><svg width="14" height="18" viewBox="0 0 14 18" fill="none" aria-hidden="true"><path d="M7 1v15.5M1 11l6 6 6-6" stroke="currentColor" stroke-width="1.4"></path></svg></a>
         </div>
       )}
     </section>
@@ -58,21 +59,24 @@ const size = short
   .fh-short .fh-heading { top: 0; margin: 0 auto; text-align: center; }
   @media (max-width: 767px) { .fh-short { height: 56svh; min-height: 24rem; } .fh-short .fh-heading { font-size: var(--fh-m) !important; } }
   .fh-hero { position: relative; }
-  .fh-aside { display: none; }
-  /* Phone, catalogue hero (design N1): the word runs up the left edge at full height, info at the bottom right */
+  .fh-aside, .fh-labels { display: none; }
+  /* Phone, catalogue hero (design N3): shorter hero; labels above the word, intro + scroll button under it */
   @media (max-width: 767px) {
-    .fh-tall .fh-col, .fh-tall .u-content-wrapper, .fh-tall .u-layout, .fh-tall .u-layout-wrapper { position: static; }
-    .fh-tall .fh-heading {
-      position: absolute; top: auto; left: calc(var(--site--margin) - .06em); bottom: 1rem; margin: 0;
-      font-size: min(calc((100svh - 11rem) / 4.75), 42vw) !important; line-height: .8;
-      transform-origin: left bottom; transform: rotate(-90deg) translateY(100%);
-    }
-    .fh-tall .fh-aside {
-      position: absolute; z-index: 2; right: var(--site--margin); bottom: 1.5rem;
-      left: calc(var(--site--margin) + min(calc((100svh - 11rem) / 4.75), 42vw) * .8 + 1.25rem);
-      display: flex; flex-direction: column; gap: .875rem; color: #fff;
-    }
-    .fh-aside p { margin: 0; font-size: .9375rem; line-height: 1.45; }
-    .fh-labels { display: flex; flex-wrap: wrap; gap: .375rem; }
+    .fh-tall { height: 80svh; min-height: 34rem; padding-bottom: 5.75rem; }
+    .fh-tall .fh-heading { top: 0; font-size: 20vw !important; line-height: 1; margin-left: -.04em; }
+    .fh-tall .fh-labels { position: absolute; z-index: 2; left: var(--site--margin); right: var(--site--margin); bottom: calc(5.75rem + 20vw + .75rem); display: flex; flex-wrap: wrap; gap: .375rem; color: #fff; }
+    .fh-tall .fh-aside { position: absolute; z-index: 2; left: var(--site--margin); right: var(--site--margin); bottom: 1.375rem; display: flex; justify-content: space-between; align-items: center; gap: 1rem; color: #fff; }
+    .fh-aside p { margin: 0; max-width: 14rem; font-size: .9375rem; line-height: 1.45; }
+    .fh-down { width: 3.25rem; height: 3.25rem; flex: none; border-radius: 9999px; border: 1px solid rgb(255 255 255 / 35%); background: rgb(255 255 255 / 14%); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); display: flex; align-items: center; justify-content: center; color: #fff; }
+    .fh-down:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   }
 </style>
+
+<script>
+  // smooth scroll (Lenis) to the catalogue from the hero arrow
+  document.querySelectorAll<HTMLAnchorElement>(".fh-down").forEach((a) => a.addEventListener("click", (e) => {
+    const t = document.querySelector(a.getAttribute("href")!);
+    const lenis = (window as any).lenis;
+    if (t && lenis) { e.preventDefault(); lenis.scrollTo(t, { offset: -24 }); }
+  }));
+</script>
