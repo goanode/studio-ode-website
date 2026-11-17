@@ -1,0 +1,49 @@
+---
+// The catalogue / trick-page hero: same markup as the homepage hero, so it gets the
+// same fluted glass and the same letter-by-letter load animation (needs wfPage = home page id).
+interface Props { title: string; image: string; short?: boolean }
+const { title, image, short = false } = Astro.props;
+const text = title.toUpperCase();
+// One line when it fits; long names go on two balanced lines. Size so the longest line fills the width.
+let lines = [text];
+if (text.length > 12 && text.includes(" ")) {
+  const words = text.split(" ");
+  let best = [text], bestMax = Infinity;
+  for (let i = 1; i < words.length; i++) {
+    const a = words.slice(0, i).join(" "), b = words.slice(i).join(" ");
+    const m = Math.max(a.length, b.length);
+    if (m < bestMax) { bestMax = m; best = [a, b]; }
+  }
+  lines = best;
+}
+const longest = Math.max(...lines.map((l) => l.length));
+const size = `min(${lines.length > 1 ? 11 : 21}vw, ${(147 / longest).toFixed(2)}vw)`;
+---
+    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class:list={["u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark", { "fh-short": short }]}>
+      <div class="u-background-slot">
+        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src={`${image}.webp`} alt="" sizes="100vw" loading="eager" srcset={`${image}-p-500.webp 500w, ${image}-p-800.webp 800w, ${image}.webp 1024w`} tlg-fluted-glass-image=""></div>
+        <div data-wf--media-overlay--variant="gradient" data-number="20" class="u-overlay w-variant-9653c0cc-21fc-fb82-1373-c98b1644e5a8"></div>
+      </div>
+      <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
+        <div data-wf--layout--variant="breakout-reversed" class="u-layout-wrapper w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
+          <div class="u-layout w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
+            <div class="fh-col u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
+              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
+                <div class="u-display-contents">
+                  <h1 class="heading fh-heading" style={`font-size: ${size}`}>{lines.map((l, i) => <>{i > 0 && <br />}{l}</>)}</h1>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<style>
+  .fh-col { grid-column: 1 / -1; width: 100%; }
+  .fh-heading { width: auto; white-space: nowrap; letter-spacing: -.02em; }
+  .fh-short .fh-heading { line-height: .9; }
+  /* Trick pages: a shorter hero instead of the full screen */
+  .fh-short { height: 64svh; min-height: 30rem; }
+  @media (max-width: 767px) { .fh-short { height: 56svh; min-height: 24rem; } }
+</style>

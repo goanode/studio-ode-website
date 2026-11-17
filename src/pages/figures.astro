@@ -1,6 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
+import FigureHero from "../components/FigureHero.astro";
 import { tricks, LEVELS, CATEGORIES } from "../data/tricks";
 
 const ORDER = { "Débutante": 0, "Intermédiaire": 1, "Avancée": 2 };
@@ -10,25 +11,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 <!-- Uses the home page's Webflow page id so the hero gets the exact same load animation (title letters rising, intro fading in) -->
 <BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <main id="main" class="page_main">
-    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark">
-      <div class="u-background-slot">
-        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-look-at-the-first-pose----820406-SN7.webp" alt="" sizes="100vw" loading="eager" srcset="/images/please-look-at-the-first-pose----820406-SN7-p-500.webp 500w, /images/please-look-at-the-first-pose----820406-SN7-p-800.webp 800w, /images/please-look-at-the-first-pose----820406-SN7.webp 1024w" tlg-fluted-glass-image=""></div>
-        <div data-wf--media-overlay--variant="gradient" data-number="20" class="u-overlay w-variant-9653c0cc-21fc-fb82-1373-c98b1644e5a8"></div>
-      </div>
-      <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
-        <div data-wf--layout--variant="breakout-reversed" class="u-layout-wrapper w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
-          <div class="u-layout w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
-            <div class="fg-hero-col u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
-              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
-                <div class="u-display-contents">
-                  <h1 class="heading fg-heading">FIGURES</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <FigureHero title="Figures" image="/images/please-look-at-the-first-pose----820406-SN7" />
 
     <div class="fg-body">
     <!-- Filters (design G5): centred like the homepage "Choisis ton cours" -->
@@ -89,7 +72,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
       </div>
       <div class="fg-grid" id="fg-grid">
         {tricks.map((t) => (
-          <a href="#" class="fg-card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category} data-order={ORDER[t.level]}>
+          <a href={`/figures/${t.slug}`} class="fg-card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category} data-order={ORDER[t.level]}>
             <span class="fg-card-img"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}; ${t.mirrored ? "transform: scaleX(-1);" : ""}`} /></span>
             <span class="u-overlay" data-number="20" aria-hidden="true"></span>
             <span class="fg-tile-fade" aria-hidden="true"></span>
@@ -231,8 +214,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
 <style>
   /* Hero: the home page's .heading is sized for "ODE"; fit "Figures" */
-  .fg-hero-col { grid-column: 1 / -1; width: 100%; }
-  .fg-heading { width: auto; white-space: nowrap; font-size: 21vw; letter-spacing: -.02em; }
   /* Everything below the hero sits on a white layer that slides over it, like the homepage sections */
   .fg-body { position: relative; z-index: 1; background: var(--_theme---background, #fff); padding-top: 1px; }
 

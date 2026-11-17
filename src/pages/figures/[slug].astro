@@ -1,0 +1,92 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import WaitlistModal from "../../components/WaitlistModal.astro";
+import FigureHero from "../../components/FigureHero.astro";
+import { tricks, LEVELS } from "../../data/tricks";
+import { content } from "../../data/trickContent";
+
+export function getStaticPaths() {
+  // same order as the catalogue: by level, then A–Z
+  const ordered = [...tricks].sort((a, b) => LEVELS.indexOf(a.level) - LEVELS.indexOf(b.level) || a.name.localeCompare(b.name));
+  return ordered.map((trick, i) => ({ params: { slug: trick.slug }, props: { trick, next: ordered[(i + 1) % ordered.length] } }));
+}
+
+const { trick, next } = Astro.props;
+const c = content[trick.slug];
+const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : trick.category === "Sol" ? "Un mouvement au sol" : trick.category === "Rotation" ? "Une rotation" : trick.category === "Montée" ? "Une montée" : trick.category === "Assise" ? "Une assise" : "Une figure tenue"} de niveau ${trick.level.toLowerCase()}${trick.alias ? `, aussi appelée ${trick.alias}` : ""}.`;
+---
+
+<!-- Home page id: same hero load animation as the homepage and the catalogue -->
+<BaseLayout title={`${trick.name} — Figures — Studio Ode`} description={intro} wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
+  <main id="main" class="page_main">
+    <FigureHero title={trick.name} image={trick.image} short />
+
+    <div class="fp-body">
+      <section class="fp-wrap">
+        <div class="fp-grid">
+          <div class="fp-left">
+            <div class="fp-pills">
+              <span class="fp-pill is-on">{trick.level}</span>
+              <span class="fp-pill">{trick.category}</span>
+            </div>
+            <p class="fp-intro">{intro}</p>
+          </div>
+
+          <div class="fp-right">
+            <div class="u-eyebrow-wrapper"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Les étapes</p></div></div></div>
+            {c ? (
+              <ol class="fp-steps">
+                {c.steps.map((s, i) => (
+                  <li>
+                    <span class="fp-n" aria-hidden="true">{i + 1}</span>
+                    <div><h2 class="fp-st">{s.title}</h2><p>{s.text}</p></div>
+                  </li>
+                ))}
+              </ol>
+            ) : (
+              <p class="fp-soon">Les étapes de cette figure arrivent bientôt. En attendant, viens la travailler en cours avec Justine.</p>
+            )}
+          </div>
+        </div>
+
+        <nav class="fp-more" aria-label="Navigation entre les figures">
+          <a href="/figures" class="fp-back">← Toutes les figures</a>
+          <a href={`/figures/${next.slug}`} class="fp-pill fp-next">Figure suivante : {next.name} →</a>
+        </nav>
+      </section>
+    </div>
+  </main>
+
+  <WaitlistModal slot="after-footer" />
+</BaseLayout>
+
+<style>
+  .fp-body { position: relative; z-index: 1; background: var(--_theme---background, #fff); padding-top: 1px; }
+  .fp-wrap { padding: clamp(3.5rem, 7vw, 6rem) var(--site--margin) clamp(4.5rem, 9vw, 7.5rem); }
+  .fp-grid { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: clamp(2rem, 6vw, 6rem); }
+  .fp-left { display: flex; flex-direction: column; gap: 1.25rem; align-items: flex-start; }
+  .fp-right { display: flex; flex-direction: column; gap: 1.25rem; }
+  .fp-pills { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .fp-pill { height: 2.75rem; display: inline-flex; align-items: center; padding: 0 1.5rem; border-radius: var(--radius--round); border: 1px solid var(--swatch--dark-900-o20); color: var(--swatch--dark-800); font-size: 1.125rem; transition: border-color .2s, background-color .2s, color .2s; }
+  .fp-pill.is-on { background: var(--swatch--dark-800); border-color: var(--swatch--dark-800); color: #fff; }
+  .fp-intro { margin: 0; max-width: 32rem; font-size: 1.125rem; line-height: 1.5; color: var(--swatch--dark-800); }
+  .fp-steps { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--swatch--dark-900-o20); }
+  .fp-steps li { display: grid; grid-template-columns: 3.5rem minmax(0, 1fr); gap: 1rem; align-items: start; padding: 1.25rem 0; border-bottom: 1px solid var(--swatch--dark-900-o20); }
+  .fp-n { font-family: freight-big-pro, "Freight Big Pro", Georgia, serif; font-size: 2.75rem; line-height: 1; margin-top: -.375rem; color: var(--swatch--dark-800); }
+  .fp-steps .fp-st { margin: 0 0 .375rem; padding: 0; font-family: inherit; font-weight: 400; font-size: 1.25rem; line-height: 1.3; letter-spacing: normal; color: var(--swatch--dark-900); }
+  .fp-right .u-eyebrow-wrapper { margin: 0; }
+  .fp-steps p { margin: 0; font-size: 1rem; line-height: 1.5; color: var(--swatch--dark-800); }
+  .fp-soon { margin: 0; padding: 1.5rem 0; border-top: 1px solid var(--swatch--dark-900-o20); border-bottom: 1px solid var(--swatch--dark-900-o20); font-size: 1.125rem; line-height: 1.5; color: var(--swatch--dark-800); }
+  .fp-more { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 3.5rem; padding-top: 2.5rem; border-top: 1px solid var(--swatch--dark-900-o20); }
+  .fp-back { font-size: 1rem; color: var(--swatch--dark-800); }
+  .fp-back:hover { text-decoration: underline; }
+  .fp-next:hover { background: var(--swatch--dark-800); border-color: var(--swatch--dark-800); color: #fff; }
+  .fp-back:focus-visible, .fp-next:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 3px; }
+  @media (max-width: 767px) {
+    .fp-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+    .fp-pill { height: 2.5rem; padding: 0 1.125rem; font-size: 1rem; }
+    .fp-intro { font-size: 1rem; }
+    .fp-n { font-size: 2.25rem; }
+    .fp-steps li { grid-template-columns: 2.75rem minmax(0, 1fr); }
+  }
+</style>
