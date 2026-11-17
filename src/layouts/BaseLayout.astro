@@ -94,8 +94,33 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         // Parallax images
         const images = document.querySelectorAll(".parallax");
         new Ukiyo(images, { scale: 1.5, speed: 1.5, willChange: true });
+
+        // Hero sections darken as you scroll past them (like oharchitecture.com.au):
+        // a black layer over the hero goes from 0 to 70% while the next section slides over it.
+        const heroes = [...document.querySelectorAll("section[slide-down]")].map((hero) => {
+          const dim = document.createElement("div");
+          dim.className = "hero-dim";
+          dim.setAttribute("aria-hidden", "true");
+          hero.appendChild(dim);
+          return { hero, dim };
+        });
+        if (heroes.length && !matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          const update = () => {
+            for (const { hero, dim } of heroes) {
+              const r = hero.getBoundingClientRect();
+              const p = Math.min(Math.max(-r.top / (r.height || 1), 0), 1);
+              dim.style.opacity = (p * 0.7).toFixed(3);
+            }
+          };
+          lenis.on("scroll", update);
+          addEventListener("resize", update);
+          update();
+        }
       });
     </script>
+    <style is:global>
+      .hero-dim { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; will-change: opacity; }
+    </style>
     <slot name="scripts" />
   </body>
 </html>
