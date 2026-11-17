@@ -84,6 +84,8 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         // Smooth scroll
         const lenis = new Lenis();
         window.lenis = lenis;
+        // Lenis only measures the page at start; re-measure whenever the content grows or shrinks (e.g. "Voir plus", filters)
+        new ResizeObserver(() => lenis.resize()).observe(document.body);
         function raf(time) {
           lenis.raf(time);
           requestAnimationFrame(raf);

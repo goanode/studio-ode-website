@@ -38,6 +38,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
       <div data-number="20" data-wf--typography-heading--variant="h1" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext fg-filters-title">
         <h2>Choisis ta figure</h2>
       </div>
+      <p class="fg-filters-intro">Retrouve toutes les figures enseignées au studio, de la première rotation aux inversions avancées. Filtre par type de mouvement ou par niveau, puis ouvre une figure pour voir ses prérequis et les étapes pour la réussir.</p>
       <div class="fg-pills" role="group" aria-label="Catégorie">
         <button type="button" class="fg-pill fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
         {CATEGORIES.map((c) => <button type="button" class="fg-pill fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
@@ -168,6 +169,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
   /* Filters (G5) */
   .fg-filters { position: relative; z-index: 2; padding: 6rem var(--site--margin) 2rem; display: flex; flex-direction: column; align-items: center; gap: .75rem; text-align: center; }
+  .fg-filters-intro { max-width: 36rem; margin: 0 0 2rem; font-size: 1.125rem; line-height: 1.5; color: var(--swatch--dark-800); text-wrap: pretty; }
   .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
   /* homepage spacing: 40px from heading to buttons (32px on phone) */
   .fg-filters-title { margin-top: 0; margin-bottom: 1.75rem; }
@@ -229,6 +231,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
     .fg-filters { padding-top: 4rem; gap: .75rem; }
     .fg-filters-title { margin-bottom: 1.25rem; }
+    .fg-filters-intro { font-size: 1rem; margin-bottom: 1.25rem; }
     .fg-filters-row { width: 100%; flex-direction: column; }
     .fg-search { width: 100%; }
     .fg-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: .5rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
