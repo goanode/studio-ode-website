@@ -1,35 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import LinkButton from "../components/LinkButton.astro";
+import FigureHero from "../components/FigureHero.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
 import { tricks, LEVELS } from "../data/tricks";
 ---
 
-<BaseLayout title="Concept" wfPage="6adb80ddd07ffba4e0c0cb69" flutedGlass>
+<!-- Home page id: same hero load animation as the homepage and /figures -->
+<BaseLayout title="Concept — Studio Ode" wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <div>
-    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark">
-      <div class="u-background-slot">
-        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/ea27f15c4ddd5e50ea8bd0309f3aae76.avif" alt="" sizes="(max-width: 1200px) 100vw, 1200px" loading="lazy" srcset="/images/ea27f15c4ddd5e50ea8bd0309f3aae76-p-500.avif 500w, /images/ea27f15c4ddd5e50ea8bd0309f3aae76-p-800.avif 800w, /images/ea27f15c4ddd5e50ea8bd0309f3aae76-p-1080.avif 1080w, /images/ea27f15c4ddd5e50ea8bd0309f3aae76.avif 1200w" tlg-fluted-glass-image=""></div>
-      </div>
-      <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
-        <div data-wf--layout--variant="breakout-reversed" class="u-layout-wrapper w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
-          <div class="u-layout w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7">
-            <div class="u-layout-column-1 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7 u-padding-bottom-0">
-              <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
-                <div class="u-display-contents"></div>
-              </div>
-            </div>
-            <div class="u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
-              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
-                <div class="u-display-contents">
-                  <h1 class="heading">Concept</h1>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
+    <FigureHero title="Concept" image="/images/ea27f15c4ddd5e50ea8bd0309f3aae76" />
     <section data-wf--section--variant="inherit" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section u-padding-top-large u-padding-bottom-small u-theme-light">
       <div class="u-container  ">
         <div data-wf--layout--variant="stack" class="u-layout-wrapper">
@@ -146,13 +126,31 @@ import { tricks, LEVELS } from "../data/tricks";
       </div>
     </section>
     <!-- Fluted glass block with a sharp photo window -->
-    <section class="cx-inset cx-flute u-theme-dark">
+    <section class="cx-inset cx-flute u-theme-dark u-clippath-inset">
       <div class="u-background-slot"><div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-look-at-the-first-pose----820406-SN7.webp" srcset="/images/please-look-at-the-first-pose----820406-SN7-p-500.webp 500w, /images/please-look-at-the-first-pose----820406-SN7-p-800.webp 800w, /images/please-look-at-the-first-pose----820406-SN7.webp 1024w" sizes="100vw" alt="" loading="lazy" tlg-fluted-glass-image="" style="object-position: 50% 40%"></div></div>
       <div class="cx-shade" aria-hidden="true"></div>
       <div class="cx-window"><img src="/images/please-look-at-the-first-pose----820406-SN7.webp" srcset="/images/please-look-at-the-first-pose----820406-SN7-p-500.webp 500w, /images/please-look-at-the-first-pose----820406-SN7-p-800.webp 800w, /images/please-look-at-the-first-pose----820406-SN7.webp 1024w" sizes="50vw" alt="Danseuse à la barre, au studio Ode" loading="lazy"></div>
       <div class="cx-flute-text">
         <h2 data-anim="fade-up" data-once="true" class="cx-serif cx-h2">Le mouvement change, toi aussi.</h2>
         <p>On t'aide à transformer chaque cours en progrès, à ton rythme.</p>
+      </div>
+    </section>
+
+    <!-- Editorial section: title + small photo, two text columns + large photo -->
+    <section class="cx-white cx-ed">
+      <div class="cx-ed-left">
+        <h2 class="cx-serif cx-h2 cx-dark">Plus forte.<br>Plus libre.</h2>
+        <figure class="cx-ed-small">
+          <div class="cx-ed-img"><img src="/images/please-keep-the-background--the-233555-iP0-p-500.webp" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w" sizes="(max-width: 767px) 60vw, 20vw" alt="Élève en figure inversée" loading="lazy"></div>
+          <figcaption>Cours d'essai, niveau débutante</figcaption>
+        </figure>
+      </div>
+      <div class="cx-ed-right">
+        <div class="cx-ed-cols">
+          <p>Chez Ode, on ne te demande ni force ni souplesse au départ. On construit les deux, cours après cours, avec des repères clairs pour mesurer tes progrès.</p>
+          <p>Les groupes restent petits, pour qu'on puisse corriger chaque placement et adapter chaque figure à ton corps, à ton niveau et à ton rythme.</p>
+        </div>
+        <div class="cx-ed-big"><img src="/images/7053819a90a239bb9f6686d8d1df9a9d.webp" srcset="/images/7053819a90a239bb9f6686d8d1df9a9d-p-500.webp 500w, /images/7053819a90a239bb9f6686d8d1df9a9d-p-800.webp 800w, /images/7053819a90a239bb9f6686d8d1df9a9d.webp 1200w" sizes="(max-width: 767px) 100vw, 65vw" alt="Le studio Ode" loading="lazy"></div>
       </div>
     </section>
 
@@ -171,7 +169,7 @@ import { tricks, LEVELS } from "../data/tricks";
     </section>
 
     <!-- What sets us apart -->
-    <section class="cx-inset cx-apart u-theme-dark">
+    <section class="cx-inset cx-apart u-theme-dark u-clippath-inset">
       <div class="u-background-slot"><div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-keep-the-background--the-233555-iP0.webp" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w, /images/please-keep-the-background--the-233555-iP0.webp 1024w" sizes="100vw" alt="" loading="lazy" tlg-fluted-glass-image="" style="object-position: 50% 30%"></div></div>
       <div class="cx-shade" aria-hidden="true"></div>
       <div class="cx-apart-in">
@@ -308,7 +306,8 @@ document.addEventListener("DOMContentLoaded", () => {
 </BaseLayout>
 
 <style>
-  .cx-inset { position: relative; margin: 0 .5rem; border-radius: var(--radius--main); overflow: hidden; color: #fff; background: var(--swatch--dark-900); }
+  /* same framing as the homepage image sections: full width, clipped .5rem in with 1rem corners */
+  .cx-inset { position: relative; overflow: hidden; color: #fff; background: var(--swatch--dark-900); }
   .cx-shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(180deg, rgb(31 29 30 / 15%), rgb(31 29 30 / 50%)); }
   .cx-serif { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); }
   .cx-h2 { margin: 0; font-size: clamp(2.75rem, 5.6vw, 5rem); line-height: 1.1; letter-spacing: -.01em; }
@@ -317,12 +316,26 @@ document.addEventListener("DOMContentLoaded", () => {
   .cx-white { position: relative; padding: 7.5rem 0; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin: 0 auto; }
   .cx-center { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1.5rem; }
   /* fluted glass + window */
-  .cx-flute { min-height: 40rem; display: flex; align-items: flex-end; justify-content: center; padding: 2rem; text-align: center; }
-  .cx-window { position: absolute; left: 26%; right: 26%; top: 12%; bottom: 34%; border-radius: var(--radius--main); overflow: hidden; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
+  .cx-flute { min-height: 100svh; display: flex; align-items: flex-end; justify-content: center; padding: 3.5rem var(--site--margin); text-align: center; }
+  .cx-window { position: absolute; left: 26%; right: 26%; top: 14%; bottom: 36%; border-radius: var(--radius--main); overflow: hidden; transition: transform .8s cubic-bezier(.2, .7, .2, 1); }
   .cx-flute:hover .cx-window { transform: scale(1.03); }
   .cx-window img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
   .cx-flute-text { position: relative; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; padding-bottom: 1rem; }
   .cx-flute-text p { margin: 0; max-width: 28rem; font-size: 1.125rem; line-height: 1.5; }
+  /* editorial section */
+  .cx-ed { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 8fr); gap: 1.5rem; align-items: stretch; }
+  .cx-ed-left { display: flex; flex-direction: column; justify-content: space-between; gap: 3rem; }
+  .cx-ed-small { margin: 0; display: flex; flex-direction: column; gap: .75rem; width: min(100%, 16rem); }
+  .cx-ed-img { position: relative; aspect-ratio: 4 / 3; border-radius: var(--radius--main); overflow: hidden; background: var(--swatch--dark-800); }
+  .cx-ed-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .cx-ed-small figcaption { text-align: left; font-size: .875rem; color: var(--swatch--dark-800); }
+  .cx-ed-right { display: flex; flex-direction: column; gap: 2.5rem; }
+  .cx-ed-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .cx-ed-cols p { margin: 0; font-size: 1rem; line-height: 1.55; color: var(--swatch--dark-800); }
+  .cx-ed-big { position: relative; flex: 1; min-height: 28rem; border-radius: var(--radius--main); overflow: hidden; background: var(--swatch--dark-800); }
+  .cx-ed-big img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .9s cubic-bezier(.2, .7, .2, 1); }
+  .cx-ed-big:hover img { scale: 1.03; }
+
   /* catalogue */
   .cx-cat { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-top: 2.5rem; text-align: left; }
   .cx-cat-photo { position: relative; min-height: 30rem; border-radius: var(--radius--main); overflow: hidden; background: var(--swatch--dark-800); }
@@ -334,8 +347,8 @@ document.addEventListener("DOMContentLoaded", () => {
   .cx-cat-card li:hover { padding-left: .5rem; }
   .cx-cat-card > :global(.button_main_wrap) { align-self: flex-start; }
   /* apart */
-  .cx-apart { min-height: 35rem; }
-  .cx-apart-in { position: relative; min-height: 35rem; padding: 2.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem; }
+  .cx-apart { min-height: 100svh; display: flex; }
+  .cx-apart-in { position: relative; flex: 1; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin: 0 auto; padding: 4.5rem 0 3.5rem; display: flex; flex-direction: column; justify-content: space-between; gap: 2.5rem; }
   .cx-minis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .5rem; }
   .cx-mini { min-height: 10.5rem; padding: 1.25rem; border-radius: var(--radius--main); background: rgb(255 255 255 / 20%); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); display: flex; flex-direction: column; justify-content: space-between; transition: transform .35s, background-color .35s, color .35s; }
   .cx-mini:hover { transform: translateY(-6px); background: #fff; color: var(--swatch--dark-800); }
@@ -346,12 +359,16 @@ document.addEventListener("DOMContentLoaded", () => {
   .cx-btn:hover { background: #fff; color: var(--swatch--dark-800); }
   @media (max-width: 767px) {
     .cx-white { padding: 4.5rem 0; }
-    .cx-flute { min-height: 38rem; padding: 1.5rem; }
+    .cx-flute { min-height: 40rem; padding: 2.5rem 1.5rem; }
     .cx-window { left: 12%; right: 12%; top: 7rem; bottom: auto; height: 15rem; }
+    .cx-ed { grid-template-columns: 1fr; gap: 2rem; }
+    .cx-ed-left { gap: 1.5rem; }
+    .cx-ed-cols { grid-template-columns: 1fr; gap: 1rem; }
+    .cx-ed-big { min-height: 20rem; flex: none; }
     .cx-cat { grid-template-columns: 1fr; }
     .cx-cat-photo { min-height: 22rem; }
     .cx-cat-card { padding: 1.5rem; }
-    .cx-apart-in { padding: 1.5rem; }
+    .cx-apart-in { padding: 3rem 0 2rem; }
     .cx-minis { grid-template-columns: 1fr 1fr; }
     .cx-mini { min-height: 8.5rem; padding: 1rem; }
   }
