@@ -1,10 +1,9 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
-import { tricks, LEVELS, CATEGORIES, FEATURED } from "../data/tricks";
+import { tricks, LEVELS, CATEGORIES } from "../data/tricks";
 
 const ORDER = { "Débutante": 0, "Intermédiaire": 1, "Avancée": 2 };
-const featured = FEATURED.map((f, i) => ({ ...f, trick: tricks.find((t) => t.slug === f.slug)!, area: ["big", "tall", "s1", "s2"][i] }));
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1000w`;
 ---
 
@@ -39,44 +38,20 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         <h2>Choisis ta figure</h2>
       </div>
       <p class="fg-filters-intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
+      <label class="fg-search">
+        <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.2"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.2"></path></svg>
+        <span class="fg-sr">Rechercher une figure</span>
+        <input type="search" id="fg-q" placeholder="Rechercher une figure" autocomplete="off" />
+      </label>
       <div class="fg-pills" role="group" aria-label="Catégorie">
         <button type="button" class="fg-pill fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
         {CATEGORIES.map((c) => <button type="button" class="fg-pill fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
       </div>
-      <div class="fg-filters-row">
-        <label class="fg-search">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.2"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.2"></path></svg>
-          <span class="fg-sr">Rechercher une figure</span>
-          <input type="search" id="fg-q" placeholder="Rechercher" autocomplete="off" />
-        </label>
-        <div class="fg-pills" role="group" aria-label="Niveau">
-          <button type="button" class="fg-pill fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
-          {LEVELS.map((lv) => <button type="button" class="fg-pill fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
-        </div>
+      <div class="fg-pills" role="group" aria-label="Niveau">
+        <button type="button" class="fg-pill fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
+        {LEVELS.map((lv) => <button type="button" class="fg-pill fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
       </div>
     </div>
-
-    <!-- À la une (hidden while searching or filtering) -->
-    <section class="fg-section" id="fg-featured">
-      <div class="fg-head">
-        <h2 class="fg-h2">À la une</h2>
-        <p class="fg-note">Choisies par Justine ce mois-ci</p>
-      </div>
-      <div class="fg-featgrid">
-        {featured.map((f) => (
-          <a href="#" class="fg-feat" style={`grid-area: ${f.area}`}>
-            <img src={`${f.trick.image}.webp`} srcset={srcset(f.trick.image)} sizes="(max-width: 900px) 100vw, 50vw" alt="" loading="lazy" style={`object-position: ${f.trick.imagePosition}; ${f.trick.mirrored ? "transform: scaleX(-1);" : ""}`} />
-            <span class="u-overlay" data-number="20" aria-hidden="true"></span>
-            <span class="fg-tile-fade" aria-hidden="true"></span>
-            <span class="fg-tag card_classes_btn u-text-style-small">{f.tag}</span>
-            <span class="fg-tile-content">
-              <span class="fg-tile-labels"><span class="card_classes_btn u-text-style-small">{f.trick.level}</span><span class="card_classes_btn u-text-style-small">{f.trick.category}</span></span>
-              <span class={`fg-tile-name fg-tile-name--${f.area}`}>{f.trick.name}</span>
-            </span>
-          </a>
-        ))}
-      </div>
-    </section>
 
     <!-- Catalogue -->
     <section class="fg-section fg-section--grid">
@@ -120,7 +95,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   const more = document.getElementById("fg-more") as HTMLButtonElement;
   const count = document.getElementById("fg-count")!;
   const empty = document.getElementById("fg-empty")!;
-  const featuredBlock = document.getElementById("fg-featured")!;
   const gridTitle = document.getElementById("fg-grid-title")!;
   const state = { level: "Tous", cat: "Toutes", limit: PAGE };
   const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
@@ -136,7 +110,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     cards.forEach((c) => (c.hidden = true));
     matches.forEach((c, i) => { grid.appendChild(c); c.hidden = i >= state.limit; });
     const browsing = state.level === "Tous" && cat === "Toutes" && !nq;
-    featuredBlock.hidden = !browsing;
     gridTitle.textContent = browsing ? "Toutes les figures" : "Résultats";
     count.textContent = matches.length === 1 ? "1 figure" : `${matches.length} figures`;
     const remaining = matches.length - Math.min(matches.length, state.limit);
@@ -173,12 +146,11 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
   /* homepage spacing: 40px from heading to buttons (32px on phone) */
   .fg-filters-title { margin-top: 0; margin-bottom: 1.75rem; }
-  .fg-filters-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .75rem; margin-top: .5rem; }
   .fg-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; max-width: 56rem; }
   .fg-pill { height: 2.75rem; padding: 0 1.5rem; border-radius: var(--radius--round); border: 1px solid var(--swatch--dark-900-o20); background: transparent; color: var(--swatch--dark-800); font-size: 1.125rem; line-height: 1; transition: border-color .2s, background-color .2s, color .2s; }
   .fg-pill:hover { border-color: var(--swatch--dark-800); }
   .fg-pill[aria-pressed="true"] { background-color: var(--swatch--dark-800); border-color: var(--swatch--dark-800); color: #fff; }
-  .fg-search { width: 21.25rem; max-width: 100%; height: 2.75rem; display: flex; align-items: center; gap: .75rem; padding: 0 1.375rem; border-radius: var(--radius--round); background: color-mix(in srgb, var(--swatch--dark-900) 6%, transparent); color: var(--swatch--dark-800); }
+  .fg-search { width: 30rem; max-width: 100%; margin-bottom: .5rem; height: 2.75rem; display: flex; align-items: center; gap: .75rem; padding: 0 1.375rem; border-radius: var(--radius--round); background: color-mix(in srgb, var(--swatch--dark-900) 6%, transparent); color: var(--swatch--dark-800); }
   .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 1.125rem; color: var(--swatch--dark-900); }
   .fg-search input::placeholder { color: var(--swatch--dark-800); opacity: .6; }
   .fg-search:focus-within, .fg-pill:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
@@ -190,11 +162,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-h2 { margin: 0; font-size: clamp(1.75rem, 2.6vw, 2.5rem); font-weight: 400; line-height: 1; letter-spacing: -.02em; color: var(--swatch--dark-900); }
   .fg-note { margin: 0; font-size: .875rem; color: var(--swatch--dark-800); }
 
-  /* À la une */
-  .fg-featgrid { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: 18rem 18rem; grid-template-areas: "big tall s1" "big tall s2"; gap: 1rem; }
-  .fg-feat { position: relative; display: block; border-radius: var(--radius--main); overflow: hidden; color: #fff; background: var(--swatch--dark-800); }
-  .fg-feat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
-  .fg-feat:hover img { scale: 1.05; }
 
   /* Tiles: same recipe as the homepage class cards (light tint, soft blur on the lower half, frosted label) */
   .fg-tile-content { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; color: #fff; }
@@ -202,9 +169,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   /* No blur on the photos: a soft dark fade on the bottom quarter keeps the text readable */
   .fg-tile-fade { position: absolute; inset: auto 0 0; height: 35%; background: linear-gradient(180deg, rgb(31 29 30 / 0), rgb(31 29 30 / 45%)); pointer-events: none; }
   .fg-tile-name { font-size: 1.25rem; line-height: 1.5; text-wrap: pretty; }
-  .fg-tile-name--big { font-size: clamp(2.25rem, 3.6vw, 3.5rem); line-height: 1.05; letter-spacing: -.02em; }
-  .fg-tile-name--tall { font-size: 1.75rem; line-height: 1.2; letter-spacing: -.01em; }
-  .fg-tag { position: absolute; z-index: 5; top: 1.5rem; left: 1.5rem; color: #fff; }
 
   /* Grid */
   .fg-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
@@ -213,35 +177,31 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-card-img { position: absolute; inset: 0; display: block; }
   .fg-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
   .fg-card:hover img { scale: 1.05; }
-  .fg-card:focus-visible, .fg-feat:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; border-radius: var(--radius--main); }
+  .fg-card:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; border-radius: var(--radius--main); }
 
   .fg-more-wrap { display: flex; justify-content: center; margin-top: 3rem; }
   .fg-btn { height: var(--button-size--medium); padding: 0 1.5rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-800); background: var(--swatch--dark-800); color: #fff; font-size: 1rem; transition: background .3s, color .3s; }
   .fg-btn:hover { background: #fff; color: var(--swatch--dark-800); }
-  .fg-btn[hidden], .fg-empty[hidden], #fg-featured[hidden] { display: none; }
+  .fg-btn[hidden], .fg-empty[hidden] { display: none; }
   .fg-empty { padding: 4.5rem 1.5rem; border: var(--border-width--main) solid var(--swatch--dark-900-o20); border-radius: var(--radius--main); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
   .fg-empty p { margin: 0; }
   .fg-empty-title { font-size: 1.375rem; color: var(--swatch--dark-900); }
 
   @media (max-width: 1000px) { .fg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
   @media (max-width: 900px) {
-    .fg-featgrid { grid-template-columns: 1fr 1fr; grid-template-rows: 22rem 15rem 15rem; grid-template-areas: "big big" "tall s1" "tall s2"; }
   }
   @media (max-width: 700px) {
     .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
     .fg-filters { padding-top: 4rem; gap: .75rem; }
     .fg-filters-title { margin-bottom: 1.25rem; }
     .fg-filters-intro { font-size: 1rem; margin-bottom: 1.25rem; }
-    .fg-filters-row { width: 100%; flex-direction: column; }
-    .fg-search { width: 100%; }
-    .fg-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: .5rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
-    .fg-pills::-webkit-scrollbar { display: none; }
+    .fg-search { width: 100%; margin-bottom: .25rem; }
+    .fg-pills { gap: .5rem; }
     .fg-pill { flex: none; height: 2.5rem; padding: 0 1.125rem; font-size: 1rem; }
     .fg-tile-content { padding: .75rem; gap: .5rem; }
-    .fg-card .card_classes_btn, .fg-feat .card_classes_btn { -webkit-backdrop-filter: none; backdrop-filter: none; background-color: rgb(255 255 255 / 22%); }
+    .fg-card .card_classes_btn { -webkit-backdrop-filter: none; backdrop-filter: none; background-color: rgb(255 255 255 / 22%); }
     .fg-card .fg-tile-labels { gap: .25rem; }
     .fg-card .card_classes_btn { padding: .375rem .5rem; font-size: .6875rem; line-height: 1.2; border-radius: .625rem; }
     .fg-card .fg-tile-name { font-size: 1.0625rem; line-height: 1.3; }
-    .fg-tag { top: 1rem; left: 1rem; }
   }
 </style>
