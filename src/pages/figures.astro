@@ -66,7 +66,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
             <span class="card_classes_blur" aria-hidden="true"></span>
             <span class="fg-tag card_classes_btn u-text-style-small">{f.tag}</span>
             <span class="fg-tile-content">
-              <span class="card_classes_btn u-text-style-small">{f.trick.level}</span>
+              <span class="fg-tile-labels"><span class="card_classes_btn u-text-style-small">{f.trick.level}</span><span class="card_classes_btn u-text-style-small">{f.trick.category}</span></span>
               <span class={`fg-tile-name fg-tile-name--${f.area}`}>{f.trick.name}</span>
             </span>
           </a>
@@ -87,7 +87,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
             <span class="u-overlay" data-number="20" aria-hidden="true"></span>
             <span class="card_classes_blur" aria-hidden="true"></span>
             <span class="fg-tile-content">
-              <span class="card_classes_btn u-text-style-small">{t.level}</span>
+              <span class="fg-tile-labels"><span class="card_classes_btn u-text-style-small">{t.level}</span><span class="card_classes_btn u-text-style-small">{t.category}</span></span>
               <span class="fg-tile-name">{t.name}</span>
             </span>
           </a>
@@ -191,6 +191,9 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
   /* Tiles: same recipe as the homepage class cards (light tint, soft blur on the lower half, frosted label) */
   .fg-tile-content { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; color: #fff; }
+  .fg-tile-labels { display: flex; flex-wrap: wrap; gap: .375rem; }
+  /* Blur covers the bottom quarter only (the homepage cards use half) */
+  .fg-card .card_classes_blur, .fg-feat .card_classes_blur { height: 25%; }
   .fg-tile-name { font-size: 1.25rem; line-height: 1.5; text-wrap: pretty; }
   .fg-tile-name--big { font-size: clamp(2.25rem, 3.6vw, 3.5rem); line-height: 1.05; letter-spacing: -.02em; }
   .fg-tile-name--tall { font-size: 1.75rem; line-height: 1.2; letter-spacing: -.01em; }
@@ -225,7 +228,9 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     .fg-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: .5rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
     .fg-pills::-webkit-scrollbar { display: none; }
     .fg-pill { flex: none; height: 2.5rem; padding: 0 1.125rem; font-size: 1rem; }
-    .fg-tile-content { padding: 1rem; gap: .75rem; }
+    .fg-tile-content { padding: .75rem; gap: .5rem; }
+    .fg-card .fg-tile-labels { gap: .25rem; }
+    .fg-card .card_classes_btn { padding: .375rem .5rem; font-size: .6875rem; line-height: 1.2; border-radius: .625rem; }
     .fg-card .fg-tile-name { font-size: 1.0625rem; line-height: 1.3; }
     .fg-tag { top: 1rem; left: 1rem; }
   }
