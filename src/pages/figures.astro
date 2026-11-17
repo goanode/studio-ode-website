@@ -34,7 +34,10 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     <div class="fg-body">
     <!-- Filters (design G5): centred like the homepage "Choisis ton cours" -->
     <div class="fg-filters" id="catalogue">
-      <h2 class="fg-filters-title">Choisis ta figure</h2>
+      <!-- Same heading component as "Choisis ton cours" on the homepage -->
+      <div data-number="20" data-wf--typography-heading--variant="h1" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext fg-filters-title">
+        <h2>Choisis ta figure</h2>
+      </div>
       <div class="fg-pills" role="group" aria-label="Catégorie">
         <button type="button" class="fg-pill fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
         {CATEGORIES.map((c) => <button type="button" class="fg-pill fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
@@ -164,8 +167,10 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* Filters (G5) */
-  .fg-filters { position: relative; z-index: 2; padding: 6rem var(--site--margin) 2rem; display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
-  .fg-filters-title { margin: 0; font-weight: 400; font-size: clamp(2.75rem, 5.6vw, 5rem); line-height: 1; letter-spacing: -.03em; color: var(--swatch--dark-800); }
+  .fg-filters { position: relative; z-index: 2; padding: 6rem var(--site--margin) 2rem; display: flex; flex-direction: column; align-items: center; gap: .75rem; text-align: center; }
+  .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
+  /* homepage spacing: 40px from heading to buttons (32px on phone) */
+  .fg-filters-title { margin-top: 0; margin-bottom: 1.75rem; }
   .fg-filters-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: .75rem; margin-top: .5rem; }
   .fg-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; max-width: 56rem; }
   .fg-pill { height: 2.75rem; padding: 0 1.5rem; border-radius: var(--radius--round); border: 1px solid var(--swatch--dark-900-o20); background: transparent; color: var(--swatch--dark-800); font-size: 1.125rem; line-height: 1; transition: border-color .2s, background-color .2s, color .2s; }
@@ -222,7 +227,8 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   }
   @media (max-width: 700px) {
     .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
-    .fg-filters { padding-top: 4rem; gap: 1.25rem; }
+    .fg-filters { padding-top: 4rem; gap: .75rem; }
+    .fg-filters-title { margin-bottom: 1.25rem; }
     .fg-filters-row { width: 100%; flex-direction: column; }
     .fg-search { width: 100%; }
     .fg-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: .5rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
