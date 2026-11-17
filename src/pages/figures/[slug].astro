@@ -63,10 +63,10 @@ const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : 
         )}
 
         <nav class="fp-nav" aria-label="Navigation entre les figures">
-          <LinkButton href="/figures" label="Toutes les figures" />
+          <LinkButton href="/figures" label="← Toutes les figures" ariaLabel="Toutes les figures" />
           <div class="fp-next-wrap">
             <p class="fp-lab"><span>(suivante)</span>{pad(nextIndex)} / {total}</p>
-            <LinkButton href={`/figures/${next.slug}`} label={next.name} ariaLabel={`Figure suivante : ${next.name}`} />
+            <LinkButton href={`/figures/${next.slug}`} label={`${next.name} →`} ariaLabel={`Figure suivante : ${next.name}`} />
           </div>
         </nav>
       </article>
