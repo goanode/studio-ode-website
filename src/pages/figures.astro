@@ -62,11 +62,12 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         {featured.map((f) => (
           <a href="#" class="fg-feat" style={`grid-area: ${f.area}`}>
             <img src={`${f.trick.image}.webp`} srcset={srcset(f.trick.image)} sizes="(max-width: 900px) 100vw, 50vw" alt="" loading="lazy" style={`object-position: ${f.trick.imagePosition}; ${f.trick.mirrored ? "transform: scaleX(-1);" : ""}`} />
-            <span class="fg-feat-shade" aria-hidden="true"></span>
-            <span class="fg-tag">{f.tag}</span>
-            <span class="fg-feat-text">
-              <span class={`fg-feat-name fg-feat-name--${f.area}`}>{f.trick.name}</span>
-              <span class="fg-feat-meta">{f.trick.level} · {f.trick.category}</span>
+            <span class="u-overlay" data-number="20" aria-hidden="true"></span>
+            <span class="card_classes_blur" aria-hidden="true"></span>
+            <span class="fg-tag card_classes_btn u-text-style-small">{f.tag}</span>
+            <span class="fg-tile-content">
+              <span class="card_classes_btn u-text-style-small">{f.trick.level}</span>
+              <span class={`fg-tile-name fg-tile-name--${f.area}`}>{f.trick.name}</span>
             </span>
           </a>
         ))}
@@ -83,10 +84,11 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         {tricks.map((t) => (
           <a href="#" class="fg-card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category} data-order={ORDER[t.level]}>
             <span class="fg-card-img"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}; ${t.mirrored ? "transform: scaleX(-1);" : ""}`} /></span>
-            <span class="fg-feat-shade" aria-hidden="true"></span>
-            <span class="fg-feat-text">
-              <span class="fg-feat-name fg-card-name">{t.name}</span>
-              <span class="fg-feat-meta">{t.level} · {t.category}</span>
+            <span class="u-overlay" data-number="20" aria-hidden="true"></span>
+            <span class="card_classes_blur" aria-hidden="true"></span>
+            <span class="fg-tile-content">
+              <span class="card_classes_btn u-text-style-small">{t.level}</span>
+              <span class="fg-tile-name">{t.name}</span>
             </span>
           </a>
         ))}
@@ -186,13 +188,13 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-feat { position: relative; display: block; border-radius: var(--radius--main); overflow: hidden; color: #fff; background: var(--swatch--dark-800); }
   .fg-feat img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
   .fg-feat:hover img { scale: 1.05; }
-  .fg-feat-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgb(31 29 30 / 0) 45%, rgb(31 29 30 / 70%)); }
-  .fg-tag { position: absolute; top: .75rem; left: .75rem; padding: .375rem .75rem; border-radius: 100vw; background: color-mix(in srgb, white 20%, transparent); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); font-size: .8125rem; }
-  .fg-feat-text { position: absolute; left: 1.125rem; right: 1.125rem; bottom: 1rem; display: flex; flex-direction: column; gap: .25rem; }
-  .fg-feat-name { font-size: 1.5rem; line-height: 1; letter-spacing: -.02em; }
-  .fg-feat-name--big { font-size: clamp(2.5rem, 4.4vw, 4.25rem); }
-  .fg-feat-name--tall { font-size: 2.125rem; }
-  .fg-feat-meta { font-size: .875rem; opacity: .85; }
+
+  /* Tiles: same recipe as the homepage class cards (light tint, soft blur on the lower half, frosted label) */
+  .fg-tile-content { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; color: #fff; }
+  .fg-tile-name { font-size: 1.25rem; line-height: 1.5; text-wrap: pretty; }
+  .fg-tile-name--big { font-size: clamp(2.25rem, 3.6vw, 3.5rem); line-height: 1.05; letter-spacing: -.02em; }
+  .fg-tile-name--tall { font-size: 1.75rem; line-height: 1.2; letter-spacing: -.01em; }
+  .fg-tag { position: absolute; z-index: 5; top: 1.5rem; left: 1.5rem; color: #fff; }
 
   /* Grid */
   .fg-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
@@ -202,7 +204,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
   .fg-card:hover img { scale: 1.05; }
   .fg-card:focus-visible, .fg-feat:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; border-radius: var(--radius--main); }
-  .fg-card-name { font-size: 1.75rem; }
 
   .fg-more-wrap { display: flex; justify-content: center; margin-top: 3rem; }
   .fg-btn { height: var(--button-size--medium); padding: 0 1.5rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-800); background: var(--swatch--dark-800); color: #fff; font-size: 1rem; transition: background .3s, color .3s; }
@@ -224,8 +225,8 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     .fg-pills { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; scrollbar-width: none; gap: .5rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin); }
     .fg-pills::-webkit-scrollbar { display: none; }
     .fg-pill { flex: none; height: 2.5rem; padding: 0 1.125rem; font-size: 1rem; }
-    .fg-card-name { font-size: 1.25rem; }
-    .fg-card .fg-feat-text { left: .75rem; right: .75rem; bottom: .75rem; }
-    .fg-card .fg-feat-meta { font-size: .75rem; }
+    .fg-tile-content { padding: 1rem; gap: .75rem; }
+    .fg-card .fg-tile-name { font-size: 1.0625rem; line-height: 1.3; }
+    .fg-tag { top: 1rem; left: 1rem; }
   }
 </style>
