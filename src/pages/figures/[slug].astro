@@ -2,6 +2,7 @@
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import WaitlistModal from "../../components/WaitlistModal.astro";
 import FigureHero from "../../components/FigureHero.astro";
+import LinkButton from "../../components/LinkButton.astro";
 import { tricks, LEVELS } from "../../data/tricks";
 import { content } from "../../data/trickContent";
 
@@ -62,11 +63,11 @@ const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : 
         )}
 
         <nav class="fp-nav" aria-label="Navigation entre les figures">
-          <a href="/figures" class="fp-back">← Toutes les figures</a>
-          <a href={`/figures/${next.slug}`} class="fp-next-link">
-            <span class="fp-lab"><span>(suivante)</span>{pad(nextIndex)} / {total}</span>
-            <span class="fp-next">{next.name} →</span>
-          </a>
+          <LinkButton href="/figures" label="Toutes les figures" />
+          <div class="fp-next-wrap">
+            <p class="fp-lab"><span>(suivante)</span>{pad(nextIndex)} / {total}</p>
+            <LinkButton href={`/figures/${next.slug}`} label={next.name} ariaLabel={`Figure suivante : ${next.name}`} />
+          </div>
         </nav>
       </article>
     </div>
@@ -99,12 +100,8 @@ const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : 
   .fp-st { grid-column: 3 / 8; margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 2rem; line-height: 1.15; letter-spacing: normal; color: var(--swatch--dark-900); }
   .fp-sp { grid-column: 9 / 13; margin: 0; padding-top: .55rem; font-size: 1rem; line-height: 1.55; }
   .fp-soon { margin: 0; padding: 1.75rem 0; border-top: 1px solid var(--swatch--dark-900-o20); border-bottom: 1px solid var(--swatch--dark-900-o20); font-size: 1.125rem; line-height: 1.5; }
+  .fp-next-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
   .fp-nav { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-top: 6rem; padding-top: 1.5rem; border-top: 1px solid var(--swatch--dark-900-o20); }
-  .fp-back { font-size: 1rem; }
-  .fp-back:hover, .fp-next-link:hover .fp-next { text-decoration: underline; text-underline-offset: .15em; }
-  .fp-next-link { display: flex; flex-direction: column; align-items: flex-end; gap: .375rem; text-align: right; }
-  .fp-next { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 2.5rem; line-height: 1.15; color: var(--swatch--dark-900); }
-  .fp-back:focus-visible, .fp-next-link:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; }
   @media (max-width: 767px) {
     .fp-wrap { padding: 3rem 0 4.5rem; }
     .fp-meta { gap: .5rem 1.5rem; }
@@ -120,8 +117,7 @@ const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : 
     .fp-sp { padding-top: 0; }
     .fp-n { padding-top: .45rem; }
     .fp-st { font-size: 1.625rem; }
-    .fp-nav { flex-direction: column; align-items: flex-start; margin-top: 4rem; }
-    .fp-next-link { align-items: flex-start; text-align: left; }
-    .fp-next { font-size: 1.875rem; }
+    .fp-nav { flex-direction: column; align-items: flex-start; margin-top: 4rem; gap: 2rem; }
+    .fp-next-wrap { align-items: flex-start; }
   }
 </style>

@@ -1,0 +1,12 @@
+---
+// The homepage "See more" button (Webflow button-main, variant "link"): same markup, so same underline hover effect.
+interface Props { href: string; label: string; ariaLabel?: string }
+const { href, label, ariaLabel } = Astro.props;
+---
+<div data-wf--button-main--variant="link" data-trigger="hover focus" class="button_main_wrap w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400">
+  <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><a href={href} class="clickable_link"><span class="u-sr-only">{ariaLabel ?? label}</span></a></div>
+  <div data-button="" class="button_main_element w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400">
+    <div aria-hidden="true" class="button_main_text u-text-style-main">{label}</div>
+    <div class="button_main_line w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400"></div>
+  </div>
+</div>
