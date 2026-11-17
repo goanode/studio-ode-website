@@ -7546,3 +7546,14 @@ figure {
   font-style: normal;
   font-display: swap;
 }
+/* Footer: the "ODE STUDIO" letters run full width, so the footer content does too
+   (same side margins as the letters, no 1440px cap); the sitemap sits at the bottom, level with the cards. */
+.footer_contain.u-container, .footer_bottom_contain.u-container { max-width: none; }
+@media screen and (min-width: 992px) {
+  .footer_layout { align-items: flex-end; }
+  .footer_content { height: auto; align-self: flex-end; }
+  /* the two cards keep a fixed, comfortable width on the right */
+  .footer_layout .u-grid-wrapper { flex: 0 0 auto; width: min(38rem, 50%); }
+  .footer_layout .u-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .footer_layout .u-column-start-3-0-mobile { grid-column-start: auto; }
+}
