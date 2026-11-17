@@ -43,13 +43,19 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         <span class="fg-sr">Rechercher une figure</span>
         <input type="search" id="fg-q" placeholder="Rechercher une figure" autocomplete="off" />
       </label>
-      <div class="fg-pills" role="group" aria-label="Catégorie">
-        <button type="button" class="fg-pill fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
-        {CATEGORIES.map((c) => <button type="button" class="fg-pill fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
+      <div class="fg-group">
+        <div class="u-eyebrow-wrapper fg-group-label"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Type de mouvement</p></div></div></div>
+        <div class="fg-pills" role="group" aria-label="Type de mouvement">
+          <button type="button" class="fg-pill fg-cat" data-cat="Toutes" aria-pressed="true">Toutes</button>
+          {CATEGORIES.map((c) => <button type="button" class="fg-pill fg-cat" data-cat={c} aria-pressed="false">{c}</button>)}
+        </div>
       </div>
-      <div class="fg-pills" role="group" aria-label="Niveau">
-        <button type="button" class="fg-pill fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
-        {LEVELS.map((lv) => <button type="button" class="fg-pill fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
+      <div class="fg-group">
+        <div class="u-eyebrow-wrapper fg-group-label"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Niveau</p></div></div></div>
+        <div class="fg-pills" role="group" aria-label="Niveau">
+          <button type="button" class="fg-pill fg-level" data-level="Tous" aria-pressed="true">Tous niveaux</button>
+          {LEVELS.map((lv) => <button type="button" class="fg-pill fg-level" data-level={lv} aria-pressed="false">{lv}</button>)}
+        </div>
       </div>
     </div>
 
@@ -146,6 +152,8 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
   /* homepage spacing: 40px from heading to buttons (32px on phone) */
   .fg-filters-title { margin-top: 0; margin-bottom: 1.75rem; }
+  .fg-group { display: flex; flex-direction: column; align-items: center; gap: .875rem; margin-top: 1.25rem; }
+  .fg-group-label { margin: 0; }
   .fg-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; max-width: 56rem; }
   .fg-pill { height: 2.75rem; padding: 0 1.5rem; border-radius: var(--radius--round); border: 1px solid var(--swatch--dark-900-o20); background: transparent; color: var(--swatch--dark-800); font-size: 1.125rem; line-height: 1; transition: border-color .2s, background-color .2s, color .2s; }
   .fg-pill:hover { border-color: var(--swatch--dark-800); }
