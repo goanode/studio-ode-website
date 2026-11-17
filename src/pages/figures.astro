@@ -220,7 +220,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
   /* Filters (G5) */
-  .fg-filters { position: relative; z-index: 2; padding: 6rem var(--site--margin) 2rem; display: flex; flex-direction: column; align-items: center; gap: .75rem; text-align: center; }
+  .fg-filters { position: relative; z-index: 2; padding: 6rem 0 2rem; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; gap: .75rem; text-align: center; }
   .fg-filters-intro { max-width: 30rem; margin: 0 0 2rem; font-size: 1.125rem; line-height: 1.5; color: var(--swatch--dark-800); text-wrap: pretty; }
   .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
   /* homepage spacing: 40px from heading to buttons (32px on phone) */
@@ -259,7 +259,8 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .fg-chips :global(.fg-chips-reset) { padding: 0 .5rem; font-size: .9375rem; color: var(--swatch--dark-800); text-decoration: underline; }
 
   /* Sections */
-  .fg-section { padding: 2rem var(--site--margin) 0; }
+  /* same content width as the homepage (centred, max 1440px) */
+  .fg-section { padding: 2rem 0 0; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin-left: auto; margin-right: auto; }
   .fg-section--grid { padding-bottom: var(--_spacing---section-space--large); }
   .fg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
   .fg-h2 { margin: 0; font-size: clamp(1.75rem, 2.6vw, 2.5rem); font-weight: 400; line-height: 1; letter-spacing: -.02em; color: var(--swatch--dark-900); }
