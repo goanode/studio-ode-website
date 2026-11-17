@@ -1,8 +1,8 @@
 ---
 // The catalogue / trick-page hero: same markup as the homepage hero, so it gets the
 // same fluted glass and the same letter-by-letter load animation (needs wfPage = home page id).
-interface Props { title: string; image: string; short?: boolean }
-const { title, image, short = false } = Astro.props;
+interface Props { title: string; image: string; short?: boolean; labels?: string[]; intro?: string }
+const { title, image, short = false, labels = [], intro } = Astro.props;
 const text = title.toUpperCase();
 // One line when it fits; long names go on two balanced lines. Size so the longest line fills the width.
 let lines = [text];
@@ -22,7 +22,7 @@ const size = short
   ? `min(${lines.length > 1 ? 11 : 18}vw, ${(130 / longest).toFixed(2)}vw)`
   : `min(21vw, ${(147 / longest).toFixed(2)}vw)`;
 ---
-    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class:list={["u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark", { "fh-short": short }]}>
+    <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class:list={["u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark fh-hero", { "fh-short": short, "fh-tall": !short }]}>
       <div class="u-background-slot">
         <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="60" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src={`${image}.webp`} alt="" sizes="100vw" loading="eager" srcset={`${image}-p-500.webp 500w, ${image}-p-800.webp 800w, ${image}.webp 1024w`} tlg-fluted-glass-image=""></div>
         <div data-wf--media-overlay--variant="gradient" data-number="20" class="u-overlay w-variant-9653c0cc-21fc-fb82-1373-c98b1644e5a8"></div>
@@ -40,6 +40,12 @@ const size = short
           </div>
         </div>
       </div>
+      {!short && (labels.length > 0 || intro) && (
+        <div fade-in="" class="fh-aside">
+          {labels.length > 0 && <div class="fh-labels">{labels.map((l) => <span class="card_classes_btn u-text-style-small">{l}</span>)}</div>}
+          {intro && <p>{intro}</p>}
+        </div>
+      )}
     </section>
 
 <style>
@@ -51,4 +57,22 @@ const size = short
   .fh-short .fh-col, .fh-short .u-content-wrapper { text-align: center; justify-content: center; align-items: center; }
   .fh-short .fh-heading { top: 0; margin: 0 auto; text-align: center; }
   @media (max-width: 767px) { .fh-short { height: 56svh; min-height: 24rem; } .fh-short .fh-heading { font-size: var(--fh-m) !important; } }
+  .fh-hero { position: relative; }
+  .fh-aside { display: none; }
+  /* Phone, catalogue hero (design N1): the word runs up the left edge at full height, info at the bottom right */
+  @media (max-width: 767px) {
+    .fh-tall .fh-col, .fh-tall .u-content-wrapper, .fh-tall .u-layout, .fh-tall .u-layout-wrapper { position: static; }
+    .fh-tall .fh-heading {
+      position: absolute; top: auto; left: calc(var(--site--margin) - .06em); bottom: 1rem; margin: 0;
+      font-size: min(calc((100svh - 11rem) / 4.75), 42vw) !important; line-height: .8;
+      transform-origin: left bottom; transform: rotate(-90deg) translateY(100%);
+    }
+    .fh-tall .fh-aside {
+      position: absolute; z-index: 2; right: var(--site--margin); bottom: 1.5rem;
+      left: calc(var(--site--margin) + min(calc((100svh - 11rem) / 4.75), 42vw) * .8 + 1.25rem);
+      display: flex; flex-direction: column; gap: .875rem; color: #fff;
+    }
+    .fh-aside p { margin: 0; font-size: .9375rem; line-height: 1.45; }
+    .fh-labels { display: flex; flex-wrap: wrap; gap: .375rem; }
+  }
 </style>
