@@ -17,7 +17,10 @@ if (text.length > 12 && text.includes(" ")) {
   lines = best;
 }
 const longest = Math.max(...lines.map((l) => l.length));
-const size = `min(${lines.length > 1 ? 11 : 21}vw, ${(147 / longest).toFixed(2)}vw)`;
+const sizeMobile = `min(18vw, ${(125 / longest).toFixed(2)}vw)`;
+const size = short
+  ? `min(${lines.length > 1 ? 11 : 18}vw, ${(130 / longest).toFixed(2)}vw)`
+  : `min(21vw, ${(147 / longest).toFixed(2)}vw)`;
 ---
     <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class:list={["u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark", { "fh-short": short }]}>
       <div class="u-background-slot">
@@ -30,7 +33,7 @@ const size = `min(${lines.length > 1 ? 11 : 21}vw, ${(147 / longest).toFixed(2)}
             <div class="fh-col u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
               <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
                 <div class="u-display-contents">
-                  <h1 class="heading fh-heading" style={`font-size: ${size}`}>{lines.map((l, i) => <>{i > 0 && <br />}{l}</>)}</h1>
+                  <h1 class="heading fh-heading" style={`font-size: ${size}; --fh-m: ${sizeMobile}`}>{lines.map((l, i) => <>{i > 0 && <br />}{l}</>)}</h1>
                 </div>
               </div>
             </div>
@@ -42,8 +45,10 @@ const size = `min(${lines.length > 1 ? 11 : 21}vw, ${(147 / longest).toFixed(2)}
 <style>
   .fh-col { grid-column: 1 / -1; width: 100%; }
   .fh-heading { width: auto; white-space: nowrap; letter-spacing: -.02em; }
-  .fh-short .fh-heading { line-height: .9; }
-  /* Trick pages: a shorter hero instead of the full screen */
-  .fh-short { height: 64svh; min-height: 30rem; }
-  @media (max-width: 767px) { .fh-short { height: 56svh; min-height: 24rem; } }
+  .fh-short .fh-heading { line-height: .95; }
+  /* Trick pages: a shorter hero, name centred (long names stay fully visible) */
+  .fh-short { height: 64svh; min-height: 30rem; justify-content: center; }
+  .fh-short .fh-col, .fh-short .u-content-wrapper { text-align: center; justify-content: center; align-items: center; }
+  .fh-short .fh-heading { top: 0; margin: 0 auto; text-align: center; }
+  @media (max-width: 767px) { .fh-short { height: 56svh; min-height: 24rem; } .fh-short .fh-heading { font-size: var(--fh-m) !important; } }
 </style>
