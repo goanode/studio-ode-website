@@ -259,25 +259,25 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                 <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Poledance" class="clickable_btn"></button></div>
                   <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
-                    <span class="pill-roll" aria-hidden="true"><span class="pill-roll-track" style="animation-delay: 0.45s"><img src="/images/chrome-star.webp" alt="" width="24" height="24" /><img src="/images/chrome-star.webp" alt="" width="24" height="24" /></span></span><div aria-hidden="true" class="button_main_text u-text-style-main">Poledance</div>
+                    <div aria-hidden="true" class="button_main_text u-text-style-main">Poledance</div>
                   </div>
                 </div>
                 <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Flexibility" class="clickable_btn"></button></div>
                   <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
-                    <span class="pill-roll" aria-hidden="true"><span class="pill-roll-track" style="animation-delay: 0.90s"><img src="/images/chrome-infinity.webp" alt="" width="24" height="24" /><img src="/images/chrome-infinity.webp" alt="" width="24" height="24" /></span></span><div aria-hidden="true" class="button_main_text u-text-style-main">Flexibility</div>
+                    <div aria-hidden="true" class="button_main_text u-text-style-main">Flexibility</div>
                   </div>
                 </div>
                 <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Flow" class="clickable_btn"></button></div>
                   <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
-                    <span class="pill-roll" aria-hidden="true"><span class="pill-roll-track" style="animation-delay: 1.35s"><img src="/images/chrome-moon.webp" alt="" width="24" height="24" /><img src="/images/chrome-moon.webp" alt="" width="24" height="24" /></span></span><div aria-hidden="true" class="button_main_text u-text-style-main">Flow</div>
+                    <div aria-hidden="true" class="button_main_text u-text-style-main">Flow</div>
                   </div>
                 </div>
                 <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Strength" class="clickable_btn"></button></div>
                   <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
-                    <span class="pill-roll" aria-hidden="true"><span class="pill-roll-track" style="animation-delay: 1.80s"><img src="/images/chrome-bolt.webp" alt="" width="24" height="24" /><img src="/images/chrome-bolt.webp" alt="" width="24" height="24" /></span></span><div aria-hidden="true" class="button_main_text u-text-style-main">Strength</div>
+                    <div aria-hidden="true" class="button_main_text u-text-style-main">Strength</div>
                   </div>
                 </div>
               </div>
@@ -991,15 +991,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   </main>
 
   <WaitlistModal slot="after-footer" />
-  <style is:global>
-    /* Silver icons in the class filter pills: they roll up on their own, one after the other */
-    .pill-roll { display: inline-block; flex: none; width: 1.5rem; height: 1.5rem; margin: -.5rem .375rem -.5rem -.25rem; overflow: hidden; vertical-align: middle; }
-    .pill-roll-track { display: flex; flex-direction: column; animation: pillRollUp 2.4s cubic-bezier(.7, 0, .2, 1) infinite; }
-    .pill-roll-track img { display: block; flex: none; width: 1.5rem; height: 1.5rem; object-fit: contain; }
-    .button_main_element:has(.pill-roll) { display: flex; align-items: center; }
-    @keyframes pillRollUp { 0%, 45% { transform: translateY(0); } 60%, 100% { transform: translateY(-1.5rem); } }
-    @media (prefers-reduced-motion: reduce) { .pill-roll-track { animation: none; } }
-  </style>
 
 
   <Fragment slot="scripts">
