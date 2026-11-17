@@ -4,6 +4,8 @@
 
 export interface TrickContent {
   intro: string;
+  /** optional short tip shown next to the photo */
+  tip?: string;
   steps: { title: string; text: string }[];
 }
 
@@ -19,6 +21,7 @@ export const content: Record<string, TrickContent> = {
   },
   "fireman-spin": {
     intro: "La première rotation qu'on apprend : un tour fluide autour de la barre, genoux serrés, comme une glissade de pompier.",
+    tip: "Garde les bras tendus : c'est l'élan qui te fait tourner, pas la force.",
     steps: [
       { title: "Place tes mains", text: "Main intérieure haute, main extérieure à hauteur de hanche, bras tendus." },
       { title: "Prends de l'élan", text: "Fais un pas autour de la barre avec le pied extérieur." },
