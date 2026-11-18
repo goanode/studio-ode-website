@@ -2,7 +2,7 @@
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
 // Concept page (design "ConceptValues", after the Telha Clarke video):
-// 1. a collage of photos around "Concept(4)"; scrolling makes one photo grow to fill the screen
+// 1. a collage of photos around "Concept"; scrolling makes one photo grow to fill the screen
 // 2. on that photo, the four pillars slide past one by one as you scroll, with their text
 const I = {
   r0: "/images/37165de30ebb4909ab52aaa06a86c422.avif",
@@ -51,24 +51,16 @@ const PILLARS = [
           ))}
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(930, 1440)};--y:${pct(70, 900)};--w:${pct(290, 1440)};--h:${pct(430, 900)}`}></span>
-        <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></span><sup>(4)</sup></h1>
+        <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></span></h1>
         <p class="meta m-l">Studio Ode</p>
         <p class="meta m-r"><span class="clock" aria-hidden="true">10:23</span>&nbsp;&nbsp;Lille, FR</p>
-        <div class="b-intro">
-          <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Découvrir le concept" data-go="pillars" class="clickable_btn"></button></div>
-            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Découvrir le concept</div></div>
-          </div>
-        </div>
         <figure class="grow">
           <img src={I.big} alt="Élève au studio Ode" />
           <span class="dim" aria-hidden="true"></span>
         </figure>
         <div class="pil u-theme-dark" aria-label="Nos quatre piliers">
-          <span class="hl" aria-hidden="true"></span><span class="vl" aria-hidden="true"></span>
-          <span class="mk l">02</span><span class="mk r">PILIERS</span>
           <div class="tick-wrap"><ul class="tick" role="list">
-            {PILLARS.map(([name]) => <li class="w">{name}</li>)}
+            {PILLARS.map(([name]) => <li class="w"><span class="ode-th">{name}<img class="ode-title-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></span></li>)}
           </ul></div>
           <div class="para">
             {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
@@ -114,9 +106,6 @@ const PILLARS = [
       const tickClock = () => { clock.textContent = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).format(new Date()); };
       tickClock(); setInterval(tickClock, 30000);
 
-      // Button scrolls to the pillars
-      const go = (y) => (window.lenis ? window.lenis.scrollTo(y, { duration: 1.8 }) : scrollTo({ top: y, behavior: "smooth" }));
-      root.querySelector('[data-go="pillars"]').addEventListener("click", () => go(intro.offsetTop + (intro.offsetHeight - innerHeight) * 0.22));
 
 
       if (reduce || !window.gsap || !window.ScrollTrigger) { root.classList.add("still"); return; }
@@ -154,8 +143,7 @@ const PILLARS = [
         .to(figs, { y: (i, el) => -innerHeight * 0.45 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.06 * +el.dataset.depth, opacity: 0, duration: 1.2, ease: "power1.in" }, 0)
         .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power1.in" }, .2)
         .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
-        .fromTo(".cv .hl", { scaleX: 0 }, { scaleX: 1, duration: .6, ease: "power2.out" }, 1.2)
-        .fromTo(".cv .vl", { scaleY: 0 }, { scaleY: 1, duration: .6, ease: "power2.out" }, 1.3);
+
       const off = (k) => -(words[k].offsetLeft - words[0].offsetLeft);
       let t = 2.2;
       for (let k = 1; k < N; k++) {
@@ -200,27 +188,23 @@ const PILLARS = [
   .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: clamp(4rem, 6.7vw, 7.5rem); line-height: 1; white-space: nowrap; color: var(--ink); }
   .vt-title { view-transition-name: concept-title; }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
-  .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .23em; vertical-align: top; position: relative; top: .6em; margin-left: 2em; }
   .meta { position: absolute; bottom: 1.75rem; z-index: 2; font-size: .9375rem; }
   .meta .clock { opacity: .5; }
   .m-l { left: var(--site--margin, 1.25rem); }
   .m-r { right: var(--site--margin, 1.25rem); }
-  .b-intro, .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
+  .b-pil :global(.button_main_text) { white-space: nowrap; }
+  .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
   .grow { position: absolute; inset: 0; z-index: 3; margin: 0; overflow: hidden; background: var(--red); will-change: clip-path; }
   .grow img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; transform-origin: 50% 50%; will-change: transform; }
   .dim { position: absolute; inset: 0; background: rgb(31 29 30 / 35%); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); opacity: 0; will-change: opacity; }
 
   /* 2 · pillars over the photo */
   .pil { position: absolute; inset: 0; z-index: 4; color: #fff; visibility: hidden; background: none; }
-  .hl { position: absolute; left: 0; right: 0; top: calc(50% - 2.5rem); height: 1px; background: rgb(255 255 255 / 35%); transform-origin: left; }
-  .vl { position: absolute; top: 0; bottom: 0; right: 28%; width: 1px; background: rgb(255 255 255 / 25%); transform-origin: top; }
-  .mk { position: absolute; top: calc(50% - 4rem); font-size: .875rem; letter-spacing: .04em; }
-  .mk.l { left: var(--site--margin, 1.25rem); }
-  .mk.r { right: var(--site--margin, 1.25rem); }
-  .tick-wrap { position: absolute; left: 8.3vw; right: 0; bottom: calc(50% + 5.5rem); }
+  .tick-wrap { position: absolute; left: 8.3vw; right: 0; bottom: calc(50% - .5rem); }
   .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
+  .tick .ode-title-heart { animation: none; }
   .tick .w { will-change: opacity; }
-  .para { position: absolute; left: calc(72% - 23.75rem); top: calc(50% + 2rem); width: 21.25rem; font-size: .9375rem; line-height: 1.45; }
+  .para { position: absolute; left: calc(72% - 23.75rem); top: calc(50% + 2.5rem); width: 21.25rem; font-size: .9375rem; line-height: 1.45; }
   .para p { position: absolute; inset: 0 auto auto 0; }
 
   /* no motion: everything shown in place, pillars listed on the photo */
@@ -231,7 +215,7 @@ const PILLARS = [
   .still .dim { opacity: 1; }
   .still .pil { visibility: visible; top: 100svh; height: 100svh; }
   .still .tick { flex-direction: column; gap: .25rem; }
-  .still .hl, .still .vl, .still .mk, .still .para, .still .slot { display: none; }
+  .still .para, .still .slot { display: none; }
 
   @media (max-width: 767px) {
     .cf.hm { display: none; }
@@ -243,10 +227,9 @@ const PILLARS = [
     .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
     .ttl { font-size: 3.75rem; }
     .meta { font-size: .8125rem; bottom: 5.25rem; }
-    .vl { display: none; }
-    .tick-wrap { left: 1rem; bottom: calc(50% + 5rem); }
+    .tick-wrap { left: 1rem; bottom: calc(50% - .25rem); }
     .tick { font-size: 3.75rem; gap: 5rem; }
-    .para { left: 1rem; right: 1rem; width: auto; top: calc(50% + 1.5rem); }
+    .para { left: 1rem; right: 1rem; width: auto; top: calc(50% + 2rem); }
     .para p { right: 0; }
   }
 </style>
