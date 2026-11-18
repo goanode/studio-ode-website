@@ -4,7 +4,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 // Concept page (design "ConceptValues", after the Telha Clarke video):
 // 1. a collage of photos around "Concept(4)"; scrolling makes one photo grow to fill the screen
 // 2. on that photo, the four pillars slide past one by one as you scroll, with their text
-// 3. the course list in one line, lighting up one course at a time, with four photos
 const I = {
   r0: "/images/37165de30ebb4909ab52aaa06a86c422.avif",
   r1: "/images/7053819a90a239bb9f6686d8d1df9a9d.webp",
@@ -37,12 +36,6 @@ const PILLARS = [
   ["Expression", "La barre devient un langage. On travaille la technique, puis on la laisse disparaître derrière le mouvement, pour que chaque élève trouve sa propre façon de danser."],
   ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui. Gagner en amplitude, en confiance, et en douceur."],
   ["Communauté", "Huit élèves maximum, une professeure qui connaît chaque corps. On s'encourage, on progresse ensemble, dans un lieu calme et lumineux à Lille."],
-];
-const COURSES: [string, string][] = [
-  ["Poledance technique", I.r4],
-  ["Flow & balance", I.r6],
-  ["Souplesse", I.r3],
-  ["Renforcement", I.r1],
 ];
 ---
 
@@ -82,29 +75,14 @@ const COURSES: [string, string][] = [
           </div>
           <div class="b-pil">
             <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Voir les cours" data-go="courses" class="clickable_btn"></button></div>
-            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Voir les cours</div></div>
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
           </div>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="lst" id="courses" aria-label="Les cours">
-      <p class="line">
-        {COURSES.map(([t], k) => (
-          <><span class:list={["it", { on: k === 0 }]} data-i={k}>{t}<sup>(0{k + 1})</sup></span>{k < COURSES.length - 1 && <span class="sl"> / </span>}</>
-        ))}
-      </p>
-      <div class="row">
-        {COURSES.map(([t, src], k) => (
-          <div class:list={["card", { on: k === 0 }]} data-i={k}>
-            <figure><img src={src} alt={t} loading="lazy" /></figure>
-            <p class="cap"><span>{t}</span><span>0{k + 1}</span></p>
-          </div>
-        ))}
-      </div>
-    </section>
   </main>
   <WaitlistModal slot="after-footer" />
 
@@ -130,17 +108,10 @@ const COURSES: [string, string][] = [
       const tickClock = () => { clock.textContent = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).format(new Date()); };
       tickClock(); setInterval(tickClock, 30000);
 
-      // Buttons scroll to the pillars / the courses
+      // Button scrolls to the pillars
       const go = (y) => (window.lenis ? window.lenis.scrollTo(y, { duration: 1.8 }) : scrollTo({ top: y, behavior: "smooth" }));
       root.querySelector('[data-go="pillars"]').addEventListener("click", () => go(intro.offsetTop + (intro.offsetHeight - innerHeight) * 0.22));
-      root.querySelector('[data-go="courses"]').addEventListener("click", () => go(root.querySelector(".lst").offsetTop));
 
-      // Course list: one course lit at a time (scroll + hover)
-      const items = [...root.querySelectorAll(".lst .it")];
-      const cards = [...root.querySelectorAll(".lst .card")];
-      let cur = 0;
-      const setCourse = (i) => { if (i === cur) return; cur = i; items.forEach((el, k) => el.classList.toggle("on", k === i)); cards.forEach((el, k) => el.classList.toggle("on", k === i)); };
-      [...items, ...cards].forEach((el) => el.addEventListener("mouseenter", () => setCourse(+el.dataset.i)));
 
       if (reduce || !window.gsap || !window.ScrollTrigger) { root.classList.add("still"); return; }
       gsap.registerPlugin(ScrollTrigger);
@@ -160,8 +131,6 @@ const COURSES: [string, string][] = [
       gsap.set(grow, { clipPath: clipFrom() });
       gsap.set(gimg, imgFrom());
 
-      // collage photos come in once, softly
-      gsap.from([...figs, grow], { opacity: 0, y: 30, duration: 1.2, ease: "power2.out", stagger: { each: .06, from: "random" }, delay: .1 });
 
       // pinned scroll: the photo opens up to full screen and blurs (homepage frosted glass, 20px) while it grows, then the four pillars slide past
       gsap.set(words, { opacity: (k) => (k === 0 ? 1 : .3) });
@@ -176,7 +145,6 @@ const COURSES: [string, string][] = [
       });
       tl.fromTo(grow, { clipPath: clipFrom }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1.4, ease: "power1.inOut" }, 0)
         .fromTo(gimg, { x: () => imgFrom().x, y: () => imgFrom().y, scale: () => imgFrom().scale }, { x: 0, y: 0, scale: 1, duration: 1.4, ease: "power1.inOut" }, 0)
-        .to(figs, { y: (i, el) => -innerHeight * 0.45 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.06 * +el.dataset.depth, opacity: 0, duration: 1.2, ease: "power1.in" }, 0)
         .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power1.in" }, .2)
         .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
         .fromTo(".cv .hl", { scaleX: 0 }, { scaleX: 1, duration: .6, ease: "power2.out" }, 1.2)
@@ -193,15 +161,7 @@ const COURSES: [string, string][] = [
       }
       tl.to({}, { duration: .5 }, t);
 
-      // course photos rise in, and the lit course follows the scroll
-      gsap.fromTo(cards.map((c) => c.querySelector("figure")), { clipPath: "inset(100% 0% 0% 0%)" }, {
-        clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power3.inOut", stagger: .12,
-        scrollTrigger: { trigger: ".cv .row", start: "top 85%", once: true },
-      });
-      ScrollTrigger.create({
-        trigger: ".cv .lst", start: "top 65%", end: "bottom 55%",
-        onUpdate: (st) => setCourse(Math.min(items.length - 1, Math.floor(st.progress * items.length))),
-      });
+
 
       addEventListener("load", () => ScrollTrigger.refresh());
       document.fonts?.ready.then(() => ScrollTrigger.refresh());
@@ -225,9 +185,8 @@ const COURSES: [string, string][] = [
   .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
   .col { position: absolute; inset: 0; z-index: 1; }
   .cf, .slot { position: absolute; left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
-  .cf { margin: 0; overflow: hidden; background: var(--red); will-change: transform, opacity; }
-  .cf.faded img { opacity: .35; }
-  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+  .cf { margin: 0; overflow: hidden; }
+  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; filter: blur(10px); transform: scale(1.15); }
   .slot { visibility: hidden; pointer-events: none; }
   .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: clamp(4rem, 6.7vw, 7.5rem); line-height: 1; white-space: nowrap; color: var(--ink); }
   .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .23em; vertical-align: top; position: relative; top: .6em; margin-left: .2em; }
@@ -253,19 +212,6 @@ const COURSES: [string, string][] = [
   .para { position: absolute; left: calc(72% - 23.75rem); top: calc(50% + 2rem); width: 21.25rem; font-size: .9375rem; line-height: 1.45; }
   .para p { position: absolute; inset: 0 auto auto 0; }
 
-  /* 3 · course list */
-  .lst { padding: 8.75rem var(--site--margin, 1.25rem) 9rem; }
-  .line { font-size: clamp(2.125rem, 4.45vw, 4rem); line-height: 1.15; color: #c9c4c5; }
-  .line .it { transition: color .5s ease; cursor: default; }
-  .line .it.on { color: var(--ink); }
-  .line sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .28em; vertical-align: top; position: relative; top: .55em; margin: 0 .35em 0 .1em; }
-  .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3.5rem; }
-  .card figure { margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--red); }
-  .card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; transform: scale(1.05); transition: transform 1.2s cubic-bezier(.2, .7, .2, 1), opacity .6s ease; opacity: .6; }
-  .card.on img { transform: scale(1); opacity: 1; }
-  .cap { display: flex; justify-content: space-between; margin-top: .625rem !important; font-size: .8125rem; color: #a9a4a5; transition: color .5s ease; }
-  .card.on .cap { color: #3b3b3b; }
-
   /* no motion: everything shown in place, pillars listed on the photo */
   .still .intro { height: auto; }
   .still .stage { position: relative; height: auto; overflow: visible; }
@@ -275,7 +221,6 @@ const COURSES: [string, string][] = [
   .still .pil { visibility: visible; top: 100svh; height: 100svh; }
   .still .tick { flex-direction: column; gap: .25rem; }
   .still .hl, .still .vl, .still .mk, .still .para, .still .slot { display: none; }
-  .still .card img { opacity: 1; transform: none; }
 
   @media (max-width: 767px) {
     .cf.hm { display: none; }
@@ -292,7 +237,5 @@ const COURSES: [string, string][] = [
     .tick { font-size: 3.75rem; gap: 5rem; }
     .para { left: 1rem; right: 1rem; width: auto; top: calc(50% + 1.5rem); }
     .para p { right: 0; }
-    .lst { padding: 5.5rem .75rem 6rem; }
-    .row { grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: 2.25rem; }
   }
 </style>
