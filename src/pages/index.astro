@@ -110,13 +110,13 @@ import WaitlistModal from "../components/WaitlistModal.astro";
           <div class="u-layout w-variant-558793eb-2b07-490b-9842-2d7e6f6bf325">
             <div class="u-layout-column-1 w-variant-558793eb-2b07-490b-9842-2d7e6f6bf325 u-alignment-center">
               <div data-number="23" data-wf--typography-heading--variant="h1" data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca" data-wf-variant-state="792802b6-ccdb-f982-5023-5fa970cf03d0" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext">
-                <p>Classes</p>
+                <p><span class="vt-figures">Figures</span></p>
               </div>
               <div data-number="45" data-wf--typography-paragraph--variant="inherit" class="u-text u-rich-text w-richtext u-color-faded">
                 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
               </div>
               <div data-wf--button-main--variant="link" data-trigger="hover focus" class="button_main_wrap w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400">
-                <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="See more" class="clickable_btn"></button></div>
+                <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><a href="/figures" aria-label="Voir les figures" class="clickable_btn"></a></div>
                 <div data-button="" class="button_main_element w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400">
                   <div aria-hidden="true" class="button_main_text u-text-style-main">See more</div>
                   <div class="button_main_line w-variant-625d5df4-ad91-f7dc-9e2f-2e69f3fd7400"></div>
@@ -997,6 +997,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   <style is:global>
     /* the homepage "Concept" word glides into the concept page title */
     .vt-concept { view-transition-name: concept-title; }
+    .vt-figures { view-transition-name: figures-title; }
     /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
     .ode-toggle { position: relative; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 0 !important; padding: 5px !important; border-radius: 9999px; background: rgb(255 255 255 / 14%) !important; border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .ode-toggle .compare_toggle_option { position: relative; z-index: 1; margin: 0; padding: .75rem 1.625rem !important; border: 0; border-radius: 9999px; background: none !important; font: inherit; font-size: 1rem; color: #fff !important; text-align: center; cursor: pointer; transition: color .35s; }
