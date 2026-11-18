@@ -344,10 +344,19 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     .meta { font-size: .8125rem; bottom: 1.25rem; }
     .m-l { left: .75rem; bottom: 2.75rem; }
     .m-r { right: .75rem; }
-    .bar { flex-direction: column; align-items: stretch; gap: 1.25rem; margin-top: 1.5rem; }
-    .tools { flex-wrap: wrap; }
-    .search, .search:focus-within, .search:has(input:not(:placeholder-shown)) { width: 100%; }
-    .f { padding: .55rem .9rem; font-size: .8125rem; }
+    /* mobile toolbar: search + icon-only view switch on one line, each filter group one swipeable row */
+    .bar { flex-direction: column; align-items: stretch; gap: 1rem; margin-top: 1.5rem; }
+    .h2 { font-size: 2.25rem; }
+    .tools { flex-wrap: nowrap; gap: .5rem; }
+    .search, .search:focus-within, .search:has(input:not(:placeholder-shown)) { flex: 1; width: auto; height: 2.875rem; padding: 0 1rem; }
+    .views { flex: none; padding: .25rem; }
+    .th { top: .25rem; bottom: .25rem; left: .25rem; width: calc(50% - .25rem); }
+    .v { height: 2.375rem; padding: 0 .875rem; font-size: 0; gap: 0; }
+    .frows { margin: .75rem -.75rem 1.25rem; }
+    .filters { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; padding: .625rem .75rem 0; margin-top: -.625rem; -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 2rem), transparent); mask-image: linear-gradient(90deg, #000 calc(100% - 2rem), transparent); }
+    .filters::-webkit-scrollbar { display: none; }
+    .filters + .filters { margin-top: -.125rem; }
+    .f { flex: none; padding: .55rem .9rem; font-size: .8125rem; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .grid.is-dense { grid-template-columns: repeat(4, 1fr); }
     .tags .tg + .tg { display: none; }
