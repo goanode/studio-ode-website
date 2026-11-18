@@ -547,7 +547,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     </section>
     <section id="formules" data-wf--section--variant="inherit" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section u-theme-dark u-clippath-inset">
       <div class="u-background-slot">
-        <div data-wf--visual-image--variant="wide-16-9" class="u-image-wrapper w-variant-27d05669-180c-3169-9b64-0eda31f8d4d3 parallax"><img src="/images/7053819a90a239bb9f6686d8d1df9a9d.avif" loading="lazy" draggable="false" alt="" sizes="(max-width: 1200px) 100vw, 1200px" srcset="/images/7053819a90a239bb9f6686d8d1df9a9d-p-500.avif 500w, /images/7053819a90a239bb9f6686d8d1df9a9d-p-800.avif 800w, /images/7053819a90a239bb9f6686d8d1df9a9d-p-1080.avif 1080w, /images/7053819a90a239bb9f6686d8d1df9a9d.avif 1200w" class="u-image"></div>
+        <div data-wf--visual-image--variant="wide-16-9" class="u-image-wrapper w-variant-27d05669-180c-3169-9b64-0eda31f8d4d3 parallax"><img src="/images/please-look-at-the-first-pose----820406-SN7.webp" loading="lazy" draggable="false" alt="" sizes="100vw" srcset="/images/please-look-at-the-first-pose----820406-SN7-p-500.webp 500w, /images/please-look-at-the-first-pose----820406-SN7-p-800.webp 800w, /images/please-look-at-the-first-pose----820406-SN7.webp 1024w" class="u-image"></div>
         <div data-wf--media-overlay--variant="blur" data-number="30" class="u-overlay w-variant-496db4ff-9886-22f6-4f25-34f44d73a98e"></div>
       </div>
       <div class="u-container  ">
@@ -993,6 +993,34 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     </section>
   </main>
 
+  <script is:inline>
+  // Formules: the three plan cards rise in at different speeds and leave the same way when you scroll on (after Forge Automotive)
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.gsap || !window.ScrollTrigger || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    gsap.registerPlugin(ScrollTrigger);
+    setTimeout(() => window.lenis && window.lenis.on("scroll", ScrollTrigger.update), 0); // smooth scroll starts right after this
+    const grid = document.querySelector("#formules .u-grid");
+    const cards = grid ? [...grid.querySelectorAll(":scope > .card_primary_wrap")] : [];
+    if (!cards.length) return;
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 768px)", () => {
+      // side by side: each card further right starts lower and leaves faster
+      const tl = gsap.timeline({ scrollTrigger: { trigger: grid, start: "top bottom", end: "bottom top", scrub: true } });
+      cards.forEach((c, k) => {
+        tl.fromTo(c, { y: () => innerHeight * (0.18 + k * 0.16) }, { y: 0, ease: "power2.out", duration: 0.45 }, 0)
+          .to(c, { y: () => -innerHeight * (0.1 + k * 0.12), opacity: 0, ease: "power1.in", duration: 0.4 }, 0.6);
+      });
+    });
+    mm.add("(max-width: 767px)", () => {
+      // stacked: each card rises in and fades up as it leaves
+      cards.forEach((c) => {
+        gsap.timeline({ scrollTrigger: { trigger: c, start: "top bottom", end: "bottom top", scrub: true } })
+          .fromTo(c, { y: 120 }, { y: 0, ease: "power2.out", duration: 0.4 }, 0)
+          .to(c, { y: -80, opacity: 0, ease: "power1.in", duration: 0.35 }, 0.65);
+      });
+    });
+  });
+  </script>
   <WaitlistModal slot="after-footer" />
   <style is:global>
     /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
