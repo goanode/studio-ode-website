@@ -1,22 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
-// Big heart (section "HomeHeart"): points along the heart curve, evenly spaced, as % of the heart's box.
-// Each small heart also gets a scatter offset (in heart-box widths) and a start rotation it flies in from.
-const HEART_PTS = (() => {
-  const n = 44, steps = 4000, pts: [number, number][] = [];
-  for (let i = 0; i <= steps; i++) { const t = (i / steps) * Math.PI * 2; pts.push([16 * Math.sin(t) ** 3, -(13 * Math.cos(t) - 5 * Math.cos(2 * t) - 2 * Math.cos(3 * t) - Math.cos(4 * t))]); }
-  const L = [0]; for (let i = 1; i < pts.length; i++) L.push(L[i - 1] + Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]));
-  let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
-  const out = []; let j = 0;
-  for (let k = 0; k < n; k++) {
-    const target = (L[L.length - 1] * k) / n; while (L[j] < target) j++;
-    const [x, y] = pts[j]; const ang = Math.atan2(y - 2.5, x); const d = 0.35 + rnd() * 0.45;
-    const r = Math.round(rnd() * 50 - 25);
-    out.push({ x: +(((x + 16.5) / 33) * 100).toFixed(2), y: +(((y + 12.5) / 30) * 100).toFixed(2), dx: +(Math.cos(ang) * d + (rnd() - .5) * .15).toFixed(3), dy: +(Math.sin(ang) * d + (rnd() - .5) * .15).toFixed(3), r, r0: Math.round(r + rnd() * 320 - 160) });
-  }
-  return out;
-})();
 ---
 
 <BaseLayout viewTransition="main" title="Website Name" description="Place website meta description here" wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
@@ -146,20 +130,63 @@ const HEART_PTS = (() => {
         </div>
       </div>
     </section>
-    <!-- Design "HomeHeart" (after Delta Cafés): a big heart made of small chrome hearts that gather as you scroll in, text and waitlist button inside -->
-    <section class="hh u-theme-dark" aria-labelledby="hh-title">
-      <div class="hh-bg" aria-hidden="true"><img src="/images/Hello-please-take-the-style-of-t-391374-HCn.webp" alt="" loading="lazy" /></div>
-      <div class="hh-ring" aria-hidden="true">
-        {HEART_PTS.map((h) => <img src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" style={`left:${h.x}%;top:${h.y}%;--dx:${h.dx};--dy:${h.dy};--r:${h.r}deg;--r0:${h.r0}deg`} />)}
+    <section data-wf--section--variant="inherit" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section u-min-height-screen u-theme-dark u-clippath-inset">
+      <div class="u-background-slot">
+        <div data-wf--visual-image--variant="wide-16-9" class="u-image-wrapper w-variant-27d05669-180c-3169-9b64-0eda31f8d4d3 parallax"><img src="/images/Hello-please-take-the-style-of-t-391374-HCn.webp" loading="lazy" draggable="false" alt="" sizes="(max-width: 1200px) 100vw, 1200px" srcset="/images/Hello-please-take-the-style-of-t-391374-HCn-p-500.webp 500w, /images/Hello-please-take-the-style-of-t-391374-HCn-p-800.webp 800w, /images/Hello-please-take-the-style-of-t-391374-HCn.webp 843w" class="u-image"></div>
+        <div data-wf--media-overlay--variant="blur" data-number="30" class="u-overlay w-variant-496db4ff-9886-22f6-4f25-34f44d73a98e"></div>
       </div>
-      <div class="hh-in">
-        <div class="u-eyebrow-wrapper hh-eb"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Studio Ode, Lille</p></div></div></div>
-        <h2 id="hh-title" class="hh-t">Un studio de pole dance, fait avec le cœur.</h2>
-        <p class="hh-p">Ouverture en 2027. Rejoins la liste d'attente et profite d'une réduction au lancement.</p>
-        <div class="hh-btn">
-          <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
-            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
+      <div class="u-container  ">
+        <div data-wf--layout--variant="stack-centered" class="u-layout-wrapper u-margin-bottom-8">
+          <div class="u-layout">
+            <div class="u-layout-column-1 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
+              <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+                <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+                <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
+                  <div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div>
+                </div>
+              </div>
+            </div>
+            <div class="u-layout-column-2 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
+              <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
+                <div class="u-display-contents">
+                  <div data-number="15" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext">
+                    <p>In 2027, studio 7 represents a brand new</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div data-wf--content-wrapper--variant="center" style="" class="u-content-wrapper w-variant-4f54624e-ceb1-0769-a238-365d5e220b70 u-margin-bottom-8 u-margin-top-8">
+          <div class="u-display-contents">
+            <div random-stagger-in="" data-number="20" data-wf--typography-heading--variant="display" data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca" data-wf-variant-state="41c609dc-9c80-9eef-75df-03bf0eea00b4" class="u-heading w-variant-41c609dc-9c80-9eef-75df-03bf0eea00b4 w-richtext  ">
+              <p>POLEDANCE STUDIO</p>
+            </div>
+          </div>
+        </div>
+        <div data-wf--layout--variant="stack-centered" class="u-layout-wrapper u-margin-top-8">
+          <div class="u-layout">
+            <div class="u-layout-column-1 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
+              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
+                <div class="u-display-contents">
+                  <div data-number="15" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext">
+                    <p>Join the waitlist and get a discount on launch</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="u-layout-column-2 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
+              <div data-wf--content-wrapper--variant="center" style="" class="u-content-wrapper w-variant-4f54624e-ceb1-0769-a238-365d5e220b70">
+                <div class="u-display-contents">
+                  <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+                    <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+                    <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab">
+                      <div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -958,58 +985,11 @@ const HEART_PTS = (() => {
     </section>
   </main>
 
-  <script is:inline>
-  // Big heart: the small chrome hearts fly in from around the screen and gather into the heart as the section scrolls in;
-  // the text and button fade in once the heart is complete. Scrolling back up scatters them again.
-  document.addEventListener("DOMContentLoaded", () => {
-    const sec = document.querySelector(".hh");
-    if (!sec || !window.gsap || !window.ScrollTrigger || matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    gsap.registerPlugin(ScrollTrigger);
-    const ring = sec.querySelector(".hh-ring");
-    const hearts = [...ring.querySelectorAll("img")];
-    const inner = sec.querySelector(".hh-in");
-    const W = () => ring.offsetWidth;
-    const tl = gsap.timeline({ scrollTrigger: { trigger: sec, start: "top 85%", end: "center 55%", scrub: true, invalidateOnRefresh: true } });
-    hearts.forEach((h, k) => {
-      const cs = getComputedStyle(h);
-      tl.fromTo(h,
-        { x: () => parseFloat(cs.getPropertyValue("--dx")) * W(), y: () => parseFloat(cs.getPropertyValue("--dy")) * W(), rotation: parseFloat(cs.getPropertyValue("--r0")), scale: .4, opacity: 0 },
-        { x: 0, y: 0, rotation: parseFloat(cs.getPropertyValue("--r")), scale: 1, opacity: 1, duration: 1, ease: "power3.out" },
-        (k / hearts.length) * 0.9 + Math.random() * 0.15);
-    });
-    tl.fromTo(inner, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: .5, ease: "power2.out" }, ">-0.25");
-  });
-  </script>
   <WaitlistModal slot="after-footer" />
   <style is:global>
     /* the homepage "Concept" word glides into the concept page title */
     .vt-concept { view-transition-name: concept-title; }
     .vt-figures { view-transition-name: figures-title; }
-
-    /* Big heart section (HomeHeart) */
-    .hh { position: relative; min-height: max(100svh, 50rem); overflow: hidden; color: #fff; display: grid; place-items: center; }
-    .hh-bg { position: absolute; inset: -3rem; }
-    .hh-bg img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; filter: blur(30px) brightness(.45); }
-    .hh::after { content: ""; position: absolute; inset: 0; background: radial-gradient(60% 60% at 50% 50%, rgb(132 38 54 / 25%), rgb(20 18 19 / 55%)); pointer-events: none; }
-    .hh-ring { position: absolute; left: 50%; top: 50%; z-index: 2; width: min(54rem, 58vw, 88svh); aspect-ratio: 33 / 30; transform: translate(-50%, -47%); }
-    .hh-ring img { position: absolute; width: 2.5rem; height: auto; margin: -1.25rem 0 0 -1.25rem; transform: rotate(var(--r)); filter: drop-shadow(0 6px 8px rgb(0 0 0 / 45%)); will-change: transform, opacity; }
-    .hh-in { position: relative; z-index: 3; width: min(32rem, 80vw); margin-top: 1%; text-align: center; }
-    .hh-eb { justify-content: center; margin-bottom: 0 !important; }
-    .hh-eb .u-eyebrow-layout { justify-content: center; }
-    .hh-t { margin: 1rem 0 0 !important; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: clamp(2.75rem, 3.75vw, 3.5rem); line-height: 1.02; letter-spacing: -.01em; }
-    .hh-t::before, .hh-t::after, .hh-p::before, .hh-p::after { content: none !important; }
-    .hh-p { max-width: 21rem; margin: 1rem auto 0 !important; font-size: .9375rem; line-height: 1.5; opacity: .82; }
-    .hh-btn { display: flex; justify-content: center; margin-top: 1.75rem; }
-    @media (max-width: 767px) {
-      .hh { min-height: 46rem; }
-      .hh-ring { width: 96vw; transform: translate(-50%, -60%); }
-      .hh-ring img { width: 1.375rem; margin: -.6875rem 0 0 -.6875rem; }
-      .hh-in { width: 14rem; margin-top: -24%; }
-      .hh-eb, .hh-p { display: none; }
-      .hh-t { margin: 0 !important; font-size: 1.625rem; }
-      .hh-btn { position: absolute; left: 50%; top: calc(100% + 11.5rem); margin: 0; transform: translateX(-50%); width: max-content; }
-      .hh-btn .button_main_text { white-space: nowrap; }
-    }
     /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
     .ode-toggle { position: relative; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 0 !important; padding: 5px !important; border-radius: 9999px; background: rgb(255 255 255 / 14%) !important; border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .ode-toggle .compare_toggle_option { position: relative; z-index: 1; margin: 0; padding: .75rem 1.625rem !important; border: 0; border-radius: 9999px; background: none !important; font: inherit; font-size: 1rem; color: #fff !important; text-align: center; cursor: pointer; transition: color .35s; }
