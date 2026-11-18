@@ -152,6 +152,12 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       /* No black buttons: on light sections buttons fill burgundy on hover, and the primary (dark) button is burgundy */
       :is(:root, .u-theme-light) { --_theme---button-secondary--background-hover: #842636; --_theme---button-secondary--text-hover: #fff; --_theme---button-primary--background: #842636; --_theme---button-primary--background-hover: #6a1e2b; --_theme---button-primary--text-hover: #fff; }
       .u-theme-dark { --_theme---button-primary--background: #842636; --_theme---button-primary--background-hover: #6a1e2b; --_theme---button-primary--text-hover: #fff; }
+      /* Brand signature: a small chrome heart at the top right of each page's main title (one per page), and burgundy label dots */
+      .ode-th { position: relative; display: inline-block; }
+      .ode-title-heart { position: absolute; right: -.4em; top: -.1em; width: .34em; min-width: 1.5rem; height: auto; pointer-events: none; transform: rotate(12deg); filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 25%)); animation: ode-heart-in .75s cubic-bezier(.3, 1.8, .5, 1) var(--heart-delay, .4s) both; }
+      @keyframes ode-heart-in { from { opacity: 0; transform: translateY(.25em) rotate(-30deg) scale(.3); } }
+      @media (prefers-reduced-motion: reduce) { .ode-title-heart { animation: none; } }
+      .u-eyebrow-marker { background-color: #842636 !important; }
       .hero-dim { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; will-change: opacity; }
     </style>
     <slot name="scripts" />

@@ -29,7 +29,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
       <div class="left">
         <div class="stick">
           <div class="u-eyebrow-wrapper eb"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Figure {pad(index)} / {total}</p></div></div></div>
-          <h1 class="ttl"><span>{trick.name}</span></h1>
+          <h1 class="ttl"><span class="ode-th"><span class="mask"><span class="txt">{trick.name}</span></span><img class="ode-title-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></span></h1>
           <dl class="meta">
             <div><dt>Niveau</dt><dd>{trick.level}</dd></div>
             <div><dt>Type</dt><dd>{trick.category}</dd></div>
@@ -94,9 +94,11 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   /* left: the name stays at the bottom of the screen while the right column scrolls */
   .stick { position: sticky; top: 0; height: 100svh; margin-top: calc(var(--nav--height-total, 6rem) * -1); display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding-bottom: 2.5rem; }
   .eb { margin-bottom: 0 !important; }
-  .ttl { margin-top: 1rem !important; overflow: hidden; font-size: clamp(4.5rem, 10.4vw, 9.5rem); line-height: 1; padding-bottom: .06em; }
-  .ttl span { display: block; animation: rise 1.1s cubic-bezier(.22, .8, .25, 1) .45s both; }
-  :global(html.from-grid) .ttl span { animation-delay: 1.05s; }
+  .ttl { margin-top: 1rem !important; font-size: clamp(4.5rem, 10.4vw, 9.5rem); line-height: 1; --heart-delay: 1.2s; }
+  .ttl .mask { display: block; overflow: hidden; padding-bottom: .06em; }
+  :global(html.from-grid) .ttl { --heart-delay: 1.8s; }
+  .ttl .txt { display: block; animation: rise 1.1s cubic-bezier(.22, .8, .25, 1) .45s both; }
+  :global(html.from-grid) .ttl .txt { animation-delay: 1.05s; }
   :global(html.from-grid) .meta { animation-delay: 1.4s; }
   .meta { display: flex; flex-wrap: wrap; gap: 1rem 3.5rem; margin-top: 2.25rem !important; opacity: 0; animation: fadeUp .8s ease .85s forwards; }
   .meta dt { margin-bottom: .375rem; font-size: .75rem; color: #8a8586; }
@@ -129,7 +131,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   .back:focus-visible, .pill:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
   @media (prefers-reduced-motion: reduce) {
-    .ttl span, .meta { animation: none; opacity: 1; }
+    .ttl .txt, .meta { animation: none; opacity: 1; }
   }
   @media (max-width: 767px) {
     .back { left: .75rem; top: calc(var(--nav--height-total, 6rem) + .25rem); }
