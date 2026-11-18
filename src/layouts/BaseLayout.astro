@@ -95,6 +95,21 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         const images = document.querySelectorAll(".parallax");
         new Ukiyo(images, { scale: 1.5, speed: 1.5, willChange: true });
 
+        // Call-to-action pills (waitlist + formules): on hover they turn burgundy and a small chrome heart pops out (design B7)
+        document.querySelectorAll(".button_main_wrap").forEach((wrap) => {
+          if (wrap.matches('[class*="w-variant-625d5df4"]')) return; // "See more" text links keep their own effect
+          if (!wrap.querySelector("[data-modal-trigger]") && !wrap.closest(".card_primary_wrap")) return;
+          const el = wrap.querySelector(".button_main_element");
+          if (!el) return;
+          wrap.classList.add("ode-heart-btn");
+          const heart = document.createElement("img");
+          heart.src = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp";
+          heart.alt = "";
+          heart.className = "ode-heart";
+          heart.setAttribute("aria-hidden", "true");
+          el.appendChild(heart);
+        });
+
         // Hero sections darken as you scroll past them (like oharchitecture.com.au):
         // a black layer over the hero goes from 0 to 70% while the next section slides over it.
         const heroes = [...document.querySelectorAll("section[slide-down]")].map((hero) => {
@@ -119,6 +134,12 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       });
     </script>
     <style is:global>
+      .ode-heart-btn { overflow: visible; }
+      .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
+      .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #842636 !important; border-color: #842636 !important; color: #fff !important; }
+      .ode-heart { position: absolute; right: -.5rem; top: -.5rem; width: 2.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.875rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 6px 8px rgb(0 0 0 / 25%)); z-index: 2; }
+      .ode-heart-btn:hover .ode-heart, .ode-heart-btn:focus-within .ode-heart, .card_primary_wrap:hover .ode-heart, .card_primary_wrap:focus-within .ode-heart { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
+      @media (prefers-reduced-motion: reduce) { .ode-heart { transition: opacity .2s; transform: none; } }
       .hero-dim { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; will-change: opacity; }
     </style>
     <slot name="scripts" />
