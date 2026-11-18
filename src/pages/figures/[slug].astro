@@ -72,7 +72,17 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   <Fragment slot="head">
     <script is:inline>
       // arriving from the catalogue with a page transition: let the photo land before the name rises
-      addEventListener("pagereveal", (e) => { if (e.viewTransition) document.documentElement.classList.add("from-grid"); });
+      addEventListener("pagereveal", (e) => {
+        if (e.viewTransition) document.documentElement.classList.add("from-grid");
+        // temporary diagnostics for the figure transition
+        const log = { t: Date.now(), vt: !!e.viewTransition, from: (window.navigation && navigation.activation && navigation.activation.from && navigation.activation.from.url) || null, reduce: matchMedia("(prefers-reduced-motion: reduce)").matches, ua: navigator.userAgent };
+        const save = () => { try { sessionStorage.setItem("vt-debug", JSON.stringify(log)); } catch (_) {} console.log("[vt-debug]", JSON.stringify(log)); };
+        save();
+        if (e.viewTransition) {
+          e.viewTransition.ready.then(() => { log.ready = "ok"; log.anims = document.getAnimations().filter((a) => a.effect && a.effect.pseudoElement).map((a) => a.effect.pseudoElement + ":" + Math.round(a.effect.getComputedTiming().duration)).slice(0, 12); save(); }, (err) => { log.ready = String(err); save(); });
+          e.viewTransition.finished.then(() => { log.finished = "ok"; save(); }, (err) => { log.finished = String(err); save(); });
+        }
+      });
     </script>
   </Fragment>
 </BaseLayout>
