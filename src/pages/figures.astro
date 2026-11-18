@@ -3,53 +3,58 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
 import { tricks, LEVELS, CATEGORIES } from "../data/tricks";
 // Figures catalogue (design "FiguresOther", after the Other° studio site):
-// big title, a large underlined search (after Mura), level + type filters,
-// and a grid that switches between 4 and 8 columns with the photos gliding into place (GSAP Flip).
+// in the homepage style: eyebrows, frosted pills with the burgundy + chrome heart hover, a compact search,
+// level + type filters, and a grid that switches between 4 and 8 columns with the photos gliding into place (GSAP Flip).
 
 const levelCount = (l: string) => tricks.filter((t) => t.level === l).length;
 const catCount = (c: string) => tricks.filter((t) => t.category === c).length;
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1000w`;
-const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédiaire": "inter.", "Avancée": "avancée" };
+
 ---
 
 <BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
-  <main id="main" class="page_main fx">
+  <main id="main" class="page_main fx u-theme-light">
     <section class="hero">
-      <h1 class="ttl">Figures<sup aria-hidden="true">°</sup></h1>
+      <div>
+        <div class="u-eyebrow-wrapper eb"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Catalogue</p></div></div></div>
+        <h1 class="ttl">Figures<sup aria-hidden="true">°</sup></h1>
+      </div>
       <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
-      <p class="counts">{LEVELS.map((l) => <span>{levelCount(l)} {SHORT[l]}</span>)}</p>
+      <p class="counts">{LEVELS.map((l) => <span class="cnt">{levelCount(l)} {l.toLowerCase()}</span>)}</p>
     </section>
-
-    <div class="search" role="search">
-      <label class="sr" for="fg-q">Rechercher une figure</label>
-      <input type="search" id="fg-q" class="q" placeholder="Rechercher" autocomplete="off" spellcheck="false" />
-      <button type="button" class="clear" id="fg-clear" aria-label="Effacer la recherche" hidden>
-        <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 3l14 14M3 17L17 3" stroke="currentColor" stroke-width="1.2"></path></svg>
-      </button>
-      <svg class="mag" width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="14.5" stroke="currentColor" stroke-width="1.2"></circle><path d="M28.5 28.5L42 42" stroke="currentColor" stroke-width="1.2"></path></svg>
-      <span class="line" aria-hidden="true"></span>
-      <p class="hint">Tape le nom d'une figure, en français ou en anglais.</p>
-    </div>
 
     <div class="bar" id="catalogue">
       <div>
+        <div class="u-eyebrow-wrapper eb"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Nos figures</p></div></div></div>
         <h2 class="h2"><span id="fg-title">Toutes les figures</span><sup id="fg-count">({tricks.length})</sup></h2>
-        <div class="filters" role="group" aria-label="Niveau" data-key="level">
-          <button type="button" class="f" aria-pressed="true" data-value="">Toutes</button>
-          {LEVELS.map((l) => <button type="button" class="f" aria-pressed="false" data-value={l}>{l}<sup>{levelCount(l)}</sup></button>)}
-        </div>
-        <div class="filters" role="group" aria-label="Type de mouvement" data-key="cat">
-          <button type="button" class="f" aria-pressed="true" data-value="">Tous les types</button>
-          {CATEGORIES.map((c) => <button type="button" class="f" aria-pressed="false" data-value={c}>{c}<sup>{catCount(c)}</sup></button>)}
+      </div>
+      <div class="tools">
+        <label class="search" role="search">
+          <svg width="18" height="18" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.3"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.3"></path></svg>
+          <span class="sr">Rechercher une figure</span>
+          <input type="search" id="fg-q" placeholder="Rechercher une figure" autocomplete="off" spellcheck="false" />
+          <button type="button" class="clear" id="fg-clear" aria-label="Effacer la recherche" hidden><svg width="12" height="12" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 3l14 14M3 17L17 3" stroke="currentColor" stroke-width="1.6"></path></svg></button>
+        </label>
+        <div class="views" role="group" aria-label="Affichage">
+          <span class="th" aria-hidden="true"></span>
+          <button type="button" class="v" aria-pressed="true" data-cols="std">
+            <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor"><rect width="8" height="8"/><rect x="10" width="8" height="8"/><rect y="10" width="8" height="8"/><rect x="10" y="10" width="8" height="8"/></g></svg>Standard
+          </button>
+          <button type="button" class="v" aria-pressed="false" data-cols="dense">
+            <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor">{[0, 1, 2, 3].map((x) => [0, 1, 2, 3].map((y) => <rect x={x * 5} y={y * 5} width="3" height="3" />))}</g></svg>Dense
+          </button>
         </div>
       </div>
-      <div class="views" role="group" aria-label="Affichage">
-        <button type="button" class="v" aria-pressed="true" data-cols="std">
-          <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor"><rect width="8" height="8"/><rect x="10" width="8" height="8"/><rect y="10" width="8" height="8"/><rect x="10" y="10" width="8" height="8"/></g></svg>Standard
-        </button>
-        <button type="button" class="v" aria-pressed="false" data-cols="dense">
-          <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor">{[0, 1, 2, 3].map((x) => [0, 1, 2, 3].map((y) => <rect x={x * 5} y={y * 5} width="3" height="3" />))}</g></svg>Dense
-        </button>
+    </div>
+
+    <div class="frows">
+      <div class="filters" role="group" aria-label="Niveau" data-key="level">
+        <button type="button" class="f" aria-pressed="true" data-value="">Toutes<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
+        {LEVELS.map((l) => <button type="button" class="f" aria-pressed="false" data-value={l}>{l}<sup>{levelCount(l)}</sup><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>)}
+      </div>
+      <div class="filters" role="group" aria-label="Type de mouvement" data-key="cat">
+        <button type="button" class="f" aria-pressed="true" data-value="">Tous les types<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
+        {CATEGORIES.map((c) => <button type="button" class="f" aria-pressed="false" data-value={c}>{c}<sup>{catCount(c)}</sup><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>)}
       </div>
     </div>
 
@@ -57,16 +62,17 @@ const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédia
       {tricks.map((t) => (
         <a href={`/figures/${t.slug}`} class="card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category}>
           <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 767px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
-          <span class="cap"><span class="nm">{t.name}</span><span class="lv">{t.level}</span></span>
+          <span class="tags"><span class="tg">{t.level}</span><span class="tg">{t.category}</span></span>
+          <span class="nm">{t.name}</span>
         </a>
       ))}
     </div>
 
-    <div class="more-wrap"><button type="button" class="pill" id="fg-more">Voir plus</button></div>
+    <div class="more-wrap"><button type="button" class="pill" id="fg-more"><span class="pill-t">Voir plus</span><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button></div>
     <div class="empty" id="fg-empty" hidden>
       <p class="empty-t">Aucune figure ne correspond à ta recherche.</p>
       <p>Essaie un autre nom, ou retire un filtre.</p>
-      <button type="button" class="pill" id="fg-reset">Voir toutes les figures</button>
+      <button type="button" class="pill" id="fg-reset">Voir toutes les figures<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
     </div>
   </main>
   <WaitlistModal slot="after-footer" />
@@ -124,7 +130,7 @@ const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédia
     count.textContent = `(${n})`;
     const left = n - Math.min(n, limit);
     more.hidden = left <= 0;
-    more.textContent = `Voir plus de figures (${left})`;
+    more.querySelector(".pill-t")!.textContent = `Voir plus de figures (${left})`;
     empty.hidden = n > 0;
     clearBtn.hidden = !q.value;
     // live counts: what each option would show with the other filter and the search
@@ -144,10 +150,12 @@ const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédia
     if (sel[key] === b.dataset.value) return;
     change(() => { sel[key] = b.dataset.value!; limit = PAGE; render(); });
   })));
+  const viewsBox = document.querySelector(".views")!;
   views.forEach((v) => v.addEventListener("click", () => {
     if (v.getAttribute("aria-pressed") === "true") return;
     change(() => {
       views.forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
+      viewsBox.classList.toggle("is-dense", v.dataset.cols === "dense");
       grid.classList.toggle("is-dense", v.dataset.cols === "dense");
     }, 0.9);
   }));
@@ -160,91 +168,94 @@ const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédia
 </script>
 
 <style>
-  .fx { --ink: #1f1d1e; --red: #842636; color: var(--ink); background: #f6f6f6; padding: calc(var(--nav--height-total, 6rem) + 1rem) var(--site--margin, 2.5rem) 8rem; font-family: var(--_typography---font--primary-family), sans-serif; }
+  .fx { --ink: #1f1d1e; --red: #842636; color: #3b3b3b; background: #fff; padding: calc(var(--nav--height-total, 6rem) + 1rem) var(--site--margin, 2.5rem) 8rem; font-family: var(--_typography---font--primary-family), sans-serif; }
   :global(.nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
   :global(.nav_button_line) { background-color: #141414 !important; }
   .fx p, .fx h1, .fx h2 { margin: 0; }
-  .fx p::before, .fx p::after, .fx h1::before, .fx h1::after, .fx h2::before, .fx h2::after { content: none; }
+  .fx > * p::before, .fx > * p::after, .fx h1::before, .fx h1::after, .fx h2::before, .fx h2::after { content: none; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-  .ttl, .h2, .q, .nm, .empty-t { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: -.01em; }
+  .ttl, .h2, .nm, .empty-t { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: -.01em; color: var(--ink); }
+  .eb { margin-bottom: 0 !important; }
 
   /* header */
-  .hero { display: grid; grid-template-columns: 4fr 3fr 1fr; align-items: center; padding: 4.5rem 0 4rem; }
-  .ttl { font-size: clamp(5rem, 9.2vw, 8.5rem); line-height: .9; }
+  .hero { display: grid; grid-template-columns: 4fr 3fr 1fr; align-items: end; padding: 4.5rem 0 4.5rem; }
+  .ttl { margin-top: 1.125rem; font-size: clamp(5rem, 9.2vw, 8.5rem); line-height: .9; }
   .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-size: .22em; vertical-align: top; position: relative; top: .5em; margin-left: .3em; color: var(--red); }
-  .intro { max-width: 20rem; font-size: .875rem; line-height: 1.45; color: #3b3b3b; }
-  .counts { display: flex; justify-content: flex-end; gap: 1rem; font-size: .8125rem; color: #3b3b3b; white-space: nowrap; }
+  .intro { max-width: 21rem; padding-bottom: .625rem; font-size: 1.0625rem; line-height: 1.5; }
+  .counts { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; padding-bottom: .625rem; }
+  .cnt { display: inline-flex; align-items: center; height: 1.875rem; padding: 0 .75rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 16%); font-size: .8125rem; white-space: nowrap; }
 
-  /* search, after Mura: one big word on a line, the magnifier at the end */
-  .search { position: relative; display: flex; align-items: center; gap: 1.5rem; margin-bottom: 6.5rem; padding-bottom: .875rem; }
-  .q { flex: 1; min-width: 0; border: 0; background: none; padding: 0; font-size: clamp(3rem, 6.2vw, 5.75rem); line-height: 1.1; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; }
-  .q::placeholder { color: #a9a6a7; opacity: 1; }
-  .q::-webkit-search-cancel-button { display: none; }
-  .mag { flex: none; width: 2.75rem; height: 2.75rem; color: #6f6b6c; transition: color .3s; }
-  .clear { flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; background: none; color: #6f6b6c; cursor: pointer; }
+  /* title row: search + view switch */
+  .bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; margin-top: 2.5rem; }
+  .h2 { display: block; margin-top: .875rem; font-size: clamp(2.25rem, 3.1vw, 2.75rem); line-height: 1; }
+  .h2 sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .8125rem; vertical-align: top; margin-left: .25rem; color: #3b3b3b; }
+  .tools { display: flex; align-items: center; gap: .625rem; }
+  .search { display: flex; align-items: center; gap: .625rem; width: 16.25rem; height: 3.375rem; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: rgb(255 255 255 / 20%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); color: #3b3b3b; cursor: text; transition: width .5s cubic-bezier(.65, 0, .35, 1), border-color .3s; }
+  .search:focus-within, .search:has(input:not(:placeholder-shown)) { width: 22.5rem; border-color: var(--red); }
+  .search:focus-within svg { color: var(--red); }
+  .search svg { flex: none; transition: color .3s; }
+  .search input { flex: 1; min-width: 0; border: 0; background: none; padding: 0; font: inherit; font-size: .9375rem; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; }
+  .search input::placeholder { color: #8a8586; opacity: 1; }
+  .search input::-webkit-search-cancel-button { display: none; }
+  .clear { flex: none; display: grid; place-items: center; width: 1.5rem; height: 1.5rem; border: 0; border-radius: 50%; background: rgb(31 29 30 / 8%); color: #3b3b3b; cursor: pointer; }
   .clear[hidden] { display: none; }
-  .clear:hover { color: var(--ink); }
-  .line { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgb(31 29 30 / 35%); }
-  .line::after { content: ""; position: absolute; inset: 0; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.65, 0, .35, 1); }
-  .search:focus-within .line::after { transform: scaleX(1); }
-  .search:focus-within .mag { color: var(--red); }
-  .hint { position: absolute; left: 0; top: calc(100% + .75rem); font-size: .75rem; color: #3b3b3b; }
+  .views { position: relative; display: grid; grid-template-columns: 1fr 1fr; padding: .3125rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: rgb(255 255 255 / 20%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .th { position: absolute; top: .3125rem; bottom: .3125rem; left: .3125rem; width: calc(50% - .3125rem); border-radius: 9999px; background: var(--red); transition: transform .5s cubic-bezier(.65, 0, .35, 1); }
+  .views.is-dense .th { transform: translateX(100%); }
+  .v { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: .5rem; height: 2.625rem; padding: 0 1.375rem; border: 0; background: none; font: inherit; font-size: .9375rem; color: #3b3b3b; cursor: pointer; transition: color .35s; }
+  .v[aria-pressed="true"] { color: #fff; }
 
-  /* title, filters and view switch */
-  .bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; margin-bottom: 1.5rem; }
-  .h2 { font-size: clamp(1.875rem, 2.4vw, 2.25rem); line-height: 1; }
-  .h2 sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .75rem; vertical-align: top; margin-left: .2rem; }
-  .filters { display: flex; flex-wrap: wrap; gap: .375rem 1.125rem; margin-top: .875rem; }
-  .filters + .filters { margin-top: .625rem; }
-  .f { padding: 0; border: 0; background: none; font: inherit; font-size: .875rem; color: #a3a0a1; cursor: pointer; transition: color .3s; }
-  .f sup { font-size: .6rem; margin-left: .15rem; }
-  .f:hover, .f[aria-pressed="true"] { color: var(--ink); }
-  .views { flex: none; display: flex; gap: .25rem; padding: .25rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 14%); }
-  .v { display: flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1rem; border: 0; border-radius: 9999px; background: none; font: inherit; font-size: .875rem; color: #8a8586; cursor: pointer; transition: background-color .35s, color .35s; }
-  .v:hover { color: var(--ink); }
-  .v[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  /* filters: frosted pills, burgundy when chosen, chrome heart pops out on hover (B7) */
+  .frows { margin: 1.25rem 0 1.75rem; }
+  .filters { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .filters + .filters { margin-top: .5rem; }
+  .f, .pill { position: relative; display: inline-flex; align-items: center; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: rgb(255 255 255 / 20%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); font: inherit; line-height: 1; color: var(--ink); cursor: pointer; transition: background-color .35s, border-color .35s, color .35s; }
+  .f { padding: .65rem 1.1rem; font-size: .875rem; }
+  .f sup { font-size: .6rem; margin-left: .25rem; opacity: .6; }
+  .f[aria-pressed="true"], .f:hover, .pill:hover { background: var(--red); border-color: var(--red); color: #fff; }
+  .hrt { position: absolute; right: -.5rem; top: -.5rem; width: 1.875rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.875rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 6px 8px rgb(0 0 0 / 25%)); z-index: 2; }
+  .pill .hrt { width: 2.125rem; }
+  .f:hover .hrt, .f:focus-visible .hrt, .pill:hover .hrt, .pill:focus-visible .hrt { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
   .f:focus-visible, .v:focus-visible, .pill:focus-visible, .clear:focus-visible, .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-  /* grid: 4 columns, or 8 when dense */
+  /* grid: 4 columns, or 8 when dense; photos stay clean until hover */
   .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
   .grid.is-dense { grid-template-columns: repeat(8, 1fr); }
   .card { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: #d9d7d7; color: #fff; text-decoration: none; }
   .card[hidden] { display: none; }
   .ph, .ph img { position: absolute; inset: 0; width: 100%; height: 100%; }
   .ph img { object-fit: cover; display: block; transition: scale .8s cubic-bezier(.2, .7, .2, 1); }
+  .ph::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, rgb(20 18 19 / 20%), transparent 30%, transparent 60%, rgb(20 18 19 / 55%)); opacity: 0; transition: opacity .35s; }
   .card:hover .ph img { scale: 1.04; }
-  .cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; gap: .75rem; padding: 2.5rem .875rem .75rem; background: linear-gradient(180deg, transparent, rgb(20 18 19 / 55%)); opacity: 0; transition: opacity .35s; }
-  .card:hover .cap, .card:focus-visible .cap { opacity: 1; }
-  .nm { font-size: 1.5rem; line-height: 1.05; }
-  .lv { font-size: .75rem; opacity: .8; white-space: nowrap; }
-  .is-dense .nm { font-size: 1rem; }
-  .is-dense .lv { display: none; }
-  .is-dense .cap { padding: 1.5rem .5rem .5rem; }
+  .tags { position: absolute; left: .75rem; top: .75rem; z-index: 2; display: flex; gap: .375rem; opacity: 0; transform: translateY(-.375rem); transition: opacity .35s, transform .35s; }
+  .tg { display: inline-flex; align-items: center; height: 1.625rem; padding: 0 .625rem; border-radius: 9999px; font-size: .75rem; background: rgb(255 255 255 / 14%); border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
+  .nm { position: absolute; left: .875rem; bottom: .75rem; z-index: 2; font-size: 1.625rem; line-height: 1.05; color: #fff; white-space: nowrap; opacity: 0; transform: translateY(.375rem); transition: opacity .35s, transform .35s; }
+  .card:hover .ph::after, .card:focus-visible .ph::after, .card:hover .tags, .card:focus-visible .tags, .card:hover .nm, .card:focus-visible .nm { opacity: 1; transform: none; }
+  .is-dense .tags { display: none; }
+  .is-dense .nm { left: .5rem; bottom: .5rem; font-size: .9375rem; }
 
   .more-wrap { display: flex; justify-content: center; margin-top: 3.5rem; }
   .more-wrap:has(.pill[hidden]) { display: none; }
-  .pill { display: inline-flex; align-items: center; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: none; font: inherit; font-size: .9375rem; font-weight: 500; color: #3b3b3b; cursor: pointer; transition: background-color .25s, color .25s, border-color .25s; }
-  .pill:hover { background: #3b3b3b; border-color: #3b3b3b; color: #fff; }
+  .pill { padding: .9rem 1.5rem; font-size: 1rem; }
   .pill[hidden] { display: none; }
-  .empty { display: flex; flex-direction: column; align-items: center; gap: .75rem; padding: 4rem 0; text-align: center; color: #3b3b3b; }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: .75rem; padding: 4rem 0; text-align: center; }
   .empty[hidden] { display: none; }
-  .empty-t { font-size: 2rem; color: var(--ink); }
+  .empty-t { font-size: 2rem; }
   .empty .pill { margin-top: 1rem; }
 
   @media (max-width: 767px) {
     .fx { padding: calc(var(--nav--height-total, 6rem) + .5rem) .75rem 5rem; }
     .hero { grid-template-columns: 1fr; gap: 1rem; padding: 3rem 0 2.5rem; }
     .ttl { font-size: 5.25rem; }
-    .counts { justify-content: flex-start; }
-    .search { gap: .75rem; margin-bottom: 4.5rem; padding-bottom: .5rem; }
-    .q { font-size: 2.75rem; }
-    .mag, .clear { width: 2rem; height: 2rem; }
-    .bar { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    .counts { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+    .bar { flex-direction: column; align-items: stretch; gap: 1.25rem; margin-top: 1.5rem; }
+    .tools { flex-wrap: wrap; }
+    .search, .search:focus-within, .search:has(input:not(:placeholder-shown)) { width: 100%; }
+    .f { padding: .55rem .9rem; font-size: .8125rem; }
     .grid { grid-template-columns: repeat(2, 1fr); }
     .grid.is-dense { grid-template-columns: repeat(4, 1fr); }
-    .cap { opacity: 1; padding: 2rem .625rem .625rem; }
-    .nm { font-size: 1.125rem; }
-    .lv { display: none; }
-    .is-dense .cap { display: none; }
+    .tags .tg + .tg { display: none; }
+    .nm { font-size: 1.25rem; left: .625rem; bottom: .625rem; }
+    .is-dense .nm { display: none; }
   }
 </style>
