@@ -46,11 +46,10 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <!-- Hide animated elements until Webflow interactions have started (prevents a flash) -->
     <style is:inline>html.w-mod-js:not(.w-mod-ix3):is([slide-down]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([slide-down]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3) :is([data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"]:is(.footer_bottom_letter), [data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"] :is(.footer_bottom_letter), [slide-down], [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"]:is([text-blur]), [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"] :is([text-blur]), [random-stagger-in], .heading, [fade-in]) {visibility: hidden !important;}</style>
 
-    <!-- Fonts: Google Fonts + Adobe Fonts (Typekit kit xbu1shi, used for freight-big-pro) -->
+    <!-- Fonts: only what the site uses — Instrument Sans (Google Fonts) and freight-big-pro (Adobe Fonts kit xbu1shi) -->
     <link href="https://fonts.googleapis.com" rel="preconnect" />
     <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous" />
-    <script is:inline src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js"></script>
-    <script is:inline>WebFont.load({ google: { families: ["Oswald:200,300,400,500,600,700","Bodoni Moda:400,500,600,700","Cormorant Garamond:300,400","Instrument Sans:400","Newsreader:200,300,400,500","Old Standard TT:400","Poppins:400","Urbanist:300,400,500,600"] } });</script>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400&amp;display=swap" rel="stylesheet" />
     <script is:inline src="https://use.typekit.net/xbu1shi.js"></script>
     <script is:inline>try{Typekit.load();}catch(e){}</script>
 
