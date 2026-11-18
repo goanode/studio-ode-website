@@ -145,6 +145,7 @@ const PILLARS = [
       });
       tl.fromTo(grow, { clipPath: clipFrom }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1.4, ease: "power1.inOut" }, 0)
         .fromTo(gimg, { x: () => imgFrom().x, y: () => imgFrom().y, scale: () => imgFrom().scale }, { x: 0, y: 0, scale: 1, duration: 1.4, ease: "power1.inOut" }, 0)
+        .to(figs, { y: (i, el) => -innerHeight * 0.45 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.06 * +el.dataset.depth, opacity: 0, duration: 1.2, ease: "power1.in" }, 0)
         .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power1.in" }, .2)
         .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
         .fromTo(".cv .hl", { scaleX: 0 }, { scaleX: 1, duration: .6, ease: "power2.out" }, 1.2)
@@ -186,7 +187,9 @@ const PILLARS = [
   .col { position: absolute; inset: 0; z-index: 1; }
   .cf, .slot { position: absolute; left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
   .cf { margin: 0; overflow: hidden; }
-  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; filter: blur(10px); transform: scale(1.15); }
+  .cf { will-change: transform, opacity; }
+  .cf.faded img { opacity: .35; }
+  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
   .slot { visibility: hidden; pointer-events: none; }
   .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: clamp(4rem, 6.7vw, 7.5rem); line-height: 1; white-space: nowrap; color: var(--ink); }
   .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .23em; vertical-align: top; position: relative; top: .6em; margin-left: .2em; }
