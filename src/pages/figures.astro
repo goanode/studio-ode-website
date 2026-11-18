@@ -1,314 +1,250 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
-import FigureHero from "../components/FigureHero.astro";
 import { tricks, LEVELS, CATEGORIES } from "../data/tricks";
+// Figures catalogue (design "FiguresOther", after the Other° studio site):
+// big title, a large underlined search (after Mura), level + type filters,
+// and a grid that switches between 4 and 8 columns with the photos gliding into place (GSAP Flip).
 
-const ORDER = { "Débutante": 0, "Intermédiaire": 1, "Avancée": 2 };
+const levelCount = (l: string) => tricks.filter((t) => t.level === l).length;
+const catCount = (c: string) => tricks.filter((t) => t.category === c).length;
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1000w`;
+const SHORT: Record<string, string> = { "Débutante": "débutante", "Intermédiaire": "inter.", "Avancée": "avancée" };
 ---
 
-<!-- Uses the home page's Webflow page id so the hero gets the exact same load animation (title letters rising, intro fading in) -->
-<BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
-  <main id="main" class="page_main">
-    <FigureHero title="Figures" image="/images/please-look-at-the-first-pose----820406-SN7" labels={[`${tricks.length} figures`, `${CATEGORIES.length} types`, `${LEVELS.length} niveaux`]} intro="De la première rotation aux inversions avancées." />
+<BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
+  <main id="main" class="page_main fx">
+    <section class="hero">
+      <h1 class="ttl">Figures<sup aria-hidden="true">°</sup></h1>
+      <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
+      <p class="counts">{LEVELS.map((l) => <span>{levelCount(l)} {SHORT[l]}</span>)}</p>
+    </section>
 
-    <div class="fg-body">
-    <!-- Filters (design G5): centred like the homepage "Choisis ton cours" -->
-    <div class="fg-filters" id="catalogue">
-      <!-- Same heading component as "Choisis ton cours" on the homepage -->
-      <div data-number="20" data-wf--typography-heading--variant="h1" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext fg-filters-title">
-        <h2>Choisis ta figure</h2>
-      </div>
-      <p class="fg-filters-intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
-      <!-- Filters (design I1): search + two multi-select dropdowns with checkboxes -->
-      <div class="fg-bar">
-        <label class="fg-search">
-          <svg width="20" height="20" viewBox="0 0 16 16" fill="none" aria-hidden="true"><circle cx="7" cy="7" r="5.25" stroke="currentColor" stroke-width="1.2"></circle><path d="M11 11l3.5 3.5" stroke="currentColor" stroke-width="1.2"></path></svg>
-          <span class="fg-sr">Rechercher une figure</span>
-          <input type="search" id="fg-q" placeholder="Rechercher une figure" autocomplete="off" />
-        </label>
-        <div class="dd" data-dd="cat">
-          <button type="button" class="dd-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="dd-cat" data-title="Type de mouvement">
-            <span class="dd-text">Type de mouvement</span><span class="dd-chev"><svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.3"></path></svg></span>
-          </button>
-          <div class="dd-panel" id="dd-cat" role="listbox" aria-multiselectable="true" aria-label="Type de mouvement" hidden>
-            {CATEGORIES.map((c) => (
-              <button type="button" role="option" class="dd-opt" aria-selected="false" data-value={c}>
-                <span class="dd-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true"><path d="M1 5l3.5 3.5L11 1.5" stroke="#1f1d1e" stroke-width="1.8"></path></svg></span><span class="dd-name">{c}</span><span class="dd-n"></span>
-              </button>
-            ))}
-            <div class="dd-foot">
-              <button type="button" class="dd-clear">Effacer</button>
-              <button type="button" class="dd-done">Voir les figures</button>
-            </div>
-          </div>
-        </div>
-        <div class="dd" data-dd="level">
-          <button type="button" class="dd-trigger" aria-haspopup="listbox" aria-expanded="false" aria-controls="dd-level" data-title="Niveau">
-            <span class="dd-text">Niveau</span><span class="dd-chev"><svg width="14" height="8" viewBox="0 0 14 8" fill="none" aria-hidden="true"><path d="M1 1l6 6 6-6" stroke="currentColor" stroke-width="1.3"></path></svg></span>
-          </button>
-          <div class="dd-panel" id="dd-level" role="listbox" aria-multiselectable="true" aria-label="Niveau" hidden>
-            {LEVELS.map((lv) => (
-              <button type="button" role="option" class="dd-opt" aria-selected="false" data-value={lv}>
-                <span class="dd-box"><svg width="12" height="10" viewBox="0 0 12 10" fill="none" aria-hidden="true"><path d="M1 5l3.5 3.5L11 1.5" stroke="#1f1d1e" stroke-width="1.8"></path></svg></span><span class="dd-name">{lv}</span><span class="dd-n"></span>
-              </button>
-            ))}
-            <div class="dd-foot">
-              <button type="button" class="dd-clear">Effacer</button>
-              <button type="button" class="dd-done">Voir les figures</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="fg-chips" id="fg-chips" aria-live="polite"></div>
+    <div class="search" role="search">
+      <label class="sr" for="fg-q">Rechercher une figure</label>
+      <input type="search" id="fg-q" class="q" placeholder="Rechercher" autocomplete="off" spellcheck="false" />
+      <button type="button" class="clear" id="fg-clear" aria-label="Effacer la recherche" hidden>
+        <svg width="22" height="22" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M3 3l14 14M3 17L17 3" stroke="currentColor" stroke-width="1.2"></path></svg>
+      </button>
+      <svg class="mag" width="44" height="44" viewBox="0 0 44 44" fill="none" aria-hidden="true"><circle cx="18" cy="18" r="14.5" stroke="currentColor" stroke-width="1.2"></circle><path d="M28.5 28.5L42 42" stroke="currentColor" stroke-width="1.2"></path></svg>
+      <span class="line" aria-hidden="true"></span>
+      <p class="hint">Tape le nom d'une figure, en français ou en anglais.</p>
     </div>
 
-    <!-- Catalogue -->
-    <section class="fg-section fg-section--grid">
-      <div class="fg-head">
-        <h2 class="fg-h2" id="fg-grid-title">Toutes les figures</h2>
-        <p class="fg-note" id="fg-count" aria-live="polite">{tricks.length} figures</p>
+    <div class="bar" id="catalogue">
+      <div>
+        <h2 class="h2"><span id="fg-title">Toutes les figures</span><sup id="fg-count">({tricks.length})</sup></h2>
+        <div class="filters" role="group" aria-label="Niveau" data-key="level">
+          <button type="button" class="f" aria-pressed="true" data-value="">Toutes</button>
+          {LEVELS.map((l) => <button type="button" class="f" aria-pressed="false" data-value={l}>{l}<sup>{levelCount(l)}</sup></button>)}
+        </div>
+        <div class="filters" role="group" aria-label="Type de mouvement" data-key="cat">
+          <button type="button" class="f" aria-pressed="true" data-value="">Tous les types</button>
+          {CATEGORIES.map((c) => <button type="button" class="f" aria-pressed="false" data-value={c}>{c}<sup>{catCount(c)}</sup></button>)}
+        </div>
       </div>
-      <div class="fg-grid" id="fg-grid">
-        {tricks.map((t) => (
-          <a href={`/figures/${t.slug}`} class="fg-card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category} data-order={ORDER[t.level]}>
-            <span class="fg-card-img"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}; ${t.mirrored ? "transform: scaleX(-1);" : ""}`} /></span>
-            <span class="u-overlay" data-number="20" aria-hidden="true"></span>
-            <span class="fg-tile-fade" aria-hidden="true"></span>
-            <span class="fg-tile-content">
-              <span class="fg-tile-labels"><span class="card_classes_btn u-text-style-small">{t.level}</span><span class="card_classes_btn u-text-style-small">{t.category}</span></span>
-              <span class="fg-tile-name">{t.name}</span>
-            </span>
-          </a>
-        ))}
+      <div class="views" role="group" aria-label="Affichage">
+        <button type="button" class="v" aria-pressed="true" data-cols="std">
+          <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor"><rect width="8" height="8"/><rect x="10" width="8" height="8"/><rect y="10" width="8" height="8"/><rect x="10" y="10" width="8" height="8"/></g></svg>Standard
+        </button>
+        <button type="button" class="v" aria-pressed="false" data-cols="dense">
+          <svg width="16" height="16" viewBox="0 0 18 18" aria-hidden="true"><g fill="currentColor">{[0, 1, 2, 3].map((x) => [0, 1, 2, 3].map((y) => <rect x={x * 5} y={y * 5} width="3" height="3" />))}</g></svg>Dense
+        </button>
       </div>
-      <div class="fg-more-wrap"><button type="button" class="fg-btn" id="fg-more">Voir plus</button></div>
-      <div class="fg-empty" id="fg-empty" hidden>
-        <p class="fg-empty-title">Aucune figure ne correspond à ta recherche.</p>
-        <p>Essaie un autre nom, ou retire un filtre.</p>
-        <button type="button" class="fg-btn" id="fg-reset">Voir toutes les figures</button>
-      </div>
-    </section>
+    </div>
+
+    <div class="grid" id="fg-grid">
+      {tricks.map((t) => (
+        <a href={`/figures/${t.slug}`} class="card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category}>
+          <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 767px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
+          <span class="cap"><span class="nm">{t.name}</span><span class="lv">{t.level}</span></span>
+        </a>
+      ))}
+    </div>
+
+    <div class="more-wrap"><button type="button" class="pill" id="fg-more">Voir plus</button></div>
+    <div class="empty" id="fg-empty" hidden>
+      <p class="empty-t">Aucune figure ne correspond à ta recherche.</p>
+      <p>Essaie un autre nom, ou retire un filtre.</p>
+      <button type="button" class="pill" id="fg-reset">Voir toutes les figures</button>
     </div>
   </main>
-
   <WaitlistModal slot="after-footer" />
+
+  <Fragment slot="scripts">
+    <script is:inline src="/vendor/Flip.min.js"></script>
+  </Fragment>
 </BaseLayout>
 
 <script>
-  const PAGE = 12;
+  const PAGE = 24; // 6 rows of 4, or 3 rows of 8
   const grid = document.getElementById("fg-grid")!;
-  const cards = Array.from(grid.querySelectorAll<HTMLAnchorElement>(".fg-card"));
+  const cards = Array.from(grid.querySelectorAll<HTMLAnchorElement>(".card"));
   const q = document.getElementById("fg-q") as HTMLInputElement;
+  const clearBtn = document.getElementById("fg-clear") as HTMLButtonElement;
   const more = document.getElementById("fg-more") as HTMLButtonElement;
-  const count = document.getElementById("fg-count")!;
   const empty = document.getElementById("fg-empty")!;
-  const gridTitle = document.getElementById("fg-grid-title")!;
-  const chipsBox = document.getElementById("fg-chips")!;
-  const sel: Record<string, string[]> = { cat: [], level: [] };
-  const state = { limit: PAGE };
-  const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-  const field = { cat: "cat", level: "level" } as const;
-  const dds = Array.from(document.querySelectorAll<HTMLElement>("[data-dd]"));
-
+  const title = document.getElementById("fg-title")!;
+  const count = document.getElementById("fg-count")!;
+  const groups = Array.from(document.querySelectorAll<HTMLElement>(".filters"));
+  const views = Array.from(document.querySelectorAll<HTMLButtonElement>(".views .v"));
+  const sel: Record<string, string> = { level: "", cat: "" };
+  let limit = PAGE;
+  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const norm = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
   const okQ = (c: HTMLElement, nq: string) => !nq || norm(`${c.dataset.name} ${c.dataset.alias}`).includes(nq);
-  const okSel = (c: HTMLElement, key: "cat" | "level", list = sel[key]) => !list.length || list.includes(c.dataset[field[key]]!);
+  const ok = (c: HTMLElement, key: "level" | "cat") => !sel[key] || c.dataset[key] === sel[key];
+
+  // Every change goes through here: the grid's before/after is captured and Flip glides each photo to its new place.
+  let flipTl: any = null;
+  function change(mutate: () => void, duration = 0.7) {
+    const w = window as any;
+    if (reduce || !w.Flip || !w.gsap) { mutate(); return; }
+    if (flipTl) flipTl.progress(1);
+    const state = w.Flip.getState(cards);
+    const h0 = grid.offsetHeight;
+    mutate();
+    // the photos are lifted out of the grid while they glide, so hold the grid's height and ease it to the new one (keeps the footer still)
+    const h1 = grid.offsetHeight;
+    w.gsap.fromTo(grid, { height: h0 }, { height: h1, duration, ease: "power3.inOut", overwrite: true, clearProps: "height" });
+    flipTl = w.Flip.from(state, {
+      duration, ease: "power3.inOut", absolute: true, stagger: 0.012, prune: true,
+      onEnter: (els: Element[]) => w.gsap.fromTo(els, { opacity: 0, scale: 0.92 }, { opacity: 1, scale: 1, duration: 0.5, ease: "power2.out", delay: 0.15 }),
+      onLeave: (els: Element[]) => w.gsap.to(els, { opacity: 0, scale: 0.92, duration: 0.35, ease: "power2.in" }),
+    });
+  }
 
   function render() {
     const nq = norm(q.value.trim());
-    const matches = cards.filter((c) => okQ(c, nq) && okSel(c, "cat") && okSel(c, "level"));
-    matches.sort((a, b) => Number(a.dataset.order) - Number(b.dataset.order) || a.dataset.name!.localeCompare(b.dataset.name!));
+    const matches = cards.filter((c) => okQ(c, nq) && ok(c, "level") && ok(c, "cat"));
     cards.forEach((c) => (c.hidden = true));
-    matches.forEach((c, i) => { grid.appendChild(c); c.hidden = i >= state.limit; });
+    matches.forEach((c, i) => (c.hidden = i >= limit));
     const n = matches.length;
-    const browsing = !sel.cat.length && !sel.level.length && !nq;
-    gridTitle.textContent = browsing ? "Toutes les figures" : "Résultats";
-    count.textContent = n === 1 ? "1 figure" : `${n} figures`;
-    const remaining = n - Math.min(n, state.limit);
-    more.hidden = remaining <= 0;
-    more.textContent = `Voir plus (${remaining} ${remaining === 1 ? "figure restante" : "figures restantes"})`;
+    title.textContent = !nq && !sel.level && !sel.cat ? "Toutes les figures" : "Résultats";
+    count.textContent = `(${n})`;
+    const left = n - Math.min(n, limit);
+    more.hidden = left <= 0;
+    more.textContent = `Voir plus de figures (${left})`;
     empty.hidden = n > 0;
-
-    // dropdowns: label, filled state, ticks and live counts
-    dds.forEach((dd) => {
-      const key = dd.dataset.dd as "cat" | "level";
-      const other = key === "cat" ? "level" : "cat";
-      const list = sel[key];
-      const trigger = dd.querySelector<HTMLButtonElement>(".dd-trigger")!;
-      trigger.querySelector(".dd-text")!.textContent = !list.length ? trigger.dataset.title! : list.length === 1 ? list[0] : `${list.length} sélectionnés`;
-      trigger.classList.toggle("is-on", list.length > 0);
-      dd.querySelectorAll<HTMLButtonElement>(".dd-opt").forEach((o) => {
-        const v = o.dataset.value!;
-        o.setAttribute("aria-selected", String(list.includes(v)));
-        o.querySelector(".dd-n")!.textContent = String(cards.filter((c) => okQ(c, nq) && okSel(c, other) && c.dataset[field[key]] === v).length);
+    clearBtn.hidden = !q.value;
+    // live counts: what each option would show with the other filter and the search
+    groups.forEach((g) => {
+      const key = g.dataset.key as "level" | "cat";
+      const other = key === "level" ? "cat" : "level";
+      g.querySelectorAll<HTMLButtonElement>(".f").forEach((b) => {
+        b.setAttribute("aria-pressed", String(b.dataset.value === sel[key]));
+        const sup = b.querySelector("sup");
+        if (sup) sup.textContent = String(cards.filter((c) => okQ(c, nq) && ok(c, other) && c.dataset[key] === b.dataset.value).length);
       });
-      dd.querySelector(".dd-done")!.textContent = n === 1 ? "Voir 1 figure" : `Voir ${n} figures`;
     });
-
-    // active filters as removable chips
-    chipsBox.replaceChildren();
-    (["cat", "level"] as const).forEach((key) => sel[key].forEach((v) => {
-      const b = document.createElement("button");
-      b.type = "button"; b.className = "fg-chip"; b.setAttribute("aria-label", `Retirer le filtre ${v}`);
-      b.innerHTML = `<span></span><svg width="10" height="10" viewBox="0 0 20 19" fill="none" aria-hidden="true"><path d="M1.5 1l17 17M1.5 18l17-17" stroke="currentColor" stroke-width="2"></path></svg>`;
-      b.firstElementChild!.textContent = v;
-      b.addEventListener("click", () => { sel[key] = sel[key].filter((x) => x !== v); update(); });
-      chipsBox.appendChild(b);
-    }));
-    if (sel.cat.length || sel.level.length) {
-      const r = document.createElement("button");
-      r.type = "button"; r.className = "fg-chips-reset"; r.textContent = "Tout effacer";
-      r.addEventListener("click", clearAll);
-      chipsBox.appendChild(r);
-    }
   }
-  const update = () => { state.limit = PAGE; render(); };
-  const clearAll = () => { q.value = ""; sel.cat = []; sel.level = []; close(); update(); };
 
-  // open / close
-  let openDD: HTMLElement | null = null;
-  function close(focus = false) {
-    if (!openDD) return;
-    const t = openDD.querySelector<HTMLButtonElement>(".dd-trigger")!;
-    t.setAttribute("aria-expanded", "false");
-    openDD.querySelector<HTMLElement>(".dd-panel")!.hidden = true;
-    if (focus) t.focus();
-    openDD = null;
-  }
-  function open(dd: HTMLElement) {
-    close();
-    dd.querySelector(".dd-trigger")!.setAttribute("aria-expanded", "true");
-    dd.querySelector<HTMLElement>(".dd-panel")!.hidden = false;
-    openDD = dd;
-  }
-  dds.forEach((dd) => {
-    const key = dd.dataset.dd as "cat" | "level";
-    dd.querySelector(".dd-trigger")!.addEventListener("click", () => (openDD === dd ? close() : open(dd)));
-    dd.querySelectorAll<HTMLButtonElement>(".dd-opt").forEach((o) => o.addEventListener("click", () => {
-      const v = o.dataset.value!;
-      sel[key] = sel[key].includes(v) ? sel[key].filter((x) => x !== v) : [...sel[key], v];
-      update();
-    }));
-    dd.querySelector(".dd-clear")!.addEventListener("click", () => { sel[key] = []; update(); });
-    dd.querySelector(".dd-done")!.addEventListener("click", () => close(true));
-    // arrow keys move between options
-    dd.querySelector(".dd-panel")!.addEventListener("keydown", (e) => {
-      const ev = e as KeyboardEvent;
-      if (ev.key !== "ArrowDown" && ev.key !== "ArrowUp") return;
-      ev.preventDefault();
-      const opts = Array.from(dd.querySelectorAll<HTMLButtonElement>(".dd-opt"));
-      const i = opts.indexOf(document.activeElement as HTMLButtonElement);
-      opts[(i + (ev.key === "ArrowDown" ? 1 : -1) + opts.length) % opts.length].focus();
-    });
-  });
-  document.addEventListener("click", (e) => { if (openDD && !openDD.contains(e.target as Node)) close(); });
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(true); });
-
-  q.addEventListener("input", update);
-  more.addEventListener("click", () => { state.limit += PAGE; render(); });
-  document.getElementById("fg-reset")!.addEventListener("click", clearAll);
-
+  groups.forEach((g) => g.querySelectorAll<HTMLButtonElement>(".f").forEach((b) => b.addEventListener("click", () => {
+    const key = g.dataset.key!;
+    if (sel[key] === b.dataset.value) return;
+    change(() => { sel[key] = b.dataset.value!; limit = PAGE; render(); });
+  })));
+  views.forEach((v) => v.addEventListener("click", () => {
+    if (v.getAttribute("aria-pressed") === "true") return;
+    change(() => {
+      views.forEach((x) => x.setAttribute("aria-pressed", String(x === v)));
+      grid.classList.toggle("is-dense", v.dataset.cols === "dense");
+    }, 0.9);
+  }));
+  let typing: number | undefined;
+  q.addEventListener("input", () => { clearTimeout(typing); typing = window.setTimeout(() => change(() => { limit = PAGE; render(); }, 0.55), 120); });
+  clearBtn.addEventListener("click", () => { q.value = ""; q.focus(); change(() => { limit = PAGE; render(); }, 0.55); });
+  more.addEventListener("click", () => change(() => { limit += PAGE; render(); }, 0.6));
+  document.getElementById("fg-reset")!.addEventListener("click", () => change(() => { q.value = ""; sel.level = ""; sel.cat = ""; limit = PAGE; render(); }));
   render();
 </script>
 
 <style>
-  /* Hero: the home page's .heading is sized for "ODE"; fit "Figures" */
-  /* Everything below the hero sits on a white layer that slides over it, like the homepage sections */
-  .fg-body { position: relative; z-index: 1; background: var(--_theme---background, #fff); padding-top: 1px; }
+  .fx { --ink: #1f1d1e; --red: #842636; color: var(--ink); background: #f6f6f6; padding: calc(var(--nav--height-total, 6rem) + 1rem) var(--site--margin, 2.5rem) 8rem; font-family: var(--_typography---font--primary-family), sans-serif; }
+  :global(.nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
+  :global(.nav_button_line) { background-color: #141414 !important; }
+  .fx p, .fx h1, .fx h2 { margin: 0; }
+  .fx p::before, .fx p::after, .fx h1::before, .fx h1::after, .fx h2::before, .fx h2::after { content: none; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .ttl, .h2, .q, .nm, .empty-t { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: -.01em; }
 
-  .fg-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* header */
+  .hero { display: grid; grid-template-columns: 4fr 3fr 1fr; align-items: center; padding: 4.5rem 0 4rem; }
+  .ttl { font-size: clamp(5rem, 9.2vw, 8.5rem); line-height: .9; }
+  .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-size: .22em; vertical-align: top; position: relative; top: .5em; margin-left: .3em; color: var(--red); }
+  .intro { max-width: 20rem; font-size: .875rem; line-height: 1.45; color: #3b3b3b; }
+  .counts { display: flex; justify-content: flex-end; gap: 1rem; font-size: .8125rem; color: #3b3b3b; white-space: nowrap; }
 
-  /* Filters (G5) */
-  .fg-filters { position: relative; z-index: 2; padding: 6rem 0 2rem; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin-left: auto; margin-right: auto; display: flex; flex-direction: column; align-items: center; gap: .75rem; text-align: center; }
-  .fg-filters-intro { max-width: 30rem; margin: 0 0 2rem; font-size: 1.125rem; line-height: 1.5; color: var(--swatch--dark-800); text-wrap: pretty; }
-  .fg-filters-title h2 { margin: 0; font: inherit; color: inherit; }
-  /* homepage spacing: 40px from heading to buttons (32px on phone) */
-  .fg-filters-title { margin-top: 0; margin-bottom: 1.75rem; }
-  .fg-search { width: 25rem; max-width: 100%; height: 2.75rem; display: flex; align-items: center; gap: .75rem; padding: 0 1.375rem; border-radius: var(--radius--round); background: color-mix(in srgb, var(--swatch--dark-900) 6%, transparent); color: var(--swatch--dark-800); }
-  .fg-search input { flex: 1; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 1.125rem; color: var(--swatch--dark-900); }
-  .fg-search input::placeholder { color: var(--swatch--dark-800); opacity: .6; }
-  .fg-search:focus-within, .dd-trigger:focus-visible, .dd-opt:focus-visible, .fg-chips :global(.fg-chip:focus-visible) { outline: 2px solid var(--swatch--dark-900); outline-offset: 2px; }
+  /* search, after Mura: one big word on a line, the magnifier at the end */
+  .search { position: relative; display: flex; align-items: center; gap: 1.5rem; margin-bottom: 6.5rem; padding-bottom: .875rem; }
+  .q { flex: 1; min-width: 0; border: 0; background: none; padding: 0; font-size: clamp(3rem, 6.2vw, 5.75rem); line-height: 1.1; color: var(--ink); outline: none; -webkit-appearance: none; appearance: none; }
+  .q::placeholder { color: #a9a6a7; opacity: 1; }
+  .q::-webkit-search-cancel-button { display: none; }
+  .mag { flex: none; width: 2.75rem; height: 2.75rem; color: #6f6b6c; transition: color .3s; }
+  .clear { flex: none; display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border: 0; background: none; color: #6f6b6c; cursor: pointer; }
+  .clear[hidden] { display: none; }
+  .clear:hover { color: var(--ink); }
+  .line { position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: rgb(31 29 30 / 35%); }
+  .line::after { content: ""; position: absolute; inset: 0; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform .6s cubic-bezier(.65, 0, .35, 1); }
+  .search:focus-within .line::after { transform: scaleX(1); }
+  .search:focus-within .mag { color: var(--red); }
+  .hint { position: absolute; left: 0; top: calc(100% + .75rem); font-size: .75rem; color: #3b3b3b; }
 
-  /* Filter bar (I1) */
-  .fg-bar { position: relative; z-index: 20; display: flex; justify-content: center; align-items: flex-start; gap: .75rem; }
-  .dd { position: relative; }
-  .dd-trigger { height: 2.75rem; min-width: 15rem; padding: 0 1.25rem 0 1.5rem; border-radius: var(--radius--round); border: 1px solid var(--swatch--dark-900-o20); background: #fff; color: var(--swatch--dark-800); font-size: 1.125rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; transition: border-color .2s, background-color .2s, color .2s; }
-  .dd-trigger:hover, .dd-trigger[aria-expanded="true"] { border-color: var(--swatch--dark-800); }
-  .dd-trigger.is-on { background: var(--swatch--dark-800); border-color: var(--swatch--dark-800); color: #fff; }
-  .dd-text { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .dd-chev { display: flex; transition: transform .25s cubic-bezier(.2, .7, .2, 1); }
-  .dd-trigger[aria-expanded="true"] .dd-chev { transform: rotate(180deg); }
-  .dd-panel { position: absolute; top: calc(100% + .5rem); left: 0; min-width: 100%; width: 17.5rem; box-sizing: border-box; padding: .5rem; border-radius: var(--radius--main); background: var(--swatch--dark-900); color: #fff; box-shadow: 0 18px 40px rgb(31 29 30 / 18%); text-align: left; animation: dd-in .22s cubic-bezier(.2, .7, .2, 1); }
-  .dd-panel[hidden] { display: none; }
-  @keyframes dd-in { from { opacity: 0; transform: translateY(-6px) scale(.98); } to { opacity: 1; transform: none; } }
-  .dd-opt { width: 100%; height: 2.75rem; padding: 0 .75rem; border-radius: .625rem; color: #fff; font-size: 1.0625rem; display: flex; align-items: center; gap: .75rem; text-align: left; }
-  .dd-opt:hover, .dd-opt:focus-visible { background: rgb(255 255 255 / 8%); outline: 0; }
-  .dd-box { width: 1.125rem; height: 1.125rem; border-radius: 5px; border: 1px solid rgb(255 255 255 / 35%); display: flex; align-items: center; justify-content: center; flex: none; transition: background-color .15s, border-color .15s; }
-  .dd-box svg { opacity: 0; transition: opacity .15s; }
-  .dd-opt[aria-selected="true"] .dd-box { background: #fff; border-color: #fff; }
-  .dd-opt[aria-selected="true"] .dd-box svg { opacity: 1; }
-  .dd-name { flex: 1; }
-  .dd-n { font-size: .875rem; opacity: .55; }
-  .dd-foot { display: flex; justify-content: space-between; align-items: center; gap: .5rem; margin-top: .375rem; padding: .625rem .25rem .125rem; border-top: 1px solid rgb(255 255 255 / 12%); }
-  .dd-clear { color: #fff; opacity: .7; font-size: .9375rem; text-decoration: underline; padding: 0 .5rem; }
-  .dd-done { height: 2.25rem; padding: 0 1rem; border-radius: var(--radius--round); background: #fff; color: var(--swatch--dark-900); font-size: .9375rem; }
-  .fg-chips { display: flex; flex-wrap: wrap; justify-content: center; gap: .5rem; min-height: 2.25rem; }
-  .fg-chips :global(.fg-chip) { height: 2.25rem; padding: 0 .75rem 0 1rem; border-radius: var(--radius--round); background: color-mix(in srgb, var(--swatch--dark-900) 8%, transparent); color: var(--swatch--dark-900); font-size: .9375rem; display: inline-flex; align-items: center; gap: .5rem; }
-  .fg-chips :global(.fg-chip:hover) { background: color-mix(in srgb, var(--swatch--dark-900) 14%, transparent); }
-  .fg-chips :global(.fg-chips-reset) { padding: 0 .5rem; font-size: .9375rem; color: var(--swatch--dark-800); text-decoration: underline; }
+  /* title, filters and view switch */
+  .bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; margin-bottom: 1.5rem; }
+  .h2 { font-size: clamp(1.875rem, 2.4vw, 2.25rem); line-height: 1; }
+  .h2 sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .75rem; vertical-align: top; margin-left: .2rem; }
+  .filters { display: flex; flex-wrap: wrap; gap: .375rem 1.125rem; margin-top: .875rem; }
+  .filters + .filters { margin-top: .625rem; }
+  .f { padding: 0; border: 0; background: none; font: inherit; font-size: .875rem; color: #a3a0a1; cursor: pointer; transition: color .3s; }
+  .f sup { font-size: .6rem; margin-left: .15rem; }
+  .f:hover, .f[aria-pressed="true"] { color: var(--ink); }
+  .views { flex: none; display: flex; gap: .25rem; padding: .25rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 14%); }
+  .v { display: flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1rem; border: 0; border-radius: 9999px; background: none; font: inherit; font-size: .875rem; color: #8a8586; cursor: pointer; transition: background-color .35s, color .35s; }
+  .v:hover { color: var(--ink); }
+  .v[aria-pressed="true"] { background: var(--ink); color: #fff; }
+  .f:focus-visible, .v:focus-visible, .pill:focus-visible, .clear:focus-visible, .card:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
-  /* Sections */
-  /* same content width as the homepage (centred, max 1440px) */
-  .fg-section { padding: 2rem 0 0; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin-left: auto; margin-right: auto; }
-  .fg-section--grid { padding-bottom: var(--_spacing---section-space--large); }
-  .fg-head { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; margin-bottom: 1.5rem; }
-  .fg-h2 { margin: 0; font-size: clamp(1.75rem, 2.6vw, 2.5rem); font-weight: 400; line-height: 1; letter-spacing: -.02em; color: var(--swatch--dark-900); }
-  .fg-note { margin: 0; font-size: .875rem; color: var(--swatch--dark-800); }
+  /* grid: 4 columns, or 8 when dense */
+  .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; }
+  .grid.is-dense { grid-template-columns: repeat(8, 1fr); }
+  .card { position: relative; display: block; aspect-ratio: 1; overflow: hidden; background: #d9d7d7; color: #fff; text-decoration: none; }
+  .card[hidden] { display: none; }
+  .ph, .ph img { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .ph img { object-fit: cover; display: block; transition: scale .8s cubic-bezier(.2, .7, .2, 1); }
+  .card:hover .ph img { scale: 1.04; }
+  .cap { position: absolute; left: 0; right: 0; bottom: 0; display: flex; justify-content: space-between; align-items: flex-end; gap: .75rem; padding: 2.5rem .875rem .75rem; background: linear-gradient(180deg, transparent, rgb(20 18 19 / 55%)); opacity: 0; transition: opacity .35s; }
+  .card:hover .cap, .card:focus-visible .cap { opacity: 1; }
+  .nm { font-size: 1.5rem; line-height: 1.05; }
+  .lv { font-size: .75rem; opacity: .8; white-space: nowrap; }
+  .is-dense .nm { font-size: 1rem; }
+  .is-dense .lv { display: none; }
+  .is-dense .cap { padding: 1.5rem .5rem .5rem; }
 
+  .more-wrap { display: flex; justify-content: center; margin-top: 3.5rem; }
+  .more-wrap:has(.pill[hidden]) { display: none; }
+  .pill { display: inline-flex; align-items: center; height: 3rem; padding: 0 1.5rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: none; font: inherit; font-size: .9375rem; font-weight: 500; color: #3b3b3b; cursor: pointer; transition: background-color .25s, color .25s, border-color .25s; }
+  .pill:hover { background: #3b3b3b; border-color: #3b3b3b; color: #fff; }
+  .pill[hidden] { display: none; }
+  .empty { display: flex; flex-direction: column; align-items: center; gap: .75rem; padding: 4rem 0; text-align: center; color: #3b3b3b; }
+  .empty[hidden] { display: none; }
+  .empty-t { font-size: 2rem; color: var(--ink); }
+  .empty .pill { margin-top: 1rem; }
 
-  /* Tiles: same recipe as the homepage class cards (light tint, soft blur on the lower half, frosted label) */
-  .fg-tile-content { position: absolute; z-index: 5; left: 0; right: 0; bottom: 0; padding: 1.5rem; display: flex; flex-direction: column; align-items: flex-start; gap: 1rem; color: #fff; }
-  .fg-tile-labels { display: flex; flex-wrap: wrap; gap: .375rem; }
-  /* No blur on the photos: a soft dark fade on the bottom quarter keeps the text readable */
-  .fg-tile-fade { position: absolute; inset: auto 0 0; height: 35%; background: linear-gradient(180deg, rgb(31 29 30 / 0), rgb(31 29 30 / 45%)); pointer-events: none; }
-  .fg-tile-name { font-size: 1.25rem; line-height: 1.5; text-wrap: pretty; }
-
-  /* Grid */
-  .fg-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 1rem; }
-  .fg-card { position: relative; display: block; aspect-ratio: 4 / 5; border-radius: var(--radius--main); overflow: hidden; color: #fff; background: var(--swatch--dark-800); }
-  .fg-card[hidden] { display: none; }
-  .fg-card-img { position: absolute; inset: 0; display: block; }
-  .fg-card-img img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: scale .7s cubic-bezier(.2, .7, .2, 1); }
-  .fg-card:hover img { scale: 1.05; }
-  .fg-card:focus-visible { outline: 2px solid var(--swatch--dark-900); outline-offset: 4px; border-radius: var(--radius--main); }
-
-  .fg-more-wrap { display: flex; justify-content: center; margin-top: 3rem; }
-  .fg-btn { height: var(--button-size--medium); padding: 0 1.5rem; border-radius: 100vw; border: var(--border-width--main) solid var(--swatch--dark-800); background: var(--swatch--dark-800); color: #fff; font-size: 1rem; transition: background .3s, color .3s; }
-  .fg-btn:hover { background: #fff; color: var(--swatch--dark-800); }
-  .fg-btn[hidden], .fg-empty[hidden] { display: none; }
-  .fg-empty { padding: 4.5rem 1.5rem; border: var(--border-width--main) solid var(--swatch--dark-900-o20); border-radius: var(--radius--main); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
-  .fg-empty p { margin: 0; }
-  .fg-empty-title { font-size: 1.375rem; color: var(--swatch--dark-900); }
-
-  @media (max-width: 1000px) { .fg-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
-  @media (max-width: 900px) {
-  }
-  @media (max-width: 700px) {
-    .fg-bar { flex-wrap: wrap; }
-    .fg-bar .fg-search { width: 100%; }
-    .fg-bar .dd { flex: 1 1 0; min-width: 0; }
-    .dd-trigger { min-width: 0; width: 100%; padding: 0 .875rem 0 1.125rem; font-size: 1rem; }
-    .dd:last-child .dd-panel { left: auto; right: 0; }
-    .dd-panel { width: min(20rem, calc(100vw - 2 * var(--site--margin))); }
-    .fg-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .5rem; }
-    .fg-filters { padding-top: 4rem; gap: .75rem; }
-    .fg-filters-title { margin-bottom: 1.25rem; }
-    .fg-filters-intro { font-size: 1rem; margin-bottom: 1.25rem; }
-    .fg-tile-content { padding: .75rem; gap: .5rem; }
-    .fg-card .card_classes_btn { -webkit-backdrop-filter: none; backdrop-filter: none; background-color: rgb(255 255 255 / 22%); }
-    .fg-card .fg-tile-labels { gap: .25rem; }
-    .fg-card .card_classes_btn { padding: .375rem .5rem; font-size: .6875rem; line-height: 1.2; border-radius: .625rem; }
-    .fg-card .fg-tile-name { font-size: 1.0625rem; line-height: 1.3; }
+  @media (max-width: 767px) {
+    .fx { padding: calc(var(--nav--height-total, 6rem) + .5rem) .75rem 5rem; }
+    .hero { grid-template-columns: 1fr; gap: 1rem; padding: 3rem 0 2.5rem; }
+    .ttl { font-size: 5.25rem; }
+    .counts { justify-content: flex-start; }
+    .search { gap: .75rem; margin-bottom: 4.5rem; padding-bottom: .5rem; }
+    .q { font-size: 2.75rem; }
+    .mag, .clear { width: 2rem; height: 2rem; }
+    .bar { flex-direction: column; align-items: flex-start; gap: 1.25rem; }
+    .grid { grid-template-columns: repeat(2, 1fr); }
+    .grid.is-dense { grid-template-columns: repeat(4, 1fr); }
+    .cap { opacity: 1; padding: 2rem .625rem .625rem; }
+    .nm { font-size: 1.125rem; }
+    .lv { display: none; }
+    .is-dense .cap { display: none; }
   }
 </style>
