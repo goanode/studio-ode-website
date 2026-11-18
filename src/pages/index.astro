@@ -255,7 +255,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
             <div data-number="20" data-wf--typography-heading--variant="h1" data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca" data-wf-variant-state="792802b6-ccdb-f982-5023-5fa970cf03d0" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext">
               <p>Choisis ton cours</p>
             </div>
-            <div class="u-button-wrapper">
+            <div class="u-button-wrapper ode-course-filters">
               <div class="u-display-contents">
                 <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="All" data-filter="strength" class="clickable_btn"></button></div>
@@ -1000,13 +1000,15 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
     .ode-toggle { position: relative; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 0 !important; padding: 5px !important; border-radius: 9999px; background: rgb(255 255 255 / 14%) !important; border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .ode-toggle .compare_toggle_option { position: relative; z-index: 1; margin: 0; padding: .75rem 1.625rem !important; border: 0; border-radius: 9999px; background: none !important; font: inherit; font-size: 1rem; color: #fff !important; text-align: center; cursor: pointer; transition: color .35s; }
-    .ode-toggle .compare_toggle_option.is-active { color: #1f1d1e !important; }
+    .ode-toggle .compare_toggle_option.is-active { color: #fff !important; }
     .ode-toggle .compare_toggle_option:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
-    .ode-toggle-thumb { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 10px) / 3); border-radius: 9999px; background: #fff; transition: transform .45s cubic-bezier(.3, 1.3, .5, 1); }
+    .ode-toggle-thumb { position: absolute; top: 5px; bottom: 5px; left: 5px; width: calc((100% - 10px) / 3); border-radius: 9999px; background: #401f28; transition: transform .45s cubic-bezier(.3, 1.3, .5, 1); }
     .ode-toggle[data-active="1"] .ode-toggle-thumb { transform: translateX(100%); }
     .ode-toggle[data-active="2"] .ode-toggle-thumb { transform: translateX(200%); }
     @media (max-width: 479px) { .ode-toggle .compare_toggle_option { padding: .6875rem .875rem !important; font-size: .875rem; } }
     @media (prefers-reduced-motion: reduce) { .ode-toggle-thumb { transition: none; } }
+    /* price packages: white bullet points */
+    .card_primary_list .u-eyebrow-marker { background-color: #fff !important; }
   </style>
 
 
