@@ -5,7 +5,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 // 1. a collage of photos around "Concept(4)"; scrolling makes one photo grow to fill the screen
 // 2. on that photo, the four pillars slide past one by one as you scroll, with their text
 // 3. the course list in one line, lighting up one course at a time, with four photos
-// 4. Ensemble + waitlist
 const I = {
   r0: "/images/37165de30ebb4909ab52aaa06a86c422.avif",
   r1: "/images/7053819a90a239bb9f6686d8d1df9a9d.webp",
@@ -49,7 +48,7 @@ const COURSES: [string, string][] = [
 
 <BaseLayout title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode, à Lille : force, expression, souplesse, communauté." wfPage="6adb80ddd07ffba4e0c0cb69">
   <main id="main" class="page_main cv">
-    <section class="intro" aria-label="Concept">
+    <section class="intro u-theme-light" aria-label="Concept">
       <div class="stage">
         <div class="col">
           {COL.map(([src, x, y, w, h, faded, hm, depth], i) => (
@@ -58,24 +57,35 @@ const COURSES: [string, string][] = [
             </figure>
           ))}
         </div>
-        <figure class="grow" style={`--x:${pct(930, 1440)};--y:${pct(70, 900)};--w:${pct(290, 1440)};--h:${pct(430, 900)}`}>
-          <img src={I.big} alt="Élève au studio Ode" />
-        </figure>
+        <span class="slot" aria-hidden="true" style={`--x:${pct(930, 1440)};--y:${pct(70, 900)};--w:${pct(290, 1440)};--h:${pct(430, 900)}`}></span>
         <h1 class="ttl">Concept<sup>(4)</sup></h1>
         <p class="meta m-l">Studio Ode</p>
         <p class="meta m-r"><span class="clock" aria-hidden="true">10:23</span>&nbsp;&nbsp;Lille, FR</p>
-        <button type="button" class="tab t-intro" data-go="pillars"><span class="k">Concept</span><span>Découvrir +</span></button>
-
-        <div class="pil" aria-label="Nos quatre piliers">
+        <div class="b-intro">
+          <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Découvrir le concept" data-go="pillars" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Découvrir le concept</div></div>
+          </div>
+        </div>
+        <figure class="grow">
+          <img src={I.big} alt="Élève au studio Ode" />
+          <span class="dim" aria-hidden="true"></span>
+        </figure>
+        <div class="pil u-theme-dark" aria-label="Nos quatre piliers">
           <span class="hl" aria-hidden="true"></span><span class="vl" aria-hidden="true"></span>
           <span class="mk l">02</span><span class="mk r">PILIERS</span>
           <div class="tick-wrap"><ul class="tick" role="list">
-            {PILLARS.map(([name], k) => <li class:list={["w", { on: k === 0 }]}>{name}</li>)}
+            {PILLARS.map(([name]) => <li class="w">{name}</li>)}
           </ul></div>
           <div class="para">
-            {PILLARS.map(([name, text], k) => <p class:list={{ on: k === 0 }}><span class="sr">{name} : </span>{text}</p>)}
+            {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
           </div>
-          <button type="button" class="tab t-pil" data-go="courses"><span class="k">Piliers</span><span>Découvrir +</span></button>
+          <div class="b-pil">
+            <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Voir les cours" data-go="courses" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Voir les cours</div></div>
+          </div>
+          </div>
         </div>
       </div>
     </section>
@@ -88,17 +98,12 @@ const COURSES: [string, string][] = [
       </p>
       <div class="row">
         {COURSES.map(([t, src], k) => (
-          <div class="card" data-i={k}>
+          <div class:list={["card", { on: k === 0 }]} data-i={k}>
             <figure><img src={src} alt={t} loading="lazy" /></figure>
             <p class="cap"><span>{t}</span><span>0{k + 1}</span></p>
           </div>
         ))}
       </div>
-    </section>
-
-    <section class="cta">
-      <h2 class="end">Ensemble</h2>
-      <button type="button" class="tab t-cta" data-modal-trigger="waitlist"><span class="k">Liste d'attente</span><span>Rejoindre +</span></button>
     </section>
   </main>
   <WaitlistModal slot="after-footer" />
@@ -110,9 +115,11 @@ const COURSES: [string, string][] = [
       if (!root) return;
       const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
       const intro = root.querySelector(".intro");
+      const stage = root.querySelector(".stage");
       const figs = [...root.querySelectorAll(".cf")];
+      const slot = root.querySelector(".slot");
       const grow = root.querySelector(".grow");
-      const ttl = root.querySelector(".ttl");
+      const gimg = grow.querySelector("img");
       const words = [...root.querySelectorAll(".tick .w")];
       const paras = [...root.querySelectorAll(".para p")];
       const tick = root.querySelector(".tick");
@@ -123,171 +130,169 @@ const COURSES: [string, string][] = [
       const tickClock = () => { clock.textContent = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).format(new Date()); };
       tickClock(); setInterval(tickClock, 30000);
 
-      // Tabs scroll to the pillars / the courses
-      const go = (y) => (window.lenis ? window.lenis.scrollTo(y, { duration: 1.6 }) : scrollTo({ top: y, behavior: "smooth" }));
-      root.querySelector('[data-go="pillars"]').addEventListener("click", () => go(intro.offsetTop + (intro.offsetHeight - innerHeight) * 0.24));
+      // Buttons scroll to the pillars / the courses
+      const go = (y) => (window.lenis ? window.lenis.scrollTo(y, { duration: 1.8 }) : scrollTo({ top: y, behavior: "smooth" }));
+      root.querySelector('[data-go="pillars"]').addEventListener("click", () => go(intro.offsetTop + (intro.offsetHeight - innerHeight) * 0.22));
       root.querySelector('[data-go="courses"]').addEventListener("click", () => go(root.querySelector(".lst").offsetTop));
 
       // Course list: one course lit at a time (scroll + hover)
       const items = [...root.querySelectorAll(".lst .it")];
       const cards = [...root.querySelectorAll(".lst .card")];
-      const setCourse = (i) => { items.forEach((el, k) => el.classList.toggle("on", k === i)); cards.forEach((el, k) => el.classList.toggle("on", k === i)); };
+      let cur = 0;
+      const setCourse = (i) => { if (i === cur) return; cur = i; items.forEach((el, k) => el.classList.toggle("on", k === i)); cards.forEach((el, k) => el.classList.toggle("on", k === i)); };
       [...items, ...cards].forEach((el) => el.addEventListener("mouseenter", () => setCourse(+el.dataset.i)));
 
       if (reduce || !window.gsap || !window.ScrollTrigger) { root.classList.add("still"); return; }
       gsap.registerPlugin(ScrollTrigger);
+      // keep ScrollTrigger in step with the smooth scroll, so nothing lags or jumps
+      if (window.lenis) window.lenis.on("scroll", ScrollTrigger.update);
 
-      // 1 · collage comes in, one photo after another, and the title writes itself
-      gsap.from(figs, { opacity: 0, y: 40, scale: .92, duration: 1.1, ease: "power3.out", stagger: { each: .07, from: "random" }, delay: .15 });
-      gsap.from(grow, { opacity: 0, y: 40, scale: .92, duration: 1.1, ease: "power3.out", delay: .35 });
-      gsap.fromTo(ttl, { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 -5% 0 0)", duration: 1.6, ease: "power3.inOut", delay: .5 });
+      // the growing photo: a full-screen photo seen through a window the size of the collage slot
+      const box = () => {
+        const s = stage.getBoundingClientRect(), r = slot.getBoundingClientRect();
+        return { t: r.top - s.top, l: r.left - s.left, b: s.bottom - r.bottom, rr: s.right - r.right, w: r.width, h: r.height, W: s.width, H: s.height };
+      };
+      const clipFrom = () => { const b = box(); return `inset(${b.t}px ${b.rr}px ${b.b}px ${b.l}px)`; };
+      const imgFrom = () => {
+        const b = box(); const sc = Math.max(b.w / b.W, b.h / b.H) * 1.08;
+        return { x: b.l + b.w / 2 - b.W / 2, y: b.t + b.h / 2 - b.H / 2, scale: sc };
+      };
+      gsap.set(grow, { clipPath: clipFrom() });
+      gsap.set(gimg, imgFrom());
 
-      // 2 · pinned scroll: photo grows full screen, then the four pillars slide past
-      const off = (k) => -(words[k].offsetLeft - words[0].offsetLeft);
+      // collage photos come in once, softly
+      gsap.from([...figs, grow], { opacity: 0, y: 30, duration: 1.2, ease: "power2.out", stagger: { each: .06, from: "random" }, delay: .1 });
+
+      // pinned scroll: the photo opens up to full screen, then the four pillars slide past
+      gsap.set(words, { opacity: (k) => (k === 0 ? 1 : .3) });
+      gsap.set(paras, { opacity: (k) => (k === 0 ? 1 : 0) });
+      let dark = false;
       const tl = gsap.timeline({
         defaults: { ease: "none" },
         scrollTrigger: {
-          trigger: intro, start: "top top", end: "bottom bottom", scrub: 0.8, invalidateOnRefresh: true,
-          onUpdate: (st) => {
-            document.body.classList.toggle("cv-dark", st.progress > 0.08 && st.progress < 0.995);
-            const step = Math.min(N - 1, Math.max(0, Math.floor((st.progress - 0.2) / 0.8 * N + 0.5)));
-            words.forEach((w, k) => w.classList.toggle("on", k === step));
-            paras.forEach((p, k) => p.classList.toggle("on", k === step));
-          },
+          trigger: intro, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true,
+          onUpdate: (st) => { const d = st.progress > 0.1 && st.progress < 0.995; if (d !== dark) { dark = d; document.body.classList.toggle("cv-dark", d); } },
         },
       });
-      tl.to(grow, { left: 0, top: 0, width: "100%", height: "100%", duration: 1, ease: "power2.inOut" }, 0)
-        .to(figs, { y: (i, el) => -innerHeight * 0.55 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.08 * +el.dataset.depth, opacity: 0, duration: 1, ease: "power1.in" }, 0)
-        .to(ttl, { opacity: 0, y: -60, filter: "blur(10px)", duration: .55 }, 0)
-        .to(".cv .meta, .cv .t-intro", { opacity: 0, duration: .3 }, 0)
-        .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .35 }, .85)
-        .fromTo(".cv .hl", { scaleX: 0 }, { scaleX: 1, duration: .5, ease: "power2.out" }, .9)
-        .fromTo(".cv .vl", { scaleY: 0 }, { scaleY: 1, duration: .5, ease: "power2.out" }, 1)
-        .fromTo(tick, { y: 40 }, { y: 0, duration: .4, ease: "power2.out" }, .95);
-      let t = 1.6;
+      tl.fromTo(grow, { clipPath: clipFrom }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1.4, ease: "power1.inOut" }, 0)
+        .fromTo(gimg, { x: () => imgFrom().x, y: () => imgFrom().y, scale: () => imgFrom().scale }, { x: 0, y: 0, scale: 1, duration: 1.4, ease: "power1.inOut" }, 0)
+        .to(figs, { y: (i, el) => -innerHeight * 0.45 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.06 * +el.dataset.depth, opacity: 0, duration: 1.2, ease: "power1.in" }, 0)
+        .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: .5 }, 1)
+        .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
+        .fromTo(".cv .hl", { scaleX: 0 }, { scaleX: 1, duration: .6, ease: "power2.out" }, 1.2)
+        .fromTo(".cv .vl", { scaleY: 0 }, { scaleY: 1, duration: .6, ease: "power2.out" }, 1.3);
+      const off = (k) => -(words[k].offsetLeft - words[0].offsetLeft);
+      let t = 2.2;
       for (let k = 1; k < N; k++) {
-        tl.to(tick, { x: () => off(k), duration: 1, ease: "power2.inOut" }, t);
-        t += 1.6;
+        tl.to(tick, { x: () => off(k), duration: 1, ease: "power1.inOut" }, t)
+          .to(words[k - 1], { opacity: .3, duration: .5 }, t)
+          .to(words[k], { opacity: 1, duration: .5 }, t + .5)
+          .to(paras[k - 1], { opacity: 0, duration: .4 }, t)
+          .to(paras[k], { opacity: 1, duration: .4 }, t + .6);
+        t += 1.8;
       }
-      tl.to({}, { duration: .4 }, t);
+      tl.to({}, { duration: .5 }, t);
 
-      // 3 · course photos rise in, and the lit course follows the scroll
-      gsap.fromTo(cards.map((c) => c.querySelector("figure")), { clipPath: "inset(100% 0 0 0)" }, {
-        clipPath: "inset(0% 0 0 0)", duration: 1.2, ease: "power3.inOut", stagger: .12,
+      // course photos rise in, and the lit course follows the scroll
+      gsap.fromTo(cards.map((c) => c.querySelector("figure")), { clipPath: "inset(100% 0% 0% 0%)" }, {
+        clipPath: "inset(0% 0% 0% 0%)", duration: 1.2, ease: "power3.inOut", stagger: .12,
         scrollTrigger: { trigger: ".cv .row", start: "top 85%", once: true },
       });
       ScrollTrigger.create({
         trigger: ".cv .lst", start: "top 65%", end: "bottom 55%",
-        onUpdate: (st) => setCourse(Math.min(N - 1, Math.floor(st.progress * items.length))),
+        onUpdate: (st) => setCourse(Math.min(items.length - 1, Math.floor(st.progress * items.length))),
       });
 
-      // 4 · Ensemble writes itself in
-      gsap.fromTo(".cv .end", { clipPath: "inset(0 100% 0 0)" }, { clipPath: "inset(0 -5% 0 0)", duration: 1.6, ease: "power3.inOut", scrollTrigger: { trigger: ".cv .cta", start: "top 75%", once: true } });
-
       addEventListener("load", () => ScrollTrigger.refresh());
+      document.fonts?.ready.then(() => ScrollTrigger.refresh());
     });
     </script>
   </Fragment>
 </BaseLayout>
 
 <style>
-  .cv { --red: #842636; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family, "Instrument Sans"), system-ui, sans-serif; }
+  .cv { --red: #842636; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
   :global(body:not(.cv-dark) .nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
   :global(body:not(.cv-dark) .nav_button_line) { background-color: #141414 !important; }
-  .cv p, .cv h1, .cv h2, .cv ul { margin: 0; padding: 0; }
-  .cv p::before, .cv p::after, .cv h1::before, .cv h1::after, .cv h2::before, .cv h2::after { content: none; }
+  .cv p, .cv h1, .cv ul { margin: 0; padding: 0; }
+  .cv p::before, .cv p::after, .cv h1::before, .cv h1::after { content: none; }
   .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
-  .serif, .ttl, .tick, .line, .end { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); }
-
-  /* dark square tab, as in the reference */
-  .tab { display: inline-flex; align-items: center; gap: .875rem; padding: .5rem .75rem; background: var(--ink); color: #fff; border: 0; border-radius: 0; font: inherit; font-size: .8125rem; line-height: 1.2; white-space: nowrap; cursor: pointer; transition: background-color .3s; }
-  .tab .k { opacity: .55; }
-  .tab:hover { background: var(--red); }
-  .tab:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+  /* titles: Freight Big Pro, exactly like the homepage headings */
+  .ttl, .tick, .line { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: var(--_typography---letter-spacing--tight, -.01em); }
 
   /* 1 · collage + growing photo (pinned) */
-  .intro { position: relative; height: 560svh; }
+  .intro { position: relative; height: 520svh; background: #fff; }
   .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
-  .col, .grow, .cf { position: absolute; }
-  .col { inset: 0; }
-  .cf, .grow { margin: 0; overflow: hidden; background: var(--red); will-change: transform, opacity; }
+  .col { position: absolute; inset: 0; z-index: 1; }
+  .cf, .slot { position: absolute; left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
+  .cf { margin: 0; overflow: hidden; background: var(--red); will-change: transform, opacity; }
   .cf.faded img { opacity: .35; }
-  .cf img, .grow img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
-  .cf, .grow { left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
-  .grow { z-index: 2; }
-  .grow::after { content: ""; position: absolute; inset: 0; background: rgb(31 29 30 / 45%); opacity: 0; transition: opacity .6s; }
-  :global(body.cv-dark) .grow::after { opacity: 1; }
-  .ttl { position: absolute; left: 50%; top: 50%; z-index: 4; transform: translate(-50%, -50%); font-size: clamp(4rem, 6.7vw, 7.5rem); line-height: 1; letter-spacing: -.01em; white-space: nowrap; color: var(--ink); }
-  .ttl sup { font-family: var(--_typography---font--primary-family, "Instrument Sans"), sans-serif; font-size: .23em; vertical-align: top; position: relative; top: .6em; margin-left: .2em; }
-  .meta { position: absolute; bottom: 1.5rem; z-index: 4; font-size: .9375rem; }
+  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+  .slot { visibility: hidden; pointer-events: none; }
+  .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: clamp(4rem, 6.7vw, 7.5rem); line-height: 1; white-space: nowrap; color: var(--ink); }
+  .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .23em; vertical-align: top; position: relative; top: .6em; margin-left: .2em; }
+  .meta { position: absolute; bottom: 1.75rem; z-index: 2; font-size: .9375rem; }
   .meta .clock { opacity: .5; }
   .m-l { left: var(--site--margin, 1.25rem); }
   .m-r { right: var(--site--margin, 1.25rem); }
-  .t-intro, .t-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 6; }
+  .b-intro, .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
+  .grow { position: absolute; inset: 0; z-index: 3; margin: 0; overflow: hidden; background: var(--red); will-change: clip-path; }
+  .grow img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; transform-origin: 50% 50%; will-change: transform; }
+  .dim { position: absolute; inset: 0; background: rgb(31 29 30 / 45%); opacity: 0; }
 
   /* 2 · pillars over the photo */
-  .pil { position: absolute; inset: 0; z-index: 5; color: #fff; visibility: hidden; }
+  .pil { position: absolute; inset: 0; z-index: 4; color: #fff; visibility: hidden; background: none; }
   .hl { position: absolute; left: 0; right: 0; top: calc(50% - 2.5rem); height: 1px; background: rgb(255 255 255 / 35%); transform-origin: left; }
   .vl { position: absolute; top: 0; bottom: 0; right: 28%; width: 1px; background: rgb(255 255 255 / 25%); transform-origin: top; }
   .mk { position: absolute; top: calc(50% - 4rem); font-size: .875rem; letter-spacing: .04em; }
   .mk.l { left: var(--site--margin, 1.25rem); }
   .mk.r { right: var(--site--margin, 1.25rem); }
-  .tick-wrap { position: absolute; left: 8.3vw; right: 0; top: calc(50% - 12rem); overflow: visible; }
-  .tick { display: flex; gap: 6vw; list-style: none; font-size: clamp(2.5rem, 4vw, 3.75rem); line-height: 1.05; white-space: nowrap; will-change: transform; }
-  .tick .w { opacity: .3; transition: opacity .5s; }
-  .tick .w.on { opacity: 1; }
+  .tick-wrap { position: absolute; left: 8.3vw; right: 0; top: calc(50% - 12rem); }
+  .tick { display: flex; gap: 6vw; list-style: none; font-size: clamp(2.75rem, 4.4vw, 4.25rem); line-height: 1.05; white-space: nowrap; will-change: transform; }
+  .tick .w { will-change: opacity; }
   .para { position: absolute; left: calc(72% - 23.75rem); top: calc(50% + 2rem); width: 21.25rem; font-size: .9375rem; line-height: 1.45; }
-  .para p { position: absolute; inset: 0 auto auto 0; opacity: 0; transform: translateY(.5rem); transition: opacity .5s, transform .5s; }
-  .para p.on { opacity: 1; transform: none; }
+  .para p { position: absolute; inset: 0 auto auto 0; }
 
   /* 3 · course list */
-  .lst { padding: 8.75rem var(--site--margin, 1.25rem) 2.5rem; }
-  .line { font-size: clamp(2.125rem, 4.45vw, 4rem); line-height: 1.15; letter-spacing: -.01em; color: #c9c4c5; }
-  .line .it { transition: color .45s; cursor: default; }
+  .lst { padding: 8.75rem var(--site--margin, 1.25rem) 9rem; }
+  .line { font-size: clamp(2.125rem, 4.45vw, 4rem); line-height: 1.15; color: #c9c4c5; }
+  .line .it { transition: color .5s ease; cursor: default; }
   .line .it.on { color: var(--ink); }
-  .line sup { font-family: var(--_typography---font--primary-family, "Instrument Sans"), sans-serif; font-size: .28em; vertical-align: top; position: relative; top: .55em; margin: 0 .35em 0 .1em; }
+  .line sup { font-family: var(--_typography---font--primary-family), sans-serif; font-weight: 400; letter-spacing: 0; font-size: .28em; vertical-align: top; position: relative; top: .55em; margin: 0 .35em 0 .1em; }
   .row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; margin-top: 3.5rem; }
   .card figure { margin: 0; aspect-ratio: 3 / 4; overflow: hidden; background: var(--red); }
-  .card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; transform: scale(1.06); transition: transform 1.1s cubic-bezier(.2, .7, .2, 1), opacity .45s; opacity: .55; }
+  .card img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; transform: scale(1.05); transition: transform 1.2s cubic-bezier(.2, .7, .2, 1), opacity .6s ease; opacity: .6; }
   .card.on img { transform: scale(1); opacity: 1; }
-  .cap { display: flex; justify-content: space-between; margin-top: .625rem !important; font-size: .8125rem; color: #3b3b3b; transition: color .45s; }
-  .card:not(.on) .cap { color: #a9a4a5; }
+  .cap { display: flex; justify-content: space-between; margin-top: .625rem !important; font-size: .8125rem; color: #a9a4a5; transition: color .5s ease; }
+  .card.on .cap { color: #3b3b3b; }
 
-  /* 4 · Ensemble */
-  .cta { display: flex; flex-direction: column; align-items: center; gap: 1.375rem; padding: 9.5rem 1.25rem 10.5rem; }
-  .end { font-size: clamp(3.5rem, 6.7vw, 6rem); line-height: 1; color: var(--ink); }
-
-  /* no motion: everything shown in place, pillars listed under the photo */
+  /* no motion: everything shown in place, pillars listed on the photo */
   .still .intro { height: auto; }
   .still .stage { position: relative; height: auto; overflow: visible; }
   .still .col { position: relative; height: 100svh; }
-  .still .grow { position: relative; left: 0 !important; top: 0 !important; width: 100% !important; height: 100svh !important; display: block; }
-  .still .grow::after { opacity: 1; }
-  .still .t-intro, .still .t-pil, .still .ttl { position: absolute; }
-  .still .ttl { top: 50svh; }
+  .still .grow { position: relative; height: 100svh; clip-path: none; }
+  .still .dim { opacity: 1; }
   .still .pil { visibility: visible; top: 100svh; height: 100svh; }
   .still .tick { flex-direction: column; gap: .25rem; }
-  .still .tick .w { opacity: 1; }
-  .still .hl, .still .vl, .still .mk, .still .para { display: none; }
+  .still .hl, .still .vl, .still .mk, .still .para, .still .slot { display: none; }
   .still .card img { opacity: 1; transform: none; }
 
   @media (max-width: 767px) {
     .cf.hm { display: none; }
-    .grow { --mx: 52%; --my: 13%; --mw: 40%; --mh: 30%; }
+    .slot { --mx: 52%; --my: 13%; --mw: 40%; --mh: 30%; }
     .cf:nth-child(2) { --mx: 8%; --my: 19%; --mw: 34%; --mh: 22%; }
     .cf:nth-child(4) { --mx: 74%; --my: 57%; --mw: 22%; --mh: 13%; }
     .cf:nth-child(5) { --mx: -4%; --my: 49%; --mw: 22%; --mh: 14%; }
     .cf:nth-child(7) { --mx: 20%; --my: 60%; --mw: 38%; --mh: 20%; }
     .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
-    .ttl { font-size: 3.5rem; }
-    .meta { font-size: .8125rem; bottom: 4rem; }
+    .ttl { font-size: 3.75rem; }
+    .meta { font-size: .8125rem; bottom: 5.25rem; }
     .vl { display: none; }
     .tick-wrap { left: 1rem; top: calc(50% - 9rem); }
-    .tick { font-size: 2.375rem; gap: 2.5rem; }
+    .tick { font-size: 2.625rem; gap: 2.5rem; }
     .para { left: 1rem; right: 1rem; width: auto; top: calc(50% + 1.5rem); }
     .para p { right: 0; }
-    .lst { padding: 5.5rem .75rem 1.5rem; }
+    .lst { padding: 5.5rem .75rem 6rem; }
     .row { grid-template-columns: 1fr 1fr; gap: .75rem; margin-top: 2.25rem; }
-    .cta { padding: 6rem .75rem 7rem; }
   }
 </style>
