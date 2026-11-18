@@ -148,19 +148,3 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
     .next { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-top: 5rem; padding: 1.75rem .75rem 3rem; }
   }
 </style>
-
-<style is:global>
-  /* page transition, in the order of the reference video:
-     1. the other photos squash into lines (0–0.45s), the rest of the page fades out
-     2. the clicked photo grows into the tall photo (0.35–1.3s)
-     3. the new page fades in around it and the name rises (from ~0.9s) */
-  ::view-transition-group(trick-photo) { animation-duration: .95s; animation-delay: .35s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
-  ::view-transition-image-pair(trick-photo) { animation-delay: .35s; }
-  ::view-transition-old(trick-photo), ::view-transition-new(trick-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; animation-duration: .95s; animation-delay: .35s; }
-  ::view-transition-old(root) { animation: .4s ease both vt-out; }
-  ::view-transition-new(root) { animation: .5s ease .9s both vt-in; }
-  ::view-transition-old(*.fg-gone) { animation: .45s cubic-bezier(.76, 0, .24, 1) both vt-line; transform-origin: 50% 50%; }
-  @keyframes vt-out { to { opacity: 0; } }
-  @keyframes vt-in { from { opacity: 0; } }
-  @keyframes vt-line { 0% { transform: scaleY(1); } 70% { transform: scaleY(.01); opacity: 1; } 100% { transform: scaleY(.01); opacity: 0; } }
-</style>
