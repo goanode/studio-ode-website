@@ -15,11 +15,17 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 <BaseLayout title="Figures — Studio Ode" viewTransition="fg-grid" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main fx u-theme-light">
     <section class="hero">
-      <div>
-        <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></span></h1>
+      <div class="hs-top">
+        <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
+        <p class="counts">{LEVELS.map((l) => <span class="cnt"><b>{levelCount(l)}</b> {l.toLowerCase()}</span>)}</p>
       </div>
-      <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
-      <p class="counts">{LEVELS.map((l) => <span class="cnt">{levelCount(l)} {l.toLowerCase()}</span>)}</p>
+      <div class="strip">
+        <img class="strip-img" src="/images/please-keep-the-background--the-233555-iP0.webp" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w, /images/please-keep-the-background--the-233555-iP0.webp 1140w" sizes="100vw" alt="" />
+        <span class="flute" aria-hidden="true"></span>
+        <p class="strip-eb"><span class="dot" aria-hidden="true"></span>{tricks.length} figures</p>
+        <img class="strip-heart" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" />
+        <h1 class="ttl"><span class="vt-title">Figures</span></h1>
+      </div>
     </section>
 
     <div class="bar" id="catalogue">
@@ -215,15 +221,21 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   .ttl, .h2, .nm, .empty-t { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: -.01em; color: var(--ink); }
   .eb { margin-bottom: 0 !important; }
 
-  /* header */
-  .hero { display: grid; grid-template-columns: 4fr 3fr 1fr; align-items: end; padding: 4.5rem 0 4.5rem; }
-  .ttl { margin-top: 0; font-size: clamp(5rem, 9.2vw, 8.5rem); line-height: .9; }
+  /* header: intro + level counts, then a full-width fluted photo strip with a giant "Figures" (like ODE on the homepage) */
+  .hero { padding: 2.5rem 0 0; }
+  .hs-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 3rem; margin-bottom: 2rem; }
+  .intro { max-width: 26rem; font-size: 1.125rem; line-height: 1.45; }
+  .counts { display: flex; gap: .5rem; flex-wrap: wrap; justify-content: flex-end; }
+  .cnt { display: inline-flex; align-items: center; gap: .375rem; height: 2.25rem; padding: 0 1rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 15%); font-size: .875rem; white-space: nowrap; }
+  .cnt b { font-weight: 500; color: var(--red); }
+  .strip { position: relative; height: 26.25rem; border-radius: 1rem; overflow: hidden; background: #1f1d1e; }
+  .strip-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; }
+  .flute { position: absolute; inset: 0; background: repeating-linear-gradient(90deg, rgb(255 255 255 / 10%) 0px, rgb(255 255 255 / 0%) 2px, rgb(255 255 255 / 0%) 20px, rgb(31 29 30 / 16%) 28px, rgb(255 255 255 / 10%) 32px); backdrop-filter: blur(3px); -webkit-backdrop-filter: blur(3px); }
+  .strip-eb { position: absolute; left: 2rem; top: 1.75rem; display: inline-flex; align-items: center; gap: .625rem; color: #fff; font-size: 1rem; }
+  .strip-eb .dot { width: .4375rem; height: .4375rem; border-radius: 9999px; background: #fff; }
+  .strip-heart { position: absolute; right: 2.5rem; top: 1.75rem; width: 3.5rem; height: auto; transform: rotate(12deg); filter: drop-shadow(0 4px 6px rgb(0 0 0 / 30%)); }
+  .fx .ttl { position: absolute; left: 0; right: 0; bottom: -.12em; margin: 0; font-size: 21.5vw; line-height: .8; text-align: center; letter-spacing: -.03em; color: #fff; }
   .vt-title { view-transition-name: figures-title; }
-  :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
-  .ttl sup { font-family: var(--_typography---font--primary-family), sans-serif; font-size: .22em; vertical-align: top; position: relative; top: .5em; margin-left: .3em; color: var(--red); }
-  .intro { max-width: 21rem; padding-bottom: .625rem; font-size: 1.0625rem; line-height: 1.5; }
-  .counts { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; padding-bottom: .625rem; }
-  .cnt { display: inline-flex; align-items: center; height: 1.875rem; padding: 0 .75rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 16%); font-size: .8125rem; white-space: nowrap; }
 
   /* title row: search + view switch */
   .bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; margin-top: 2.5rem; }
@@ -285,9 +297,13 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
   @media (max-width: 767px) {
     .fx { padding: calc(var(--nav--height-total, 6rem) + .5rem) .75rem 5rem; }
-    .hero { grid-template-columns: 1fr; gap: 1rem; padding: 3rem 0 2.5rem; }
-    .ttl { font-size: 5.25rem; }
-    .counts { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
+    .hero { padding: 1.5rem 0 0; }
+    .hs-top { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-bottom: 1.25rem; }
+    .intro { font-size: 1rem; }
+    .counts { justify-content: flex-start; }
+    .strip { height: 16.25rem; }
+    .strip-eb { left: 1rem; top: 1rem; font-size: .875rem; }
+    .strip-heart { right: 1rem; top: 1rem; width: 2.5rem; }
     .bar { flex-direction: column; align-items: stretch; gap: 1.25rem; margin-top: 1.5rem; }
     .tools { flex-wrap: wrap; }
     .search, .search:focus-within, .search:has(input:not(:placeholder-shown)) { width: 100%; }
