@@ -13,9 +13,11 @@ interface Props {
   wfPage: string;
   /** Load the "fluted glass" WebGL effect (three.js). */
   flutedGlass?: boolean;
+  /** opt in to the browser's page transition (figures catalogue <-> trick pages); value = id of an element that must be parsed before the page shows */
+  viewTransition?: string;
 }
 
-const { title, description, wfPage, flutedGlass = false } = Astro.props;
+const { title, description, wfPage, flutedGlass = false, viewTransition } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
@@ -23,6 +25,13 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
 <html data-wf-page={wfPage} data-wf-site="6a96e3c056f4431a13f9f154" lang="en">
   <head>
     <meta charset="utf-8" />
+    {viewTransition && (
+      <>
+        {/* page transition opt-in first thing in the head, so it is in place before the first render; and don't show the page until its main content is parsed */}
+        <style is:inline>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
+        <link rel="expect" href={`#${viewTransition}`} blocking="render" />
+      </>
+    )}
     <title>{title}</title>
     {description && <meta name="description" content={description} />}
     <meta property="og:title" content={title} />

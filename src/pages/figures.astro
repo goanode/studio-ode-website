@@ -12,7 +12,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
 ---
 
-<BaseLayout title="Figures — Studio Ode" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
+<BaseLayout title="Figures — Studio Ode" viewTransition="fg-grid" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main fx u-theme-light">
     <section class="hero">
       <div>
@@ -296,9 +296,6 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 </style>
 
 <style is:global>
-  @media (prefers-reduced-motion: no-preference) {
-    @view-transition { navigation: auto; }
-  }
   /* page transition, in the order of the reference video:
      1. the other photos squash into lines (0–0.45s), the rest of the page fades out
      2. the clicked photo grows into the tall photo (0.35–1.3s)

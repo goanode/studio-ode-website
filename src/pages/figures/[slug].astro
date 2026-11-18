@@ -22,7 +22,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 const second = trick.image.includes("SN7") ? "/images/please-keep-the-background--the-233555-iP0" : "/images/please-look-at-the-first-pose----820406-SN7";
 ---
 
-<BaseLayout title={`${trick.name} — Figures — Studio Ode`} description={intro} wfPage="6a96e3c256f4431a13f9f238">
+<BaseLayout title={`${trick.name} — Figures — Studio Ode`} viewTransition="trick-main" description={intro} wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main tp u-theme-light">
     <a class="back" href="/figures"><span aria-hidden="true">←</span> Toutes les figures</a>
     <div class="cols">
@@ -39,7 +39,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
         </div>
       </div>
       <div class="right">
-        <figure class="photo" style={`background-image: url(${trick.image}-p-500.webp)`}>
+        <figure id="trick-main" class="photo" style={`background-image: url(${trick.image}-p-500.webp)`}>
           <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name} à la barre`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
         </figure>
         <p class="intro">{intro}</p>
@@ -74,24 +74,12 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
       // arriving from the catalogue with a page transition: let the photo land before the name rises
       addEventListener("pagereveal", (e) => {
         if (e.viewTransition) document.documentElement.classList.add("from-grid");
-        // temporary diagnostics for the figure transition
-        const log = { t: Date.now(), vt: !!e.viewTransition, from: (window.navigation && navigation.activation && navigation.activation.from && navigation.activation.from.url) || null, reduce: matchMedia("(prefers-reduced-motion: reduce)").matches, ua: navigator.userAgent };
-        const save = () => { try { sessionStorage.setItem("vt-debug", JSON.stringify(log)); } catch (_) {} console.log("[vt-debug]", JSON.stringify(log)); };
-        save();
-        if (e.viewTransition) {
-          e.viewTransition.ready.then(() => { log.ready = "ok"; log.anims = document.getAnimations().filter((a) => a.effect && a.effect.pseudoElement).map((a) => a.effect.pseudoElement + ":" + Math.round(a.effect.getComputedTiming().duration)).slice(0, 12); save(); }, (err) => { log.ready = String(err); save(); });
-          e.viewTransition.finished.then(() => { log.finished = "ok"; save(); }, (err) => { log.finished = String(err); save(); });
-        }
       });
     </script>
   </Fragment>
 </BaseLayout>
 
 <style>
-  /* the catalogue and the trick pages opt in to the browser's page transition */
-  @media (prefers-reduced-motion: no-preference) {
-    @view-transition { navigation: auto; }
-  }
   .tp { --ink: #1f1d1e; --red: #842636; position: relative; color: #3b3b3b; background: #fff; padding: var(--nav--height-total, 6rem) 0 0; font-family: var(--_typography---font--primary-family), sans-serif; }
   :global(.nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
   :global(.nav_button_line) { background-color: #141414 !important; }
