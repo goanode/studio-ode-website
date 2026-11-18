@@ -144,7 +144,9 @@ const PILLARS = [
         .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power1.in" }, .2)
         .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
 
-      const off = (k) => -(words[k].offsetLeft - words[0].offsetLeft);
+      // the active word sits in the middle of the screen: shift the row so word k's centre lands on the screen's centre
+      const off = (k) => innerWidth / 2 - (words[k].offsetLeft + words[k].offsetWidth / 2);
+      tl.fromTo(tick, { x: () => off(0) }, { x: () => off(0), duration: 0.01 }, 0); // part of the scroll timeline so it re-measures on resize
       let t = 2.2;
       for (let k = 1; k < N; k++) {
         tl.to(tick, { x: () => off(k), duration: 1, ease: "power1.inOut" }, t)
@@ -200,12 +202,12 @@ const PILLARS = [
 
   /* 2 · pillars over the photo */
   .pil { position: absolute; inset: 0; z-index: 4; color: #fff; visibility: hidden; background: none; }
-  .tick-wrap { position: absolute; left: 8.3vw; right: 0; bottom: calc(50% - .5rem); }
+  .tick-wrap { position: absolute; left: 0; right: 0; bottom: calc(50% - .5rem); }
   .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
   .tick .ode-title-heart { animation: none; }
   .tick .w { will-change: opacity; }
-  .para { position: absolute; left: calc(72% - 23.75rem); top: calc(50% + 2.5rem); width: 21.25rem; font-size: .9375rem; line-height: 1.45; }
-  .para p { position: absolute; inset: 0 auto auto 0; }
+  .para { position: absolute; left: 50%; top: calc(50% + 2.5rem); width: 26rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
+  .para p { position: absolute; top: 0; left: 0; right: 0; }
 
   /* no motion: everything shown in place, pillars listed on the photo */
   .still .intro { height: auto; }
@@ -227,9 +229,8 @@ const PILLARS = [
     .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
     .ttl { font-size: 3.75rem; }
     .meta { font-size: .8125rem; bottom: 5.25rem; }
-    .tick-wrap { left: 1rem; bottom: calc(50% - .25rem); }
+    .tick-wrap { left: 0; bottom: calc(50% - .25rem); }
     .tick { font-size: 3.75rem; gap: 5rem; }
-    .para { left: 1rem; right: 1rem; width: auto; top: calc(50% + 2rem); }
-    .para p { right: 0; }
+    .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
   }
 </style>
