@@ -153,19 +153,19 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <style is:global>
       .ode-heart-btn { overflow: visible; }
       .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
-      .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #842636 !important; border-color: #842636 !important; color: #fff !important; }
+      .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
       .ode-heart { position: absolute; right: -.5rem; top: -.5rem; width: 2.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.875rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 6px 8px rgb(0 0 0 / 25%)); z-index: 2; }
       .ode-heart-btn:hover .ode-heart, .ode-heart-btn:focus-within .ode-heart, .card_primary_wrap:hover .ode-heart, .card_primary_wrap:focus-within .ode-heart { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
       @media (prefers-reduced-motion: reduce) { .ode-heart { transition: opacity .2s; transform: none; } }
       /* No black buttons: on light sections buttons fill burgundy on hover, and the primary (dark) button is burgundy */
-      :is(:root, .u-theme-light) { --_theme---button-secondary--background-hover: #842636; --_theme---button-secondary--text-hover: #fff; --_theme---button-primary--background: #842636; --_theme---button-primary--background-hover: #6a1e2b; --_theme---button-primary--text-hover: #fff; }
-      .u-theme-dark { --_theme---button-primary--background: #842636; --_theme---button-primary--background-hover: #6a1e2b; --_theme---button-primary--text-hover: #fff; }
+      :is(:root, .u-theme-light) { --_theme---button-secondary--background-hover: #401f28; --_theme---button-secondary--text-hover: #fff; --_theme---button-primary--background: #401f28; --_theme---button-primary--background-hover: #2b141b; --_theme---button-primary--text-hover: #fff; }
+      .u-theme-dark { --_theme---button-primary--background: #401f28; --_theme---button-primary--background-hover: #2b141b; --_theme---button-primary--text-hover: #fff; }
       /* Brand signature: a small chrome heart at the top right of each page's main title (one per page), and burgundy label dots */
       .ode-th { position: relative; display: inline-block; }
       .ode-title-heart { position: absolute; right: -.4em; top: -.1em; width: .34em; min-width: 1.5rem; height: auto; pointer-events: none; transform: rotate(12deg); filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 25%)); animation: ode-heart-in .75s cubic-bezier(.3, 1.8, .5, 1) var(--heart-delay, .4s) both; }
       @keyframes ode-heart-in { from { opacity: 0; transform: translateY(.25em) rotate(-30deg) scale(.3); } }
       @media (prefers-reduced-motion: reduce) { .ode-title-heart { animation: none; } }
-      .u-eyebrow-marker { background-color: #842636 !important; }
+      .u-eyebrow-marker { background-color: #401f28 !important; }
       /* Page transitions (pages that opt in via viewTransition): the old page fades, shared elements glide, the new page fades in */
       ::view-transition-old(root) { animation: .4s ease both vt-out; }
       ::view-transition-new(root) { animation: .5s ease .9s both vt-in; }
