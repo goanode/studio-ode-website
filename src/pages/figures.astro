@@ -164,6 +164,41 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
   clearBtn.addEventListener("click", () => { q.value = ""; q.focus(); change(() => { limit = PAGE; render(); }, 0.55); });
   more.addEventListener("click", () => change(() => { limit += PAGE; render(); }, 0.6));
   document.getElementById("fg-reset")!.addEventListener("click", () => change(() => { q.value = ""; sel.level = ""; sel.cat = ""; limit = PAGE; render(); }));
+
+  // Opening a figure: the clicked photo is handed to the trick page (it glides into the tall photo there)
+  // and the other photos on screen squash into thin lines (cross-document view transition; plain navigation where unsupported).
+  const canVT = "onpagereveal" in window && !reduce;
+  const named: HTMLElement[] = [];
+  const clearNames = () => { named.forEach((el) => { el.style.viewTransitionName = ""; el.style.removeProperty("view-transition-class"); }); named.length = 0; };
+  if (canVT) {
+    cards.forEach((card) => card.addEventListener("click", (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || (e as MouseEvent).button !== 0) return;
+      clearNames();
+      const vh = innerHeight;
+      cards.forEach((c, i) => {
+        if (c.hidden) return;
+        const r = c.getBoundingClientRect();
+        if (r.bottom < 0 || r.top > vh) return;
+        const ph = c.querySelector<HTMLElement>(".ph")!;
+        if (c === card) ph.style.viewTransitionName = "trick-photo";
+        else { ph.style.viewTransitionName = `fg-${i}`; ph.style.setProperty("view-transition-class", "fg-gone"); }
+        named.push(ph);
+      });
+    }));
+    // coming back from a trick page: its photo glides back into its tile
+    addEventListener("pagereveal", (e: any) => {
+      const from = (window as any).navigation?.activation?.from?.url as string | undefined;
+      if (!e.viewTransition || !from) return;
+      const slug = new URL(from).pathname.replace(/\/$/, "").split("/").pop();
+      const card = cards.find((c) => c.getAttribute("href")?.endsWith(`/${slug}`) && !c.hidden);
+      if (!card) return;
+      const ph = card.querySelector<HTMLElement>(".ph")!;
+      ph.style.viewTransitionName = "trick-photo";
+      named.push(ph);
+      e.viewTransition.finished.finally(clearNames);
+    });
+    addEventListener("pageshow", (e) => { if ((e as PageTransitionEvent).persisted) clearNames(); });
+  }
   render();
 </script>
 
@@ -258,4 +293,16 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
     .nm { font-size: 1.25rem; left: .625rem; bottom: .625rem; }
     .is-dense .nm { display: none; }
   }
+</style>
+
+<style is:global>
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
+  }
+  ::view-transition-group(trick-photo) { animation-duration: .9s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  ::view-transition-old(trick-photo), ::view-transition-new(trick-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; animation-duration: .9s; }
+  ::view-transition-old(root) { animation: .35s ease both vt-out; }
+  ::view-transition-new(root) { animation: .45s ease .35s both vt-in; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; } }
 </style>

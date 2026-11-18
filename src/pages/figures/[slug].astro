@@ -1,123 +1,154 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import WaitlistModal from "../../components/WaitlistModal.astro";
-import FigureHero from "../../components/FigureHero.astro";
-import LinkButton from "../../components/LinkButton.astro";
 import { tricks, LEVELS } from "../../data/tricks";
 import { content } from "../../data/trickContent";
+// Trick page (design "TrickPage", after Brandon Yasin): the name sits large at the bottom left and stays put,
+// a tall photo on the right with the intro, tip and steps under it, then the next figure.
+// Coming from the catalogue, the clicked photo glides into place (cross-document view transition, see figures.astro).
 
 export function getStaticPaths() {
   // same order as the catalogue: by level, then A–Z
   const ordered = [...tricks].sort((a, b) => LEVELS.indexOf(a.level) - LEVELS.indexOf(b.level) || a.name.localeCompare(b.name));
-  return ordered.map((trick, i) => ({ params: { slug: trick.slug }, props: { trick, next: ordered[(i + 1) % ordered.length], nextIndex: ((i + 1) % ordered.length) + 1, total: ordered.length } }));
+  return ordered.map((trick, i) => ({ params: { slug: trick.slug }, props: { trick, index: i + 1, next: ordered[(i + 1) % ordered.length], total: ordered.length } }));
 }
 
-const { trick, next, nextIndex, total } = Astro.props;
+const { trick, index, next, total } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, "0");
 const c = content[trick.slug];
-const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : trick.category === "Sol" ? "Un mouvement au sol" : trick.category === "Rotation" ? "Une rotation" : trick.category === "Montée" ? "Une montée" : trick.category === "Assise" ? "Une assise" : "Une figure tenue"} de niveau ${trick.level.toLowerCase()}${trick.alias ? `, aussi appelée ${trick.alias}` : ""}.`;
+const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : trick.category === "Sol" ? "Un mouvement au sol" : trick.category === "Rotation" ? "Une rotation" : trick.category === "Montée" ? "Une montée" : trick.category === "Assise" ? "Une assise" : "Une figure tenue"} de niveau ${trick.level.toLowerCase()}, enseignée au studio Ode à Lille.`;
+const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1024w`;
+// second photo: the other studio shot
+const second = trick.image.includes("SN7") ? "/images/please-keep-the-background--the-233555-iP0" : "/images/please-look-at-the-first-pose----820406-SN7";
 ---
 
-<!-- Home page id: same hero load animation as the homepage and the catalogue -->
-<BaseLayout title={`${trick.name} — Figures — Studio Ode`} description={intro} wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
-  <main id="main" class="page_main">
-    <FigureHero title={trick.name} image={trick.image} short />
-
-    <div class="fp-body">
-      <!-- Design M1: editorial sheet (labels in brackets, 12-column grid, process-style step rows) -->
-      <article class="fp-wrap">
-        <div class="fp-meta">
-          <p class="fp-lab"><span>(niveau)</span>{trick.level}</p>
-          <p class="fp-lab"><span>(type)</span>{trick.category}</p>
-          <p class="fp-lab"><span>(étapes)</span>{c ? pad(c.steps.length) : "bientôt"}</p>
-          {trick.alias && <p class="fp-lab"><span>(aussi appelée)</span>{trick.alias}</p>}
+<BaseLayout title={`${trick.name} — Figures — Studio Ode`} description={intro} wfPage="6a96e3c256f4431a13f9f238">
+  <main id="main" class="page_main tp u-theme-light">
+    <a class="back" href="/figures"><span aria-hidden="true">←</span> Toutes les figures</a>
+    <div class="cols">
+      <div class="left">
+        <div class="stick">
+          <div class="u-eyebrow-wrapper eb"><div class="u-eyebrow-layout"><div class="u-eyebrow-marker"></div><div class="u-eyebrow-text w-richtext"><p>Figure {pad(index)} / {total}</p></div></div></div>
+          <h1 class="ttl"><span>{trick.name}</span></h1>
+          <dl class="meta">
+            <div><dt>Niveau</dt><dd>{trick.level}</dd></div>
+            <div><dt>Type</dt><dd>{trick.category}</dd></div>
+            {trick.alias && <div><dt>Aussi appelée</dt><dd>{trick.alias}</dd></div>}
+            <div><dt>Étapes</dt><dd>{c ? pad(c.steps.length) : "bientôt"}</dd></div>
+          </dl>
         </div>
-
-        <div class="fp-12">
-          <h2 class="fp-title">{trick.name}</h2>
-          <figure class="fp-photo">
-            <img src={`${trick.image}.webp`} srcset={`${trick.image}-p-500.webp 500w, ${trick.image}-p-800.webp 800w, ${trick.image}.webp 1024w`} sizes="(max-width: 767px) 100vw, 55vw" alt={`${trick.name} à la barre`} loading="lazy" style={`object-position: ${trick.imagePosition}; ${trick.mirrored ? "transform: scaleX(-1);" : ""}`} />
-          </figure>
-          <div class="fp-side">
-            <div class="fp-brief">
-              <p class="fp-lab"><span>(en bref)</span></p>
-              <p class="fp-intro">{intro}</p>
-            </div>
-            {c?.tip && <p class="fp-lab fp-tip"><span>(conseil)</span>{c.tip}</p>}
-          </div>
-        </div>
-
-        <div class="fp-steps-head"><p class="fp-lab"><span>(les étapes)</span></p>{c && <p class="fp-lab">{pad(c.steps.length)}</p>}</div>
+      </div>
+      <div class="right">
+        <figure class="photo">
+          <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name} à la barre`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
+        </figure>
+        <p class="intro">{intro}</p>
+        {c?.tip && <p class="tip"><b>Conseil</b> : {c.tip}</p>}
         {c ? (
-          <ol class="fp-steps">
+          <ol class="steps">
             {c.steps.map((s, i) => (
               <li>
-                <span class="fp-lab fp-n">({pad(i + 1)})</span>
-                <h3 class="fp-st">{s.title}</h3>
-                <p class="fp-sp">{s.text}</p>
+                <span class="n">{pad(i + 1)}</span>
+                <div><h2 class="st">{s.title}</h2><p>{s.text}</p></div>
               </li>
             ))}
           </ol>
         ) : (
-          <p class="fp-soon">Les étapes de cette figure arrivent bientôt. En attendant, viens la travailler en cours avec Justine.</p>
+          <p class="soon">Les étapes de cette figure arrivent bientôt. En attendant, viens la travailler en cours avec Justine.</p>
         )}
-
-        <nav class="fp-nav" aria-label="Navigation entre les figures">
-          <LinkButton href="/figures" label="← Toutes les figures" ariaLabel="Toutes les figures" />
-          <div class="fp-next-wrap">
-            <p class="fp-lab"><span>(suivante)</span>{pad(nextIndex)} / {total}</p>
-            <LinkButton href={`/figures/${next.slug}`} label={`${next.name} →`} ariaLabel={`Figure suivante : ${next.name}`} />
-          </div>
-        </nav>
-      </article>
+        <figure class="photo2"><img src={`${second}-p-800.webp`} srcset={srcset(second)} sizes="(max-width: 767px) 100vw, 36vw" alt="" loading="lazy" /></figure>
+      </div>
     </div>
-  </main>
 
+    <nav class="next" aria-label="Figure suivante">
+      <div>
+        <p class="lab">Figure suivante</p>
+        <p class="nx">{next.name}</p>
+      </div>
+      <a class="pill" href={`/figures/${next.slug}`} aria-label={`Voir la figure suivante : ${next.name}`}>Voir la figure<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></a>
+    </nav>
+  </main>
   <WaitlistModal slot="after-footer" />
 </BaseLayout>
 
 <style>
-  .fp-body { position: relative; z-index: 1; background: var(--_theme---background, #fff); padding-top: 1px; }
-  .fp-wrap { padding: 6rem 0 7.5rem; width: calc(100% - var(--site--margin) * 2); max-width: var(--max-width--main); margin-left: auto; margin-right: auto; color: var(--swatch--dark-800); }
-  .fp-serif { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); }
-  .fp-lab { margin: 0; font-size: .875rem; line-height: 1.5; color: var(--swatch--dark-800); }
-  .fp-lab > span { opacity: .55; margin-right: .5rem; }
-  .fp-meta { display: flex; flex-wrap: wrap; gap: .75rem 2.5rem; padding: 1rem 0; border-top: 1px solid var(--swatch--dark-900-o20); border-bottom: 1px solid var(--swatch--dark-900-o20); }
-  .fp-12 { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 1.5rem; }
-  /* line-height 1.15 leaves room for descenders (the "p" of "spin") */
-  .fp-title { grid-column: 1 / -1; margin: 3.5rem 0 4rem; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: clamp(4.5rem, 10vw, 10.5rem); line-height: 1.15; letter-spacing: -.01em; color: var(--swatch--dark-800); text-wrap: balance; }
-  .fp-photo { grid-column: 1 / 8; position: relative; margin: 0; aspect-ratio: 4 / 5; border-radius: var(--radius--main); overflow: hidden; background: var(--swatch--dark-800); }
-  .fp-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  .fp-side { grid-column: 9 / 13; display: flex; flex-direction: column; justify-content: space-between; gap: 2rem; }
-  .fp-brief { display: flex; flex-direction: column; gap: 1rem; }
-  .fp-intro { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 2rem; line-height: 1.25; color: var(--swatch--dark-900); }
-  .fp-steps-head { display: flex; justify-content: space-between; align-items: baseline; margin: 7.5rem 0 1.5rem; }
-  .fp-steps { list-style: none; margin: 0; padding: 0; }
-  .fp-steps li { display: grid; grid-template-columns: repeat(12, minmax(0, 1fr)); column-gap: 1.5rem; align-items: start; padding: 1.75rem 0; border-top: 1px solid var(--swatch--dark-900-o20); }
-  .fp-steps li:last-child { border-bottom: 1px solid var(--swatch--dark-900-o20); }
-  /* small label + text nudged down to sit on the serif title's first line */
-  .fp-n { grid-column: 1 / 3; padding-top: .7rem; }
-  .fp-st { grid-column: 3 / 8; margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 2rem; line-height: 1.15; letter-spacing: normal; color: var(--swatch--dark-900); }
-  .fp-sp { grid-column: 9 / 13; margin: 0; padding-top: .55rem; font-size: 1rem; line-height: 1.55; }
-  .fp-soon { margin: 0; padding: 1.75rem 0; border-top: 1px solid var(--swatch--dark-900-o20); border-bottom: 1px solid var(--swatch--dark-900-o20); font-size: 1.125rem; line-height: 1.5; }
-  .fp-next-wrap { display: flex; flex-direction: column; align-items: flex-end; gap: .5rem; }
-  .fp-nav { display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem; margin-top: 6rem; padding-top: 1.5rem; border-top: 1px solid var(--swatch--dark-900-o20); }
-  @media (max-width: 767px) {
-    .fp-wrap { padding: 3rem 0 4.5rem; }
-    .fp-meta { gap: .5rem 1.5rem; }
-    .fp-12 { grid-template-columns: 1fr; }
-    .fp-title { margin: 2rem 0; font-size: 4rem; }
-    .fp-photo, .fp-side { grid-column: 1 / -1; }
-    .fp-side { margin-top: 1.5rem; }
-    .fp-intro { font-size: 1.5rem; }
-    .fp-steps-head { margin: 4rem 0 1rem; }
-    .fp-steps li { grid-template-columns: 3rem minmax(0, 1fr); row-gap: .5rem; padding: 1.25rem 0; }
-    .fp-n { grid-column: 1; grid-row: 1 / 3; }
-    .fp-st, .fp-sp { grid-column: 2; }
-    .fp-sp { padding-top: 0; }
-    .fp-n { padding-top: .45rem; }
-    .fp-st { font-size: 1.625rem; }
-    .fp-nav { flex-direction: column; align-items: flex-start; margin-top: 4rem; gap: 2rem; }
-    .fp-next-wrap { align-items: flex-start; }
+  /* the catalogue and the trick pages opt in to the browser's page transition */
+  @media (prefers-reduced-motion: no-preference) {
+    @view-transition { navigation: auto; }
   }
+  .tp { --ink: #1f1d1e; --red: #842636; position: relative; color: #3b3b3b; background: #fff; padding: var(--nav--height-total, 6rem) 0 0; font-family: var(--_typography---font--primary-family), sans-serif; }
+  :global(.nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
+  :global(.nav_button_line) { background-color: #141414 !important; }
+  .tp p, .tp h1, .tp h2, .tp ol, .tp dl, .tp dd { margin: 0; padding: 0; }
+  .tp p::before, .tp p::after, .tp h1::before, .tp h1::after, .tp h2::before, .tp h2::after { content: none; }
+  .ttl, .st, .nx { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: -.01em; color: var(--ink); }
+
+  .back { position: absolute; left: var(--site--margin, 2.5rem); top: calc(var(--nav--height-total, 6rem) + .5rem); z-index: 2; display: inline-flex; gap: .5rem; font-size: .875rem; color: #3b3b3b; text-decoration: none; transition: color .3s; }
+  .back:hover { color: var(--red); }
+
+  .cols { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 36vw); gap: 0 4rem; padding: 0 8.3vw 0 var(--site--margin, 2.5rem); }
+  /* left: the name stays at the bottom of the screen while the right column scrolls */
+  .stick { position: sticky; top: 0; height: 100svh; margin-top: calc(var(--nav--height-total, 6rem) * -1); display: flex; flex-direction: column; justify-content: flex-end; align-items: flex-start; padding-bottom: 2.5rem; }
+  .eb { margin-bottom: 0 !important; }
+  .ttl { margin-top: 1rem !important; overflow: hidden; font-size: clamp(4.5rem, 10.4vw, 9.5rem); line-height: 1; padding-bottom: .06em; }
+  .ttl span { display: block; animation: rise 1.1s cubic-bezier(.22, .8, .25, 1) .45s both; }
+  .meta { display: flex; flex-wrap: wrap; gap: 1rem 3.5rem; margin-top: 2.25rem !important; opacity: 0; animation: fadeUp .8s ease .85s forwards; }
+  .meta dt { margin-bottom: .375rem; font-size: .75rem; color: #8a8586; }
+  .meta dd { font-size: .9375rem; color: var(--ink); }
+  @keyframes rise { from { transform: translateY(105%); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(.625rem); } to { opacity: 1; transform: none; } }
+
+  /* right: tall photo, then the text */
+  .right { padding-top: 1.5rem; }
+  .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7; view-transition-name: trick-photo; }
+  .photo img, .photo2 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .intro { margin-top: 3.5rem !important; font-size: 1.625rem; line-height: 1.3; color: var(--ink); }
+  .tip { margin-top: 1.75rem !important; padding: 1.125rem 1.25rem !important; border-left: 2px solid var(--red); background: #faf8f8; font-size: .9375rem; line-height: 1.5; }
+  .tip b { color: var(--red); font-weight: 500; }
+  .steps { list-style: none; margin-top: 4.5rem !important; border-top: 1px solid rgb(31 29 30 / 14%); }
+  .steps li { display: grid; grid-template-columns: 3rem 1fr; gap: 1rem; padding: 1.625rem 0; border-bottom: 1px solid rgb(31 29 30 / 14%); }
+  .n { padding-top: .5rem; font-size: .8125rem; color: var(--red); }
+  .st { margin: 0; font-size: 1.875rem; line-height: 1.1; }
+  .steps p { margin-top: .5rem !important; font-size: .9375rem; line-height: 1.5; }
+  .soon { margin-top: 4.5rem !important; padding: 1.625rem 0 !important; border-top: 1px solid rgb(31 29 30 / 14%); border-bottom: 1px solid rgb(31 29 30 / 14%); font-size: 1.0625rem; line-height: 1.5; }
+  .photo2 { margin: 4.5rem 0 0; height: 32.5rem; overflow: hidden; background: #d9d7d7; }
+
+  .next { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-top: 8.75rem; padding: 2.5rem var(--site--margin, 2.5rem) 4rem; border-top: 1px solid rgb(31 29 30 / 14%); }
+  .lab { font-size: .75rem; color: #8a8586; margin-bottom: .375rem !important; }
+  .nx { font-size: clamp(3.5rem, 6.7vw, 6rem); line-height: 1; }
+  .pill { position: relative; display: inline-flex; align-items: center; padding: .9rem 1.5rem; border-radius: 9999px; border: 1px solid rgb(31 29 30 / 20%); background: rgb(255 255 255 / 20%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); font-size: 1rem; line-height: 1; color: var(--ink); text-decoration: none; white-space: nowrap; transition: background-color .35s, border-color .35s, color .35s; }
+  .pill:hover, .pill:focus-visible { background: var(--red); border-color: var(--red); color: #fff; }
+  .hrt { position: absolute; right: -.5rem; top: -.5rem; width: 2.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.875rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 6px 8px rgb(0 0 0 / 25%)); }
+  .pill:hover .hrt, .pill:focus-visible .hrt { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
+  .back:focus-visible, .pill:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ttl span, .meta { animation: none; opacity: 1; }
+  }
+  @media (max-width: 767px) {
+    .back { left: .75rem; top: calc(var(--nav--height-total, 6rem) + .25rem); }
+    .cols { grid-template-columns: 1fr; padding: 2.75rem .75rem 0; }
+    .stick { position: static; height: auto; margin: 0; padding: 0 0 1.75rem; }
+    .ttl { font-size: clamp(3.5rem, 18vw, 4.5rem); }
+    .meta { gap: .75rem 1.75rem; margin-top: 1.25rem !important; }
+    .right { padding-top: 0; }
+    .photo { height: 30rem; }
+    .intro { margin-top: 2.25rem !important; font-size: 1.3125rem; }
+    .st { font-size: 1.5rem; }
+    .steps li { grid-template-columns: 2.25rem 1fr; }
+    .photo2 { height: 22.5rem; }
+    .next { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-top: 5rem; padding: 1.75rem .75rem 3rem; }
+  }
+</style>
+
+<style is:global>
+  /* page transition: the clicked catalogue photo glides into the tall photo; the rest of the old page fades out */
+  ::view-transition-group(trick-photo) { animation-duration: .9s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  ::view-transition-old(trick-photo), ::view-transition-new(trick-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; animation-duration: .9s; }
+  ::view-transition-old(root) { animation: .35s ease both vt-out; }
+  ::view-transition-new(root) { animation: .45s ease .35s both vt-in; }
+  ::view-transition-old(*.fg-gone) { animation: .4s cubic-bezier(.76, 0, .24, 1) both vt-line; transform-origin: 50% 50%; }
+  @keyframes vt-out { to { opacity: 0; } }
+  @keyframes vt-in { from { opacity: 0; } }
+  @keyframes vt-line { 0% { transform: scaleY(1); } 75% { transform: scaleY(.01); opacity: 1; } 100% { transform: scaleY(.01); opacity: 0; } }
 </style>
