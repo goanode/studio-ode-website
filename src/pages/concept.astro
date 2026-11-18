@@ -32,10 +32,10 @@ const COL: [string, number, number, number, number, boolean, boolean, number][] 
 ];
 const pct = (x: number, total: number) => `${((x / total) * 100).toFixed(3)}%`;
 const PILLARS = [
-  ["Force", "Pas besoin d'être forte pour commencer. On construit des bases solides, cours après cours : dos, épaules, gainage, prise de barre. Chaque séance ajoute un peu de force, à ton rythme et sans te comparer. Un jour, tu tiens une figure qui te semblait impossible, et tu ne sais même plus quand c'est devenu facile."],
-  ["Expression", "La barre devient un langage. On apprend d'abord la technique, puis on la laisse disparaître derrière le mouvement, la musique et l'intention. Il n'y a pas une seule bonne façon de danser : chaque élève trouve la sienne, avec ses lignes, son énergie et son caractère."],
-  ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui, pas à celui d'une autre. On gagne en amplitude doucement, en respectant tes limites, avec des exercices que tu peux refaire chez toi. La souplesse ne se force pas : elle se construit, semaine après semaine."],
-  ["Communauté", "Huit élèves maximum par cours, et une professeure qui connaît chaque prénom et chaque corps. On s'encourage, on rit, on applaudit les premières fois. Dans un lieu calme et lumineux à Lille, tu viens pour toi, et tu repars un peu plus fière de ce que ton corps sait faire."],
+  ["Force", "Pas besoin d'être forte pour commencer. On construit des bases solides, cours après cours : dos, épaules, gainage. La force vient en chemin, sans forcer et sans se comparer."],
+  ["Expression", "La barre devient un langage. On travaille la technique, puis on la laisse disparaître derrière le mouvement, pour que chaque élève trouve sa propre façon de danser."],
+  ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui. Gagner en amplitude, en confiance, et en douceur."],
+  ["Communauté", "Huit élèves maximum, une professeure qui connaît chaque corps. On s'encourage, on progresse ensemble, dans un lieu calme et lumineux à Lille."],
 ];
 ---
 
@@ -64,6 +64,12 @@ const PILLARS = [
           </ul></div>
           <div class="para">
             {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
+          </div>
+          <div class="b-pil">
+            <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
+          </div>
           </div>
         </div>
       </div>
@@ -188,17 +194,19 @@ const PILLARS = [
   .meta .clock { opacity: .5; }
   .m-l { left: var(--site--margin, 1.25rem); }
   .m-r { right: var(--site--margin, 1.25rem); }
+  .b-pil :global(.button_main_text) { white-space: nowrap; }
+  .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
   .grow { position: absolute; inset: 0; z-index: 3; margin: 0; overflow: hidden; background: var(--red); will-change: clip-path; }
   .grow img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; transform-origin: 50% 50%; will-change: transform; }
   .dim { position: absolute; inset: 0; background: rgb(31 29 30 / 35%); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); opacity: 0; will-change: opacity; }
 
   /* 2 · pillars over the photo */
   .pil { position: absolute; inset: 0; z-index: 4; color: #fff; visibility: hidden; background: none; }
-  .tick-wrap { position: absolute; left: 0; right: 0; bottom: calc(50% + 2.5rem); }
+  .tick-wrap { position: absolute; left: 0; right: 0; bottom: calc(50% - .5rem); }
   .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
   .tick .ode-title-heart { animation: none; }
   .tick .w { will-change: opacity; }
-  .para { position: absolute; left: 50%; top: calc(50% + 5.5rem); width: 32rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
+  .para { position: absolute; left: 50%; top: calc(50% + 2.5rem); width: 26rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
   .para p { position: absolute; top: 0; left: 0; right: 0; }
 
   /* no motion: everything shown in place, pillars listed on the photo */
@@ -221,8 +229,8 @@ const PILLARS = [
     .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
     .ttl { font-size: 3.75rem; }
     .meta { font-size: .8125rem; bottom: 5.25rem; }
-    .tick-wrap { left: 0; bottom: calc(50% + 2rem); }
-    .tick { font-size: 3.25rem; gap: 5rem; }
-    .para { width: calc(100% - 2.5rem); top: calc(50% + 4.75rem); }
+    .tick-wrap { left: 0; bottom: calc(50% - .25rem); }
+    .tick { font-size: 3.75rem; gap: 5rem; }
+    .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
   }
 </style>
