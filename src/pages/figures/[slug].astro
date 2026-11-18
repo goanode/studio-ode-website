@@ -39,7 +39,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
         </div>
       </div>
       <div class="right">
-        <figure class="photo">
+        <figure class="photo" style={`background-image: url(${trick.image}-p-500.webp)`}>
           <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name} à la barre`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
         </figure>
         <p class="intro">{intro}</p>
@@ -69,6 +69,12 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
     </nav>
   </main>
   <WaitlistModal slot="after-footer" />
+  <Fragment slot="head">
+    <script is:inline>
+      // arriving from the catalogue with a page transition: let the photo land before the name rises
+      addEventListener("pagereveal", (e) => { if (e.viewTransition) document.documentElement.classList.add("from-grid"); });
+    </script>
+  </Fragment>
 </BaseLayout>
 
 <style>
@@ -92,6 +98,8 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   .eb { margin-bottom: 0 !important; }
   .ttl { margin-top: 1rem !important; overflow: hidden; font-size: clamp(4.5rem, 10.4vw, 9.5rem); line-height: 1; padding-bottom: .06em; }
   .ttl span { display: block; animation: rise 1.1s cubic-bezier(.22, .8, .25, 1) .45s both; }
+  :global(html.from-grid) .ttl span { animation-delay: 1.05s; }
+  :global(html.from-grid) .meta { animation-delay: 1.4s; }
   .meta { display: flex; flex-wrap: wrap; gap: 1rem 3.5rem; margin-top: 2.25rem !important; opacity: 0; animation: fadeUp .8s ease .85s forwards; }
   .meta dt { margin-bottom: .375rem; font-size: .75rem; color: #8a8586; }
   .meta dd { font-size: .9375rem; color: var(--ink); }
@@ -100,7 +108,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
 
   /* right: tall photo, then the text */
   .right { padding-top: 1.5rem; }
-  .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7; view-transition-name: trick-photo; }
+  .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7 center / cover no-repeat; view-transition-name: trick-photo; }
   .photo img, .photo2 img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .intro { margin-top: 3.5rem !important; font-size: 1.625rem; line-height: 1.3; color: var(--ink); }
   .tip { margin-top: 1.75rem !important; padding: 1.125rem 1.25rem !important; border-left: 2px solid var(--red); background: #faf8f8; font-size: .9375rem; line-height: 1.5; }
@@ -142,13 +150,17 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
 </style>
 
 <style is:global>
-  /* page transition: the clicked catalogue photo glides into the tall photo; the rest of the old page fades out */
-  ::view-transition-group(trick-photo) { animation-duration: .9s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
-  ::view-transition-old(trick-photo), ::view-transition-new(trick-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; animation-duration: .9s; }
-  ::view-transition-old(root) { animation: .35s ease both vt-out; }
-  ::view-transition-new(root) { animation: .45s ease .35s both vt-in; }
-  ::view-transition-old(*.fg-gone) { animation: .4s cubic-bezier(.76, 0, .24, 1) both vt-line; transform-origin: 50% 50%; }
+  /* page transition, in the order of the reference video:
+     1. the other photos squash into lines (0–0.45s), the rest of the page fades out
+     2. the clicked photo grows into the tall photo (0.35–1.3s)
+     3. the new page fades in around it and the name rises (from ~0.9s) */
+  ::view-transition-group(trick-photo) { animation-duration: .95s; animation-delay: .35s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+  ::view-transition-image-pair(trick-photo) { animation-delay: .35s; }
+  ::view-transition-old(trick-photo), ::view-transition-new(trick-photo) { width: 100%; height: 100%; object-fit: cover; overflow: clip; animation-duration: .95s; animation-delay: .35s; }
+  ::view-transition-old(root) { animation: .4s ease both vt-out; }
+  ::view-transition-new(root) { animation: .5s ease .9s both vt-in; }
+  ::view-transition-old(*.fg-gone) { animation: .45s cubic-bezier(.76, 0, .24, 1) both vt-line; transform-origin: 50% 50%; }
   @keyframes vt-out { to { opacity: 0; } }
   @keyframes vt-in { from { opacity: 0; } }
-  @keyframes vt-line { 0% { transform: scaleY(1); } 75% { transform: scaleY(.01); opacity: 1; } 100% { transform: scaleY(.01); opacity: 0; } }
+  @keyframes vt-line { 0% { transform: scaleY(1); } 70% { transform: scaleY(.01); opacity: 1; } 100% { transform: scaleY(.01); opacity: 0; } }
 </style>
