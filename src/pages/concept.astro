@@ -80,11 +80,8 @@ const PILLARS = [
         <div class="strap" aria-hidden="true"><span>STUDIO ODE</span><span>STUDIO ODE</span></div>
         <img class="clip" src="/images/ode-lanyard-clip.webp" alt="" aria-hidden="true" width="390" height="662" loading="lazy" />
         <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></button>
-        <span class="j-badge" data-modal-trigger="waitlist" aria-hidden="true">
-          <svg class="j-badge-txt" viewBox="0 0 132 132"><defs><path id="j-badge-c" d="M66 66 m -48 0 a 48 48 0 1 1 96 0 a 48 48 0 1 1 -96 0"></path></defs><text><textPath href="#j-badge-c">CLIQUE ICI · DEVIENS FONDATRICE ·</textPath></text></svg>
-          <svg class="j-badge-arr" viewBox="0 0 40 40"><path d="M30 10 L 10 30"></path><path d="M10 16 L 10 30 L 24 30"></path></svg>
-        </span>
       </div>
+      <div class="j-note" aria-hidden="true"><span class="j-note-lbl">clique-moi</span><svg viewBox="0 0 200 200"><path d="M150 45 C 196 95, 170 160, 30 168"></path><path d="M54 146 L 28 168 L 60 182"></path></svg></div>
       <h2 class="j-big" id="join-title"><span>Deviens</span> <span>fondatrice.</span></h2>
       <ol class="j-steps">
         <li><span class="j-n">01</span><p class="j-t">Une place réservée</p><p class="j-x">Tes cours choisis avant l’ouverture au public.</p></li>
@@ -213,15 +210,13 @@ const PILLARS = [
   .j-t { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: 2rem; line-height: 1.05; color: var(--ink); }
   .j-x { margin: 0; font-size: .9375rem; line-height: 1.5; opacity: .6; }
   .j-cta { display: flex; justify-content: center; margin-top: 4.5rem; }
-  /* "click me" badge on the card's corner: burgundy, the text turns slowly around an arrow pointing at the card */
-  .j-badge { position: absolute; z-index: 4; right: -2.875rem; bottom: .25rem; width: 8.25rem; height: 8.25rem; border-radius: 50%; background: var(--red); box-shadow: 0 10px 24px rgb(64 31 40 / 35%); cursor: pointer; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1); }
-  .j-badge:hover, .inv:hover + .j-badge { transform: scale(1.06); }
-  .j-badge-txt { position: absolute; inset: 0; width: 100%; height: 100%; animation: j-spin 14s linear infinite; }
-  .j-badge-txt text { fill: #fff; font-size: 10.5px; letter-spacing: .2em; font-weight: 500; font-family: var(--_typography---font--primary-family), sans-serif; }
-  .j-badge-arr { position: absolute; left: 50%; top: 50%; width: 2.5rem; height: 2.5rem; margin: -1.25rem 0 0 -1.25rem; }
-  .j-badge-arr path { fill: none; stroke: #fff; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-  @keyframes j-spin { to { transform: rotate(360deg); } }
-  @media (prefers-reduced-motion: reduce) { .lanyard, .j-badge-txt { animation: none; } }
+  /* "clique-moi" note: a hand-drawn burgundy arrow that draws itself on a loop, pointing at the card */
+  .j-note { position: absolute; z-index: 4; left: calc(50% + 9.5rem); top: 15.5rem; pointer-events: none; }
+  .j-note-lbl { position: absolute; left: 4.375rem; top: -.625rem; font-family: var(--_typography---font--secondary-family); font-style: italic; font-weight: 400; font-size: 2.5rem; line-height: 1; color: var(--red); transform: rotate(-7deg); white-space: nowrap; }
+  .j-note svg { display: block; width: 12.5rem; height: 12.5rem; overflow: visible; }
+  .j-note path { fill: none; stroke: var(--red); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 420; animation: j-draw 4.5s ease-in-out infinite; }
+  @keyframes j-draw { 0% { stroke-dashoffset: 420; } 30%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -420; } }
+  @media (prefers-reduced-motion: reduce) { .lanyard, .j-note path { animation: none; } }
   @media (min-width: 768px) and (max-width: 991px) { .j-big { font-size: 5vw; } }
   @media (max-width: 767px) {
     .join { padding: 0 .75rem 2.5rem; min-height: 0; }
@@ -229,8 +224,9 @@ const PILLARS = [
     .strap { height: 7rem; }
     .strap span + span { display: none; }
     .inv { width: 13.75rem; }
-    .j-badge { right: -2.25rem; bottom: 1.5rem; width: 6.5rem; height: 6.5rem; }
-    .j-badge-arr { width: 2rem; height: 2rem; margin: -1rem 0 0 -1rem; }
+    .j-note { left: .75rem; top: 9rem; }
+    .j-note-lbl { left: 0; top: -.25rem; font-size: 1.875rem; transform: rotate(6deg); }
+    .j-note svg { width: 8.75rem; height: 8.75rem; margin: 1.25rem 0 0 1.25rem; transform: scaleX(-1); }
     .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 20vw; }
     .j-steps { grid-template-columns: 1fr; margin-top: 3rem; }
     .j-steps li { padding: 1.5rem 0; }
