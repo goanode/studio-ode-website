@@ -74,6 +74,20 @@ const PILLARS = [
         </div>
       </div>
     </section>
+    <!-- under the animated hero: a short story paragraph with small silver photos that open inside the lines as you scroll, then the two buttons -->
+    <section class="story-sec" aria-label="Notre histoire">
+      <p class="story">Ode est né d’une envie simple&nbsp;: un studio <img class="chip" src="/images/Hello-please-take-the-style-of-t-11755-EU2-p-800.webp" alt="" /> où l’on vient comme on est. Huit élèves maximum, une professeure <img class="chip" src="/images/please-keep-the-background--the-233555-iP0-p-500.webp" alt="" /> qui connaît chaque corps, et un lieu calme et lumineux à Lille. Ici, la force et la souplesse <img class="chip" src="/images/Hello-please-take-the-style-of-t-391374-HCn-p-800.webp" alt="" /> se construisent pas à pas, pour que chaque cours te ressemble.</p>
+      <div class="story-btns ode-heart-cta">
+        <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+          <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+          <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
+        </div>
+        <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+          <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><a href="/figures" class="clickable_link"><span class="u-sr-only">Découvre les figures</span></a></div>
+          <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Découvre les figures</div></div>
+        </div>
+      </div>
+    </section>
 
   </main>
   <WaitlistModal slot="after-footer" />
@@ -85,6 +99,19 @@ const PILLARS = [
   </Fragment>
 
   <Fragment slot="scripts">
+    <script is:inline>
+    // story paragraph: each photo opens inside its line as the paragraph scrolls into view (text makes room)
+    document.addEventListener("DOMContentLoaded", () => {
+      const story = document.querySelector(".story");
+      if (!story || matchMedia("(prefers-reduced-motion: reduce)").matches || !window.gsap || !window.ScrollTrigger) return;
+      gsap.registerPlugin(ScrollTrigger);
+      story.querySelectorAll(".chip").forEach((chip, i) => {
+        gsap.fromTo(chip, { "--g": 0 }, { "--g": 1, ease: "power2.out",
+          scrollTrigger: { trigger: story, start: `top ${88 - i * 6}%`, end: `center ${60 - i * 4}%`, scrub: true } });
+      });
+      addEventListener("load", () => ScrollTrigger.refresh());
+    });
+    </script>
     <script is:inline>
     document.addEventListener("DOMContentLoaded", () => {
       const root = document.querySelector(".cv");
@@ -168,6 +195,16 @@ const PILLARS = [
 </BaseLayout>
 
 <style>
+  /* 3 · story paragraph under the hero */
+  .story-sec { display: flex; flex-direction: column; align-items: center; gap: 3.5rem; padding: 11rem var(--site--margin, 2.5rem) 12rem; background: #fff; }
+  .story { margin: 0; max-width: 67.5rem; text-align: center; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(2.25rem, 4vw, 3.6rem); line-height: 1.18; letter-spacing: -.012em; color: var(--ink, #1f1d1e); text-wrap: balance; }
+  .chip { --g: 1; display: inline-block; width: calc(1.75em * var(--g)); height: .92em; margin: 0 calc(.14em * var(--g)); border-radius: .14em; object-fit: cover; object-position: 50% 30%; vertical-align: -.12em; opacity: var(--g); transform: scale(calc(.6 + .4 * var(--g))); box-shadow: 0 .04em .12em rgb(0 0 0 / 18%); }
+  .story-btns { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: center; }
+  @media (max-width: 767px) {
+    .story-sec { gap: 2.5rem; padding: 6rem .75rem 7rem; }
+    .story { font-size: 1.75rem; line-height: 1.24; }
+  }
+
   .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
   :global(body:not(.cv-dark) .nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
   :global(body:not(.cv-dark) .nav_button_line) { background-color: #141414 !important; }

@@ -106,7 +106,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         // Call-to-action pills (waitlist + formules + course filters): on hover they turn burgundy and a small chrome heart pops out (design B7)
         document.querySelectorAll(".button_main_wrap").forEach((wrap) => {
           if (wrap.matches('[class*="w-variant-625d5df4"]')) return; // "See more" text links keep their own effect
-          if (!wrap.querySelector("[data-modal-trigger]") && !wrap.closest(".card_primary_wrap") && !wrap.closest(".ode-course-filters")) return;
+          if (!wrap.querySelector("[data-modal-trigger]") && !wrap.closest(".card_primary_wrap") && !wrap.closest(".ode-course-filters") && !wrap.closest(".ode-heart-cta")) return;
           const el = wrap.querySelector(".button_main_element");
           if (!el) return;
           wrap.classList.add("ode-heart-btn");
