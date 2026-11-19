@@ -41,7 +41,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
               <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
                 <div class="u-display-contents">
                   <div fade-in="" data-number="40" data-wf--typography-paragraph--variant="text-main" class="u-text w-variant-61d538b2-709c-eb7a-4258-8c0890dc07fc u-rich-text w-richtext">
-                    <p>Ode is Lille’s new pole dance studio, a space to move, strengthen and express yourself. Join the waitlist to be first in line when our doors open.</p>
+                    <h1 class="ode-hero-h1">Ode is Lille’s new pole dance studio, a space to move, strengthen and express yourself. Join the waitlist to be first in line when our doors open.</h1>
                   </div>
                   <div fade-in="" class="u-button-wrapper">
                     <div class="u-display-contents">
@@ -59,7 +59,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
             <div class="u-layout-column-2 w-variant-6bb5e515-55a9-1fc8-d29b-ff898d8b40f7  ">
               <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
                 <div class="u-display-contents">
-                  <h1 class="heading">ODE</h1>
+                  <p class="heading ode-hero-word">ODE</p>
                 </div>
               </div>
             </div>
@@ -1007,6 +1007,9 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     .ode-toggle[data-active="2"] .ode-toggle-thumb { transform: translateX(200%); }
     @media (max-width: 479px) { .ode-toggle .compare_toggle_option { padding: .6875rem .875rem !important; font-size: .875rem; } }
     @media (prefers-reduced-motion: reduce) { .ode-toggle-thumb { transition: none; } }
+    /* SEO: the sentence next to ODE is the page's H1 (looks like body text); the big ODE stays as design */
+    .u-rich-text .ode-hero-h1 { margin: 0 !important; font: inherit !important; letter-spacing: inherit !important; text-transform: inherit !important; color: inherit !important; }
+    .ode-hero-word { --_text-style---font-family: var(--_typography---font--secondary-family); --_text-style---font-size: var(--_typography---font-size--h1); --_text-style---line-height: var(--_typography---line-height--small); --_text-style---font-weight: var(--_typography---font--primary-medium); --_text-style---letter-spacing: var(--_typography---letter-spacing--tight); --_text-style---text-wrap: balance; font-family: var(--_text-style---font-family); font-weight: var(--_text-style---font-weight); letter-spacing: var(--_text-style---letter-spacing); text-wrap: balance; margin: 0; display: flow-root; }
     /* price packages: white bullet points */
     .card_primary_list .u-eyebrow-marker { background-color: #fff !important; }
   </style>
