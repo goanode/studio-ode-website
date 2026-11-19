@@ -79,21 +79,14 @@ const PILLARS = [
       <div class="lanyard">
         <div class="strap" aria-hidden="true"><span>STUDIO ODE</span><span>STUDIO ODE</span></div>
         <img class="clip" src="/images/ode-lanyard-clip.webp" alt="" aria-hidden="true" width="390" height="662" loading="lazy" />
-        <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></button>
+        <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
       </div>
-      <div class="j-note" aria-hidden="true"><span class="j-note-lbl">clique-moi</span><svg viewBox="0 0 200 200"><path d="M150 45 C 196 95, 170 160, 30 168"></path><path d="M54 146 L 28 168 L 60 182"></path></svg></div>
       <h2 class="j-big" id="join-title"><span>Deviens</span> <span>fondatrice.</span></h2>
       <ol class="j-steps">
         <li><span class="j-n">01</span><p class="j-t">Une place réservée</p><p class="j-x">Tes cours choisis avant l’ouverture au public.</p></li>
         <li><span class="j-n">02</span><p class="j-t">Un tarif fondatrice</p><p class="j-x">Un prix de lancement, gardé tant que tu restes.</p></li>
         <li><span class="j-n">03</span><p class="j-t">Ton premier cours offert</p><p class="j-x">Pour essayer la barre, sans pression.</p></li>
       </ol>
-      <div class="j-cta ode-heart-cta">
-          <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Deviens membre fondatrice" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
-            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Deviens membre fondatrice</div></div>
-          </div>
-      </div>
     </section>
 
   </main>
@@ -190,17 +183,22 @@ const PILLARS = [
 
 <style>
   /* 3 · join section under the hero: the silver invitation on a burgundy lanyard, between the words of a big call to action */
-  .join { position: relative; padding: 0 var(--site--margin, 2.5rem) 5rem; background: #fff; overflow: hidden; }
+  .join { position: relative; padding: 0 var(--site--margin, 2.5rem) 9rem; background: #fff; overflow: hidden; }
   .lanyard { position: absolute; left: 50%; top: 0; z-index: 3; width: 18.75rem; margin-left: -9.375rem; display: flex; flex-direction: column; align-items: center; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; }
   @keyframes sway { 0%, 100% { transform: rotate(1.6deg); } 50% { transform: rotate(-1.6deg); } }
   .strap { width: 2.77rem; height: 16rem; background: var(--red); display: flex; flex-direction: column; align-items: center; justify-content: space-around; overflow: hidden; }
   .strap span { writing-mode: vertical-rl; white-space: nowrap; color: #fff; font-size: .6875rem; letter-spacing: .24em; font-weight: 500; opacity: .85; }
   .clip { position: relative; z-index: 1; display: block; width: 5rem; height: auto; margin-top: -1px; filter: drop-shadow(0 3px 4px rgb(0 0 0 / 18%)); }
-  .inv { position: relative; z-index: 2; display: block; padding: 0; border: 0; cursor: pointer; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s; width: 16.25rem; margin-top: -1.2rem; aspect-ratio: 620 / 827; border-radius: 1rem; overflow: hidden; background: #8a8888; box-shadow: 0 18px 40px rgb(31 29 30 / 22%); }
+  .inv { position: relative; z-index: 2; display: block; padding: 0; border: 0; cursor: pointer; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s; width: 16.25rem; margin-top: -1.2rem; aspect-ratio: 620 / 827; border-radius: 1rem; overflow: visible; background: #8a8888; box-shadow: 0 18px 40px rgb(31 29 30 / 22%); }
   .inv:hover { transform: translateY(4px) rotate(-1deg); box-shadow: 0 24px 48px rgb(31 29 30 / 28%); }
   .inv:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
   .inv::before { content: ""; position: absolute; z-index: 2; left: 50%; top: .5625rem; width: 2.125rem; height: .375rem; margin-left: -1.0625rem; border-radius: 9999px; background: rgb(255 255 255 / 55%); box-shadow: inset 0 1px 2px rgb(0 0 0 / 35%); }
-  .inv img { display: block; width: 100%; height: 100%; object-fit: cover; }
+  .inv img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1rem; }
+  /* burgundy tab on the bottom edge of the card: makes it clear the card opens something */
+  .j-tab { position: absolute; z-index: 3; left: 50%; bottom: -1.25rem; display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.125rem; border-radius: 9999px; background: var(--red); color: #fff; font-size: .875rem; white-space: nowrap; box-shadow: 0 8px 18px rgb(64 31 40 / 30%); transform: translateX(-50%); animation: j-peek 3s ease-in-out infinite; }
+  .j-tab i { font-style: normal; transition: transform .3s; }
+  .inv:hover .j-tab i { transform: translateX(4px); }
+  @keyframes j-peek { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(4px); } }
   .j-big { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 19rem 1fr; align-items: center; margin: 0; padding-top: 29.5rem; white-space: nowrap; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.5rem, 7.2vw, 7.5rem); line-height: .9; letter-spacing: -.04em; color: var(--ink); }
   .j-big span:first-child { grid-column: 1; justify-self: end; }
   .j-big span:last-child { grid-column: 3; justify-self: start; }
@@ -209,14 +207,7 @@ const PILLARS = [
   .j-n { font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: 1.25rem; color: var(--red); }
   .j-t { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: 2rem; line-height: 1.05; color: var(--ink); }
   .j-x { margin: 0; font-size: .9375rem; line-height: 1.5; opacity: .6; }
-  .j-cta { display: flex; justify-content: center; margin-top: 4.5rem; }
-  /* "clique-moi" note: a hand-drawn burgundy arrow that draws itself on a loop, pointing at the card */
-  .j-note { position: absolute; z-index: 4; left: calc(50% + 9.5rem); top: 15.5rem; pointer-events: none; }
-  .j-note-lbl { position: absolute; left: 4.375rem; top: -.625rem; font-family: var(--_typography---font--secondary-family); font-style: italic; font-weight: 400; font-size: 2.5rem; line-height: 1; color: var(--red); transform: rotate(-7deg); white-space: nowrap; }
-  .j-note svg { display: block; width: 12.5rem; height: 12.5rem; overflow: visible; }
-  .j-note path { fill: none; stroke: var(--red); stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 420; animation: j-draw 4.5s ease-in-out infinite; }
-  @keyframes j-draw { 0% { stroke-dashoffset: 420; } 30%, 85% { stroke-dashoffset: 0; } 100% { stroke-dashoffset: -420; } }
-  @media (prefers-reduced-motion: reduce) { .lanyard, .j-note path { animation: none; } }
+  @media (prefers-reduced-motion: reduce) { .lanyard, .j-tab { animation: none; } }
   @media (min-width: 768px) and (max-width: 991px) { .j-big { font-size: 5vw; } }
   @media (max-width: 767px) {
     .join { padding: 0 .75rem 2.5rem; min-height: 0; }
@@ -224,13 +215,10 @@ const PILLARS = [
     .strap { height: 7rem; }
     .strap span + span { display: none; }
     .inv { width: 13.75rem; }
-    .j-note { left: .75rem; top: 9rem; }
-    .j-note-lbl { left: 0; top: -.25rem; font-size: 1.875rem; transform: rotate(6deg); }
-    .j-note svg { width: 8.75rem; height: 8.75rem; margin: 1.25rem 0 0 1.25rem; transform: scaleX(-1); }
+    .j-tab { height: 2.125rem; padding: 0 .875rem; font-size: .75rem; bottom: -1rem; }
     .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 20vw; }
     .j-steps { grid-template-columns: 1fr; margin-top: 3rem; }
     .j-steps li { padding: 1.5rem 0; }
-    .j-cta { margin-top: 2rem; }
     .j-big span:last-child { align-self: flex-end; }
   }
 
