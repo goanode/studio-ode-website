@@ -52,8 +52,6 @@ const PILLARS = [
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(1030, 1440)};--y:${pct(60, 900)};--w:${pct(260, 1440)};--h:${pct(400, 900)}`}></span>
         <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" /></span></h1>
-        <p class="meta m-l">Studio Ode</p>
-        <p class="meta m-r"><span class="clock" aria-hidden="true">10:23</span>&nbsp;&nbsp;Lille, FR</p>
         <figure class="grow">
           <img src={I.big} alt="Élève au studio Ode" />
           <span class="dim" aria-hidden="true"></span>
@@ -111,10 +109,6 @@ const PILLARS = [
       const tick = root.querySelector(".tick");
       const N = words.length;
 
-      // Live Lille time in the corner
-      const clock = root.querySelector(".clock");
-      const tickClock = () => { clock.textContent = new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: "Europe/Paris" }).format(new Date()); };
-      tickClock(); setInterval(tickClock, 30000);
 
 
 
@@ -239,10 +233,6 @@ const PILLARS = [
   .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: 9.375rem; line-height: 1; white-space: nowrap; color: var(--ink); }
   .vt-title { view-transition-name: concept-title; }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
-  .meta { position: absolute; bottom: 1.75rem; z-index: 2; font-size: .9375rem; }
-  .meta .clock { opacity: .5; }
-  .m-l { left: var(--site--margin, 1.25rem); }
-  .m-r { right: var(--site--margin, 1.25rem); }
   .b-pil :global(.button_main_text) { white-space: nowrap; }
   .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
   .grow { position: absolute; inset: 0; z-index: 3; margin: 0; overflow: hidden; background: var(--red); will-change: clip-path; }
@@ -277,7 +267,6 @@ const PILLARS = [
     .cf:nth-child(7) { --mx: 20%; --my: 60%; --mw: 38%; --mh: 20%; }
     .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
     .ttl { font-size: 4.375rem; }
-    .meta { font-size: .8125rem; bottom: 5.25rem; }
     .tick-wrap { left: 0; bottom: calc(50% - .25rem); }
     .tick { font-size: 3.75rem; gap: 5rem; }
     .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
