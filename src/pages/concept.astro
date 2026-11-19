@@ -82,7 +82,7 @@ const PILLARS = [
         <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
       </div>
       <h2 class="j-big" id="join-title"><span>Deviens</span> <span>fondatrice.</span></h2>
-<p class="j-perks"><span>Une place réservée</span><img src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Un tarif fondatrice</span><img src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Ton premier cours offert</span></p>
+
     </section>
 
   </main>
@@ -180,6 +180,7 @@ const PILLARS = [
 <style>
   /* 3 · join section under the hero: the silver invitation on a burgundy lanyard, between the words of a big call to action */
   .join { position: relative; padding: 0 var(--site--margin, 2.5rem) 9rem; background: #fff; overflow: hidden; }
+  .join { min-height: 54rem; } /* room for the hanging card below the headline */
   .lanyard { position: absolute; left: 50%; top: 0; z-index: 3; width: 18.75rem; margin-left: -9.375rem; display: flex; flex-direction: column; align-items: center; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; }
   @keyframes sway { 0%, 100% { transform: rotate(1.6deg); } 50% { transform: rotate(-1.6deg); } }
   .strap { width: 2.77rem; height: 16rem; background: var(--red); display: flex; flex-direction: column; align-items: center; justify-content: space-around; overflow: hidden; }
@@ -198,20 +199,15 @@ const PILLARS = [
   .j-big { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 19rem 1fr; align-items: center; margin: 0; padding-top: 29.5rem; white-space: nowrap; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.5rem, 7.2vw, 7.5rem); line-height: .9; letter-spacing: -.04em; color: var(--ink); }
   .j-big span:first-child { grid-column: 1; justify-self: end; }
   .j-big span:last-child { grid-column: 3; justify-self: start; }
-  /* the founder perks: one quiet line of small capitals joined by chrome sparkles, under the card */
-  .join { min-height: 57rem; }
-  .j-perks { position: absolute; left: var(--site--margin, 2.5rem); right: var(--site--margin, 2.5rem); top: 49.5rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 1.375rem; margin: 0; font-size: .8125rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
-  .j-perks img { width: 1rem; height: auto; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 20%)); }
   @media (prefers-reduced-motion: reduce) { .lanyard, .j-tab { animation: none; } }
   @media (min-width: 768px) and (max-width: 991px) { .j-big { font-size: 5vw; } }
   @media (max-width: 767px) {
     .join { padding: 0 .75rem 2.5rem; min-height: 0; }
+    .join { min-height: 0; }
     .lanyard { width: 15rem; margin-left: -7.5rem; }
     .strap { height: 7rem; }
     .strap span + span { display: none; }
     .inv { width: 13.75rem; }
-    .join { min-height: 0; }
-    .j-perks { position: static; flex-direction: column; gap: .75rem; margin-top: 4.5rem; font-size: .75rem; text-align: center; }
     .j-tab { height: 2.125rem; padding: 0 .875rem; font-size: .75rem; bottom: -1rem; }
     .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 20vw; }
     .j-big span:last-child { align-self: flex-end; }
