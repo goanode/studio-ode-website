@@ -74,23 +74,23 @@ const PILLARS = [
         </div>
       </div>
     </section>
-    <!-- under the animated hero: the silver invitation hangs on a burgundy lanyard between the words of a big call to action -->
+    <!-- under the animated hero: "Deviens fondatrice" — the silver invitation hangs on a burgundy lanyard between the words; perks + CTA open the waitlist -->
     <section class="join" aria-labelledby="join-title">
       <div class="lanyard">
         <div class="strap" aria-hidden="true"><span>STUDIO ODE</span><span>STUDIO ODE</span></div>
         <img class="clip" src="/images/ode-lanyard-clip.webp" alt="" aria-hidden="true" width="390" height="662" loading="lazy" />
-        <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Rejoins la liste d&#x27;attente"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></button>
+        <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></button>
       </div>
-      <h2 class="j-big" id="join-title"><span>Rejoins</span> <span>la liste.</span></h2>
+      <h2 class="j-big" id="join-title"><span>Deviens</span> <span>fondatrice.</span></h2>
       <ol class="j-steps">
-        <li><span class="j-n">01</span><p class="j-t">Réserve en premier</p><p class="j-x">Le planning et tes cours, avant tout le monde.</p></li>
-        <li><span class="j-n">02</span><p class="j-t">Un prix de lancement</p><p class="j-x">Une réduction sur ta première formule.</p></li>
+        <li><span class="j-n">01</span><p class="j-t">Une place réservée</p><p class="j-x">Tes cours choisis avant l’ouverture au public.</p></li>
+        <li><span class="j-n">02</span><p class="j-t">Un tarif fondatrice</p><p class="j-x">Un prix de lancement, gardé tant que tu restes.</p></li>
         <li><span class="j-n">03</span><p class="j-t">Ton premier cours offert</p><p class="j-x">Pour essayer la barre, sans pression.</p></li>
       </ol>
       <div class="j-cta ode-heart-cta">
           <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
-            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Deviens membre fondatrice" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Deviens membre fondatrice</div></div>
           </div>
       </div>
     </section>
@@ -200,7 +200,7 @@ const PILLARS = [
   .inv:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
   .inv::before { content: ""; position: absolute; z-index: 2; left: 50%; top: .5625rem; width: 2.125rem; height: .375rem; margin-left: -1.0625rem; border-radius: 9999px; background: rgb(255 255 255 / 55%); box-shadow: inset 0 1px 2px rgb(0 0 0 / 35%); }
   .inv img { display: block; width: 100%; height: 100%; object-fit: cover; }
-  .j-big { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 19rem 1fr; align-items: center; margin: 0; padding-top: 29.5rem; white-space: nowrap; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(4rem, 9vw, 9rem); line-height: .9; letter-spacing: -.04em; color: var(--ink); }
+  .j-big { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 19rem 1fr; align-items: center; margin: 0; padding-top: 29.5rem; white-space: nowrap; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.5rem, 7.2vw, 7.5rem); line-height: .9; letter-spacing: -.04em; color: var(--ink); }
   .j-big span:first-child { grid-column: 1; justify-self: end; }
   .j-big span:last-child { grid-column: 3; justify-self: start; }
   .j-steps { list-style: none; display: grid; grid-template-columns: repeat(3, 1fr); max-width: 68.75rem; margin: 12.5rem auto 0; padding: 0; }
@@ -210,13 +210,14 @@ const PILLARS = [
   .j-x { margin: 0; font-size: .9375rem; line-height: 1.5; opacity: .6; }
   .j-cta { display: flex; justify-content: center; margin-top: 4.5rem; }
   @media (prefers-reduced-motion: reduce) { .lanyard { animation: none; } }
+  @media (min-width: 768px) and (max-width: 991px) { .j-big { font-size: 5vw; } }
   @media (max-width: 767px) {
     .join { padding: 0 .75rem 2.5rem; min-height: 0; }
     .lanyard { width: 15rem; margin-left: -7.5rem; }
     .strap { height: 7rem; }
     .strap span + span { display: none; }
     .inv { width: 13.75rem; }
-    .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 23vw; }
+    .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 20vw; }
     .j-steps { grid-template-columns: 1fr; margin-top: 3rem; }
     .j-steps li { padding: 1.5rem 0; }
     .j-cta { margin-top: 2rem; }
