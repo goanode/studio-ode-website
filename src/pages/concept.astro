@@ -39,7 +39,7 @@ const PILLARS = [
 ];
 ---
 
-<BaseLayout flutedGlass viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode, à Lille : force, expression, souplesse, communauté." wfPage="6adb80ddd07ffba4e0c0cb69">
+<BaseLayout viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode, à Lille : force, expression, souplesse, communauté." wfPage="6adb80ddd07ffba4e0c0cb69">
   <main id="main" class="page_main cv">
     <section class="intro u-theme-light" aria-label="Concept">
       <div class="stage">
@@ -72,62 +72,15 @@ const PILLARS = [
         </div>
       </div>
     </section>
-    <!-- under the animated hero: "Deviens fondatrice", same layout as the homepage "Le visage derrière le studio" section; the invitation inset opens the waitlist -->
-    <section id="fondatrice" data-wf--section--variant="inherit" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section u-padding-top-large u-theme-light">
-      <div class="u-container  ">
-        <div data-wf--layout--variant="stack" class="u-layout-wrapper">
-          <div class="u-layout">
-            <div class="u-layout-column-1  ">
-              <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1 u-margin-bottom-6">
-                <div class="u-display-contents">
-                  <div data-number="15" data-wf--typography-heading--variant="h1" data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca" data-wf-variant-state="792802b6-ccdb-f982-5023-5fa970cf03d0" class="u-heading w-variant-792802b6-ccdb-f982-5023-5fa970cf03d0 w-richtext u-margin-bottom-0">
-                    <p>Deviens<br />fondatrice.</p>
-                  </div>
-                </div>
-              </div>
-              <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
-                <div class="u-display-contents">
-                  <div data-number="60" data-wf--typography-paragraph--variant="h6" class="u-text w-variant-b8555f10-fa7d-e9ba-e262-f9aa44c27c1c u-rich-text w-richtext u-color-faded">
-                    <p>Ode ouvre ses portes à Lille en 2027, avec huit élèves maximum par cours. Les premières inscrites deviennent membres fondatrices&nbsp;: une place réservée avant tout le monde, un tarif fondatrice et leur premier cours offert.</p>
-                  </div>
-                <div class="u-button-wrapper ode-heart-cta">
-                  <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
-                    <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Rejoins la liste d&#x27;attente" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
-                    <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Rejoins la liste d&#x27;attente</div></div>
-                  </div>
-                </div>
-                </div>
-              </div>
-            </div>
-            <div class="u-layout-column-2 u-padding-top-7">
-              <div class="div-block-4">
-                <div tlg-fluted-glass-mode="scroll" tlg-fluted-glass-canvas="" class="div-block-5"><img class="test-image-2" src="/images/Hello-please-take-the-style-of-t-11755-EU2.webp" alt="" loading="lazy" tlg-fluted-glass-image=""><img class="test-image-2-copy" src="/images/Hello-please-take-the-style-of-t-11755-EU2.webp" alt="" loading="lazy" tlg-fluted-glass-image=""></div>
-              </div>
-              <div class="section_media_layout u-grid-custom">
-                <div tlg-fluted-glass-mode="scroll" tlg-fluted-glass-canvas="" data-w-id="63b7eb76-e579-78ec-09bb-36ed4b1c98f9" class="section_media_visual_wrap">
-                  <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn" data-modal-trigger="waitlist" aria-label="Deviens fondatrice : rejoins la liste d&#x27;attente"></button></div><img class="test-image-2" src="/images/Hello-please-take-the-style-of-t-391374-HCn.webp" alt="" loading="lazy" tlg-fluted-glass-image=""><img class="test-image-2-copy" src="/images/ode-invitation.webp" alt="Invitation Ode Studio, Lille 2027" loading="lazy">
-                </div>
-                <div class="section_media_contents">
-                  <div class="section_media_text_wrap">
-                    <div class="section_media_text_inner">
-                      <div data-number="60" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext">
-                        <p>Ton premier cours offert</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="section_media_text_wrap is-1">
-                    <div class="section_media_text_inner">
-                      <div data-number="60" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext">
-                        <p>Place réservée · Tarif fondatrice</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+    <!-- under the animated hero: "Deviens fondatrice" — the silver invitation hangs on a burgundy lanyard between the words; perks + CTA open the waitlist -->
+    <section class="join" aria-labelledby="join-title">
+      <div class="lanyard">
+        <div class="strap" aria-hidden="true"><span>STUDIO ODE</span><span>STUDIO ODE</span></div>
+        <img class="clip" src="/images/ode-lanyard-clip.webp" alt="" aria-hidden="true" width="390" height="662" loading="lazy" />
+        <button type="button" class="inv" data-modal-trigger="waitlist" aria-label="Deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
       </div>
+      <h2 class="j-big" id="join-title"><span>Deviens</span> <span>fondatrice.</span></h2>
+<p class="j-perks"><span>Une place réservée</span><img src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Un tarif fondatrice</span><img src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Ton premier cours offert</span></p>
     </section>
 
   </main>
@@ -219,6 +172,44 @@ const PILLARS = [
 </BaseLayout>
 
 <style>
+  /* 3 · join section under the hero: the silver invitation on a burgundy lanyard, between the words of a big call to action */
+  .join { position: relative; padding: 0 var(--site--margin, 2.5rem) 9rem; background: #fff; overflow: hidden; }
+  .lanyard { position: absolute; left: 50%; top: 0; z-index: 3; width: 18.75rem; margin-left: -9.375rem; display: flex; flex-direction: column; align-items: center; transform-origin: 50% 0; animation: sway 6s ease-in-out infinite; }
+  @keyframes sway { 0%, 100% { transform: rotate(1.6deg); } 50% { transform: rotate(-1.6deg); } }
+  .strap { width: 2.77rem; height: 16rem; background: var(--red); display: flex; flex-direction: column; align-items: center; justify-content: space-around; overflow: hidden; }
+  .strap span { writing-mode: vertical-rl; white-space: nowrap; color: #fff; font-size: .6875rem; letter-spacing: .24em; font-weight: 500; opacity: .85; }
+  .clip { position: relative; z-index: 1; display: block; width: 5rem; height: auto; margin-top: -1px; filter: drop-shadow(0 3px 4px rgb(0 0 0 / 18%)); }
+  .inv { position: relative; z-index: 2; display: block; padding: 0; border: 0; cursor: pointer; transition: transform .35s cubic-bezier(.3, 1.4, .5, 1), box-shadow .35s; width: 16.25rem; margin-top: -1.2rem; aspect-ratio: 620 / 827; border-radius: 1rem; overflow: visible; background: #8a8888; box-shadow: 0 18px 40px rgb(31 29 30 / 22%); }
+  .inv:hover { transform: translateY(4px) rotate(-1deg); box-shadow: 0 24px 48px rgb(31 29 30 / 28%); }
+  .inv:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  .inv::before { content: ""; position: absolute; z-index: 2; left: 50%; top: .5625rem; width: 2.125rem; height: .375rem; margin-left: -1.0625rem; border-radius: 9999px; background: rgb(255 255 255 / 55%); box-shadow: inset 0 1px 2px rgb(0 0 0 / 35%); }
+  .inv img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1rem; }
+  /* burgundy tab on the bottom edge of the card: makes it clear the card opens something */
+  .j-tab { position: absolute; z-index: 3; left: 50%; bottom: -1.25rem; display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.125rem; border-radius: 9999px; background: var(--red); color: #fff; font-size: .875rem; white-space: nowrap; box-shadow: 0 8px 18px rgb(64 31 40 / 30%); transform: translateX(-50%); animation: j-peek 3s ease-in-out infinite; }
+  .j-tab i { font-style: normal; transition: transform .3s; }
+  .inv:hover .j-tab i { transform: translateX(4px); }
+  @keyframes j-peek { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(4px); } }
+  .j-big { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 19rem 1fr; align-items: center; margin: 0; padding-top: 29.5rem; white-space: nowrap; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.5rem, 7.2vw, 7.5rem); line-height: .9; letter-spacing: -.04em; color: var(--ink); }
+  .j-big span:first-child { grid-column: 1; justify-self: end; }
+  .j-big span:last-child { grid-column: 3; justify-self: start; }
+  /* the founder perks: one quiet line of small capitals joined by chrome sparkles, under the card */
+  .join { min-height: 57rem; }
+  .j-perks { position: absolute; left: var(--site--margin, 2.5rem); right: var(--site--margin, 2.5rem); top: 49.5rem; display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 1.375rem; margin: 0; font-size: .8125rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+  .j-perks img { width: 1rem; height: auto; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 20%)); }
+  @media (prefers-reduced-motion: reduce) { .lanyard, .j-tab { animation: none; } }
+  @media (min-width: 768px) and (max-width: 991px) { .j-big { font-size: 5vw; } }
+  @media (max-width: 767px) {
+    .join { padding: 0 .75rem 5rem; min-height: 0; }
+    .lanyard { width: 15rem; margin-left: -7.5rem; }
+    .strap { height: 7rem; }
+    .strap span + span { display: none; }
+    .inv { width: 13.75rem; }
+    .join { min-height: 0; }
+    .j-perks { display: none; }
+    .j-tab { height: 2.125rem; padding: 0 .875rem; font-size: .75rem; bottom: -1rem; }
+    .j-big { display: flex; flex-direction: column; align-items: flex-start; padding-top: 36rem; margin-top: 0; font-size: 20vw; }
+    .j-big span:last-child { align-self: flex-end; }
+  }
 
   .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
   :global(body:not(.cv-dark) .nav_button_wrap) { color: #141414; border-color: rgb(20 20 20 / 20%) !important; }
