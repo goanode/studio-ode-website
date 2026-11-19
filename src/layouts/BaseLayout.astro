@@ -156,11 +156,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       .ode-heart { position: absolute; right: -.5rem; top: -.5rem; width: 2.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.875rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 6px 8px rgb(0 0 0 / 25%)); z-index: 2; }
       .ode-heart-btn:hover .ode-heart, .ode-heart-btn:focus-within .ode-heart, .card_primary_wrap:hover .ode-heart, .card_primary_wrap:focus-within .ode-heart { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
       @media (prefers-reduced-motion: reduce) { .ode-heart { transition: opacity .2s; transform: none; } }
-      /* touch screens have no hover: show the burgundy + heart state straight away (course filters stay neutral, they're filters not calls to action) */
-      @media (hover: none) and (pointer: coarse) {
-        .ode-heart-btn:not(.ode-course-filters .ode-heart-btn) .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
-        .ode-heart-btn:not(.ode-course-filters .ode-heart-btn) .ode-heart { opacity: 1; transform: translateY(-.625rem) rotate(12deg) scale(1); }
-      }
       /* No black buttons: on light sections buttons fill burgundy on hover, and the primary (dark) button is burgundy */
       :is(:root, .u-theme-light) { --_theme---button-secondary--background-hover: #401f28; --_theme---button-secondary--text-hover: #fff; --_theme---button-primary--background: #401f28; --_theme---button-primary--background-hover: #2b141b; --_theme---button-primary--text-hover: #fff; }
       .u-theme-dark { --_theme---button-primary--background: #401f28; --_theme---button-primary--background-hover: #2b141b; --_theme---button-primary--text-hover: #fff; }
