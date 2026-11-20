@@ -105,10 +105,18 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
           if (!reduce) {
             // big hero words: letters rise into place on load, then the [fade-in] text and buttons appear
             // (the hero letters rising and the [fade-in] text/buttons are pure CSS now, see the homepage, so they start as soon as the page shows)
-            // section titles: the words rise one by one from behind an invisible line (like "ODE" on load),
-            // and the paragraph right under the title fades up just after. Plays once, when it comes into view.
+            // Text and photos come in the way oharchitecture.com.au does it, once, when they scroll into view:
+            // - titles and the paragraph under them: each LINE rises from behind its own edge (yPercent 120 -> 0, small stagger)
+            // - photos: a plain cover fades away while the photo settles from 105% to 100%
+            const EASE = "expo.out";
+            const lineRise = (el, delay = 0) => {
+              if (!window.SplitText) return;
+              const split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "rv-line", aria: "none" });
+              gsap.from(split.lines, { yPercent: 120, rotate: 0.001, duration: 1, ease: EASE, stagger: 0.0625, delay, scrollTrigger: { trigger: el, start: "top 85%", once: true }, onComplete: () => split.revert() });
+            };
             const titles = [...document.querySelectorAll('main p[role="heading"][aria-level="2"], main .j-big')];
             titles.forEach((t) => {
+              // titles keep their chrome icon, so they are split into words and the words of one line move together
               const walker = document.createTreeWalker(t, NodeFilter.SHOW_TEXT);
               const nodes = []; while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
               const inner = [];
@@ -123,29 +131,25 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
                 });
                 n.replaceWith(frag);
               });
-              if (!inner.length) return;
+              if (inner.length) {
+                const tops = [...new Set(inner.map((i) => Math.round(i.parentElement.offsetTop)))].sort((a, b) => a - b);
+                gsap.from(inner, { yPercent: 120, rotate: 0.001, duration: 1, ease: EASE, delay: (k) => tops.indexOf(Math.round(inner[k].parentElement.offsetTop)) * 0.0625, scrollTrigger: { trigger: t, start: "top 85%", once: true } });
+              }
               const wrap = t.closest('[class*="u-heading"]') || t;
               let para = wrap.nextElementSibling;
               if (!(para && para.matches(".u-text, .j-perks"))) para = document.querySelector(`[data-reveal-after="${t.textContent.trim().slice(0, 12)}"]`);
-              const tl = gsap.timeline({ scrollTrigger: { trigger: t, start: "top 88%", once: true } });
-              tl.from(inner, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.08 });
-              if (para) tl.from(para, { opacity: 0, y: 14, duration: 0.9, ease: "power2.out" }, 0.3);
-              // a link/button right under the text arrives last, so the eye lands on the title first
-              const btn = para && para.nextElementSibling;
-              if (btn && btn.matches(".button_main_wrap, .u-button-wrapper")) tl.from(btn, { opacity: 0, y: 10, duration: 0.8, ease: "power2.out" }, 0.55);
+              if (para) para.querySelectorAll("p").length ? para.querySelectorAll("p").forEach((pp) => lineRise(pp, 0.15)) : lineRise(para, 0.15);
             });
-            // photos open like a curtain from the bottom while settling from a slight zoom (the header photo is left alone)
             document.querySelectorAll("main .keypoints_visual_wrap, main .section_media_visual_wrap").forEach((ph) => {
               if (ph.closest("section[slide-down]")) return;
-              const tl = gsap.timeline({ scrollTrigger: { trigger: ph, start: "top 85%", once: true } });
-              tl.fromTo(ph, { clipPath: "inset(100% 0% 0% 0%)" }, { clipPath: "inset(0% 0% 0% 0%)", duration: 1.3, ease: "expo.inOut", clearProps: "clipPath" })
-                .from(ph.children, { scale: 1.08, duration: 1.8, ease: "expo.out", clearProps: "transform" }, 0.2);
-            });
-            // cards appear one after another: class cards, pricing cards, FAQ rows
-            [["#cours .card_classes_wrap", "#cours .slider_wrap"], ["#formules .card_primary_wrap", "#formules .card_primary_wrap"], ["#faq .accordion_item", "#faq .accordion_list"]].forEach(([sel, trig]) => {
-              const items = [...document.querySelectorAll(sel)].filter((el) => el.offsetParent !== null);
-              const trigger = document.querySelector(trig);
-              if (items.length && trigger) gsap.from(items, { opacity: 0, y: 28, duration: 0.9, ease: "power3.out", stagger: 0.1, clearProps: "opacity,transform", scrollTrigger: { trigger, start: "top 85%", once: true } });
+              const cover = document.createElement("div");
+              cover.className = "rv-cover"; ph.append(cover);
+              const media = [...ph.children].filter((c) => c !== cover);
+              gsap.set(media, { scale: 1.05 });
+              ScrollTrigger.create({ trigger: ph, start: "top 90%", once: true, onEnter: () => {
+                gsap.to(media, { scale: 1, duration: 1.2, ease: EASE, clearProps: "transform" });
+                gsap.to(cover, { autoAlpha: 0, duration: 0.6, onComplete: () => cover.remove() });
+              } });
             });
             // sections marked [slide-down] drift down a little as you scroll past them
             document.querySelectorAll("[slide-down]").forEach((el) => gsap.fromTo(el, { yPercent: 0 }, { yPercent: 25, ease: "none", scrollTrigger: scrub(el) }));
@@ -255,6 +259,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       /* word masks for the title rise: clip only below the line, so italics and descenders are never cut */
       .rv-w { display: inline-block; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; clip-path: inset(-.5em -.4em 0 -.4em); }
       .rv-i { display: inline-block; will-change: transform; }
+      .rv-cover { position: absolute; inset: 0; z-index: 5; background: #e8e6e6; pointer-events: none; }
       .ode-heart-btn { overflow: visible; }
       .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
       .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
