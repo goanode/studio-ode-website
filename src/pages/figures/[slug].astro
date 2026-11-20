@@ -149,9 +149,10 @@ const head = _w.length ? _w.join(" ") + " " : "";
   /* right: tall photo, then the text */
   .right { padding-top: 1.5rem; }
   .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7 center / cover no-repeat; view-transition-name: trick-photo; }
-  /* the photo is never cropped: shown whole at its own proportions (tall ones capped to the screen height) */
-  .photo { height: auto !important; background: none !important; }
-  .photo img { width: auto; max-width: 100%; height: auto; max-height: min(84svh, 47.5rem); object-fit: contain; display: block; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* landscape photos (horizontal figures) are shown whole, not cropped into the tall frame */
+  .photo.wide { height: auto; }
+  .photo.wide img { height: auto; }
   .links { margin-top: 3rem; }
   .lk-h { margin: 0 0 .875rem !important; font-size: .75rem !important; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #6b6667; font-family: var(--_typography---font--primary-family), sans-serif !important; }
   .links p { font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
