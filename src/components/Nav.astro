@@ -21,7 +21,7 @@ const HEART = "/images/ode-heart-s.webp";
   <nav class="onav-links" aria-label="Navigation principale">
     {links.map((l, li) => (
       <a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined} aria-label={l.label} style={`--li:${li}`}>
-        <span class="rl" aria-hidden="true">{[...l.label].map((ch, i) => <span class="ch" style={`--d:${i}`} data-c={ch}>{ch}</span>)}</span>
+        <span class="rl" aria-hidden="true">{[...l.label].map((ch, i) => <span class="ch" style={`--d:${i}`} data-c={ch}>{ch}</span>)}</span><img class="onav-lh" src={HEART} alt="" aria-hidden="true" />
       </a>
     ))}
   </nav>
@@ -53,14 +53,14 @@ const HEART = "/images/ode-heart-s.webp";
   /* the silver chrome logo as it is (a soft shadow keeps it readable on light sections) */
   .onav-logo img { display: block; height: 1.625rem; width: auto; filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 28%)); }
   .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.5rem; }
-  /* hover: the letters roll up one after another (a copy rises from below); the current page stays at full strength */
-  .onav-links a { position: relative; display: block; font-size: 1rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; }
+  /* hover: the other links fade and blur a little, and a mini chrome heart pops up on the hovered one (like the section titles) */
+  .onav-links a { position: relative; display: block; font-size: 1rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; transition: opacity .35s, filter .35s; }
   .onav-links .rl { display: flex; overflow: hidden; padding: .125rem 0; }
-  .onav-links .ch { position: relative; display: block; white-space: pre; transition: transform .5s cubic-bezier(.7, 0, .2, 1) calc(var(--d) * .025s); }
-  .onav-links .ch::after { content: attr(data-c); position: absolute; left: 0; top: 100%; padding-top: .125rem; }
-  .onav-links a:hover .ch, .onav-links a:focus-visible .ch { transform: translateY(calc(-100% - .125rem)); }
-  .onav-links a { opacity: .7; transition: opacity .3s; }
-  .onav-links a:hover, .onav-links a:focus-visible, .onav-links a.on { opacity: 1; }
+  .onav-links .ch { position: relative; display: block; white-space: pre; }
+  .onav-links:hover a:not(:hover), .onav-links:focus-within a:not(:focus-visible):not(:hover) { opacity: .35; filter: blur(1.2px); }
+  .onav-lh { position: absolute; right: -.875rem; top: -.625rem; width: 1.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.375rem) rotate(-30deg) scale(.3); transition: transform .5s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)); }
+  .onav-links a:hover .onav-lh, .onav-links a:focus-visible .onav-lh { opacity: 1; transform: rotate(12deg); }
+  @media (prefers-reduced-motion: reduce) { .onav-lh { transition: opacity .2s; transform: none; } }
   .onav-right { display: flex; align-items: center; gap: 1rem; }
   .onav-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.625rem; padding: 0 1.25rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--fg) 45%, transparent); background: color-mix(in srgb, var(--fg) 12%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: inherit; font: inherit; font-size: .9375rem; letter-spacing: .01em; white-space: nowrap; cursor: pointer; transition: background-color .35s, border-color .35s, color .35s; }
   .onav-cta:hover, .onav-cta:focus-visible { background: #401f28; border-color: #401f28; color: #fff; }
