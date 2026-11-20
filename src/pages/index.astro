@@ -5,6 +5,32 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
 <BaseLayout viewTransition="main" title="Cours de pole dance à Lille — Studio Ode" description="Ode, nouveau studio de pole dance à Lille : cours de débutante à avancée, pole flow, souplesse et renforcement, en petit groupe. Ouverture en 2027." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <Fragment slot="head">
+  <script is:inline>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("has-pl");</script>
+  <style is:inline>
+    .pl { display: none; }
+    html.has-pl .pl { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; background: #efeded; color: #1f1d1e; animation: pl-up .75s cubic-bezier(.76, 0, .24, 1) 1.8s forwards; pointer-events: none; }
+    @keyframes pl-up { to { transform: translateY(-100%); visibility: hidden; } }
+    .pl-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
+    .pl-word { display: block; overflow: hidden; padding: 0 .04em .06em; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 4.75rem; line-height: 1.05; letter-spacing: -.03em; }
+    .pl-word span { display: inline-block; transform: translateY(105%); animation: pl-rise .9s cubic-bezier(.16, 1, .3, 1) calc(.1s + var(--i) * .07s) forwards; }
+    @keyframes pl-rise { to { transform: none; } }
+    .pl-sub { display: block; height: 1.125rem; overflow: hidden; margin-top: .875rem; font-size: .75rem; letter-spacing: .2em; text-transform: uppercase; color: rgb(31 29 30 / 55%); }
+    .pl-sub b { display: block; font-weight: 400; transform: translateY(100%); animation: pl-rise .8s cubic-bezier(.16, 1, .3, 1) .35s forwards; }
+    .pl-slot { position: absolute; right: -2.125rem; top: -.375rem; width: 2.125rem; height: 2.125rem; }
+    .pl-slot img { position: absolute; inset: 0; width: 100%; height: auto; opacity: 0; filter: drop-shadow(0 .25rem .5rem rgb(0 0 0 / 22%)); animation: pl-swap .42s cubic-bezier(.3, 1.4, .5, 1) calc(.45s + var(--k) * .35s) both; }
+    @keyframes pl-swap { 0% { opacity: 0; transform: scale(.6) rotate(-15deg); } 40%, 70% { opacity: 1; transform: scale(1) rotate(8deg); } 100% { opacity: 0; transform: scale(.85) rotate(20deg); } }
+    .pl-slot img.last { animation: pl-land .5s cubic-bezier(.3, 1.6, .5, 1) 1.5s both; }
+    @keyframes pl-land { from { opacity: 0; transform: scale(.4) rotate(-30deg); } to { opacity: 1; transform: scale(1) rotate(10deg); } }
+    .pl-line { position: absolute; left: 0; bottom: 0; width: 100%; height: 1px; background: #401f28; transform: scaleX(0); transform-origin: left; animation: pl-line 1.5s cubic-bezier(.65, 0, .35, 1) .2s forwards; }
+    @keyframes pl-line { to { transform: none; } }
+    @media (max-width: 767px) { .pl-word { font-size: 3.75rem; } .pl-slot { right: -1.75rem; top: -.25rem; width: 1.75rem; height: 1.75rem; } }
+    /* the homepage intro (hero letters, text, navbar) starts as the curtain lifts */
+    html.has-pl .ode-hero-word .gsap_split_letter { animation-delay: calc(2.05s + var(--i) * .05s); }
+    html.has-pl [fade-in] { animation-delay: calc(2.9s + var(--i, 0) * .05s); }
+    html.has-pl .onav-logo { animation-delay: 2s; }
+    html.has-pl .onav-links .ch { animation-delay: calc(2.15s + var(--li, 0) * .07s + var(--d) * .012s); }
+    html.has-pl .onav-right > * { animation-delay: 2.4s; }
+  </style>
   <style is:inline>
     strong, b {
       font-weight: inherit;
@@ -21,6 +47,17 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   </Fragment>
 
   <Fragment slot="body-start">
+  <!-- preloader (design N1), on every load of the homepage: O-D-E rise, "Lille · 2027" slides in, the chrome icons blend
+       into one another on the E and end on the heart while a thin burgundy line runs, then the panel lifts like a curtain.
+       Pure CSS, ~2.4 s; the hero's own intro waits for it (html.has-pl). Skipped with reduced motion. -->
+  <div class="pl" aria-hidden="true">
+    <div class="pl-wrap">
+      <span class="pl-word"><span style="--i:0">O</span><span style="--i:1">D</span><span style="--i:2">E</span></span>
+      <span class="pl-slot"><img src="/images/ode-icon-sparkle-s.webp" alt="" style="--k:0" /><img src="/images/ode-icon-book-s.webp" alt="" style="--k:1" /><img src="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" alt="" style="--k:2" /><img class="last" src="/images/ode-heart-s.webp" alt="" /></span>
+      <span class="pl-sub"><b>Lille · 2027</b></span>
+    </div>
+    <i class="pl-line"></i>
+  </div>
   <div class="cursor_wrapper">
     <div class="cursor_element meet_teacher has-liquid-glass">
       <div class="cursor_text u-text-style-small">Écris-moi</div>

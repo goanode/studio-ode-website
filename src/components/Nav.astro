@@ -50,8 +50,8 @@ const HEART = "/images/ode-heart-s.webp";
   .onav-skip:focus { transform: none; }
   .onav { --fg: #fff; position: fixed; z-index: 1000; left: 0; right: 0; top: 0; height: var(--nav--height-total); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--site--margin, 2.5rem); color: var(--fg); transition: color .35s; font-family: var(--_typography---font--primary-family), sans-serif; }
   .onav.is-dark { --fg: #1f1d1e; }
-  .onav-logo img { display: block; height: 1.625rem; width: auto; filter: brightness(0) opacity(.88); transition: filter .35s; }
-  .onav.is-light .onav-logo img { filter: brightness(0) invert(1); }
+  /* the silver chrome logo as it is (a soft shadow keeps it readable on light sections) */
+  .onav-logo img { display: block; height: 1.625rem; width: auto; filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 28%)); }
   .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.25rem; }
   /* hover: the letters roll up one after another (a copy rises from below); the current page stays at full strength */
   .onav-links a { position: relative; display: block; font-size: .875rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; }
@@ -88,7 +88,6 @@ const HEART = "/images/ode-heart-s.webp";
   .onav-join { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: none; font: inherit; color: #401f28; cursor: pointer; }
   .onav-tag { margin: 0; font-size: .75rem; opacity: .5; text-align: center; }
   html.onav-open .onav { --fg: #1f1d1e; }
-  html.onav-open .onav-logo img { filter: brightness(0) opacity(.88); }
   html.onav-open .onav-menu .o { display: none; }
   html.onav-open .onav-menu .c { display: inline; }
   html.onav-open, html.onav-open body { overflow: hidden; }
