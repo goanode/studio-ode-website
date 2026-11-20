@@ -44,13 +44,8 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
   :root { --nav--height-total: calc(2.75rem + var(--site--margin, 2.5rem)); }
   .onav-skip { position: fixed; left: .75rem; top: .75rem; z-index: 1001; padding: .5rem .875rem; border-radius: 9999px; background: #fff; color: #1f1d1e; transform: translateY(-200%); transition: transform .2s; }
   .onav-skip:focus { transform: none; }
-  .onav { --fg: #fff; position: fixed; z-index: 1000; left: 0; right: 0; top: 0; height: var(--nav--height-total); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--site--margin, 2.5rem); color: var(--fg); transition: color .35s, transform .5s cubic-bezier(.7, 0, .2, 1); font-family: var(--_typography---font--primary-family), sans-serif; }
+  .onav { --fg: #fff; position: fixed; z-index: 1000; left: 0; right: 0; top: 0; height: var(--nav--height-total); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--site--margin, 2.5rem); color: var(--fg); transition: color .35s; font-family: var(--_typography---font--primary-family), sans-serif; }
   .onav.is-dark { --fg: #1f1d1e; }
-  /* over white sections the bar gets a white background; over photos and dark sections it slides away until you reach white again */
-  .onav::before { content: ""; position: absolute; inset: 0; z-index: -1; background: #fff; box-shadow: 0 1px 0 rgb(31 29 30 / 8%); opacity: 0; transition: opacity .35s; }
-  .onav.is-solid::before { opacity: 1; }
-  .onav.is-hidden { transform: translateY(-100%); }
-  .onav:focus-within { transform: none; }
   .onav-logo img { display: block; height: 1.625rem; width: auto; filter: brightness(0) opacity(.88); transition: filter .35s; }
   .onav.is-light .onav-logo img { filter: brightness(0) invert(1); }
   .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.25rem; }
@@ -105,7 +100,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
   const base = bar.dataset.base;
   const lum = (c) => { const m = c.match(/[\d.]+/g); if (!m) return null; const [r, g, b, a = 1] = m.map(Number); return a < .5 ? null : (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
   const tone = () => {
-    if (document.documentElement.classList.contains("onav-open")) { bar.classList.remove("is-hidden", "is-solid"); return; }
+    if (document.documentElement.classList.contains("onav-open")) return;
     let light = base === "light";
     if (document.body.classList.contains("cv-dark")) light = true;
     else if (scrollY > 24) {
@@ -120,11 +115,8 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
       }
       light = v !== null ? v < .5 : base === "light";
     }
-    const scrolled = scrollY > 24;
     bar.classList.toggle("is-light", light);
     bar.classList.toggle("is-dark", !light);
-    bar.classList.toggle("is-solid", scrolled && !light);
-    bar.classList.toggle("is-hidden", scrolled && light);
   };
   let raf = 0;
   addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; tone(); }); }, { passive: true });
