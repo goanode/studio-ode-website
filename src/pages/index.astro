@@ -1018,6 +1018,8 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     @keyframes ode-fade { from { opacity: 0; } }
     @media (prefers-reduced-motion: reduce) { .ode-hero-word .gsap_split_letter, [fade-in] { animation: none; } }
     /* the chosen course filter stays burgundy, like the Figures filters */
+    /* class slider: no dots (the arrows stay on desktop; on phones, where the arrows are hidden, the whole row goes) */
+    #cours .slider_bullet_list, .slider_bullet_list { visibility: hidden; }
     .ode-course-filters .button_main_wrap.is-on .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
     /* the homepage "Concept" word glides into the concept page title */
     .vt-concept { view-transition-name: concept-title; }

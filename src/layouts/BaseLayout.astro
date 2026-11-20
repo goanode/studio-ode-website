@@ -156,7 +156,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
             // [random-stagger-in] titles: letters appear in random order while scrolling
             document.querySelectorAll("[random-stagger-in]").forEach((el) => gsap.fromTo(split(el), { opacity: 0, y: "80%" }, { opacity: 1, y: "0%", ease: "power4.out", stagger: { each: 0.05, from: "random" }, scrollTrigger: scrub(el) }));
             // footer: the big chrome letters rise from the centre outwards
-            document.querySelectorAll(".footer_bottom_logo").forEach((logo) => gsap.fromTo(logo.querySelectorAll(".footer_bottom_letter"), { y: "70%" }, { y: "0px", ease: "none", stagger: { each: 0.05, from: "center" }, scrollTrigger: scrub(logo, "top bottom", "bottom 70%") }));
+            // (each word on its own when "ODE" and "STUDIO" sit on two lines, as on phones)
+            document.querySelectorAll(".footer_bottom_logo").forEach((logo) => {
+              const rows = [...logo.children], stacked = rows.length > 1 && matchMedia("(max-width: 767px)").matches;
+              (stacked ? rows : [logo]).forEach((row) => gsap.fromTo(row.querySelectorAll(".footer_bottom_letter"), { y: "70%" }, { y: "0px", ease: "none", stagger: { each: 0.05, from: "center" }, scrollTrigger: scrub(logo, "top bottom", "bottom 70%") }));
+            });
           }
           if (desktop) {
             // class cards: on hover the stacked photos fold away one by one onto the first one
