@@ -31,7 +31,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   <main id="main" class="page_main">
     <section slide-down="" data-wf--section--variant="100svh" data-w-id="9cd849af-5c85-da69-3983-2e49dba72900" class="u-section w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4 u-padding-bottom-0 u-theme-dark">
       <div class="u-background-slot">
-        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="80" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-keep-the-background--the-233555-iP0.webp" alt="" sizes="(max-width: 939px) 100vw, 939px" loading="eager" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w, /images/please-keep-the-background--the-233555-iP0.webp 1140w" tlg-fluted-glass-image=""></div>
+        <div tlg-fluted-glass-canvas="" tlg-fluted-glass-mode="scroll" tlg-fluted-glass-segments="80" class="keypoints_visual_wrap"><img class="keypoints_visual_img" src="/images/please-keep-the-background--the-233555-iP0.webp" alt="" sizes="(max-width: 939px) 100vw, 939px" loading="eager" fetchpriority="low" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w, /images/please-keep-the-background--the-233555-iP0.webp 1140w" tlg-fluted-glass-image=""><picture class="hero-snap"><source media="(orientation: portrait)" srcset="/images/hero-fluted-mobile.webp" /><img src="/images/hero-fluted-desktop.webp" alt="" fetchpriority="high" /></picture></div>
         <div data-wf--media-overlay--variant="gradient" data-number="20" class="u-overlay w-variant-9653c0cc-21fc-fb82-1373-c98b1644e5a8"></div>
       </div>
       <div class="u-container w-variant-f69fa043-d68c-1f67-d426-c93e24510eb4">
@@ -994,6 +994,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
   <WaitlistModal slot="after-footer" />
   <style is:global>
+    /* Header: a still of the fluted glass (taken from the live effect at the top of the page) shows until the live effect fades in over it */
+    .hero-snap { position: absolute; inset: 0; }
+    .hero-snap img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    /* the big ODE always stays on one line, so it doesn't jump when the Freight font arrives */
+    p.heading.ode-hero-word { white-space: nowrap !important; text-wrap: nowrap !important; }
     /* Hero: the big ODE letters rise into place and the text + button fade in, as soon as the page shows (pure CSS, no waiting for scripts) */
     .ode-hero-word .gsap_split_word { position: relative; display: inline-block; }
     .ode-hero-word .gsap_split_letter { position: relative; display: inline-block; animation: ode-rise 1s cubic-bezier(.165, .84, .44, 1) calc(var(--i) * .05s) both; }

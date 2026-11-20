@@ -123,7 +123,7 @@
   --nav--banner-height: 2.4rem;
   --_typography---font--primary-trim-top: .33em;
   --_typography---font--primary-trim-bottom: .38em;
-  --_typography---font--secondary-family: freight-big-pro, sans-serif;
+  --_typography---font--secondary-family: freight-big-pro, Georgia, "Times New Roman", serif;
   --_typography---font--secondary-semibold: 600;
   --_typography---font-size--text-small: clamp(.75 * 1rem, ((.8 - ((.75 - .8) / (var(--site--viewport-max)  - var(--site--viewport-min)) * var(--site--viewport-min))) * 1rem + ((.75 - .8) / (var(--site--viewport-max)  - var(--site--viewport-min))) * 100vw), .8 * 1rem);
   --_typography---font-size--text-main: clamp(1 * 1rem, ((1 - ((1.125 - 1) / (var(--site--viewport-max)  - var(--site--viewport-min)) * var(--site--viewport-min))) * 1rem + ((1.125 - 1) / (var(--site--viewport-max)  - var(--site--viewport-min))) * 100vw), 1.125 * 1rem);
