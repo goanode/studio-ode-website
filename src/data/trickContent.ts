@@ -284,28 +284,6 @@ export const content: Record<string, TrickContent> = {
     ],
     pre: ["gemini"],
   },
-  "cupid": {
-    intro: "Une figure tenue jambes tendues autour de la barre, tête en bas, qui dessine une silhouette en forme de flèche.",
-    tip: "Les hanches restent proches de la barre : si tu t'éloignes, la prise glisse.",
-    steps: [
-      { title: "Inverse-toi", text: "Basic invert, mains en split grip." },
-      { title: "Crochète par l'arrière des genoux", text: "La barre passe derrière les genoux, jambes croisées." },
-      { title: "Tends les jambes", text: "Jambes serrées et tendues vers le plafond." },
-      { title: "Lâche les mains", text: "Seulement si la prise est sûre, puis reprends-les pour sortir." },
-    ],
-    pre: ["basic-invert"],
-  },
-  "teddy": {
-    intro: "Une figure tenue en équilibre sur l'épaule et le bras, les jambes enroulées autour de la barre comme un ours en peluche.",
-    tip: "Le coude du bas s'appuie contre la barre : c'est lui qui porte le poids, pas le cou.",
-    steps: [
-      { title: "Mets-toi face à la barre", text: "Bras du bas plié, coude contre la barre." },
-      { title: "Monte les genoux", text: "Groupe les jambes, genoux vers la poitrine." },
-      { title: "Enroule les jambes", text: "Croise-les autour de la barre." },
-      { title: "Tiens", text: "Garde le buste compact, puis redescends." },
-    ],
-    pre: ["basic-invert"],
-  },
   "cradle-spin": {
     intro: "Une rotation tête en bas, bercée entre les bras et les jambes autour de la barre.",
     tip: "Garde le menton rentré et les bras forts : la rotation est lente et contrôlée.",
@@ -405,17 +383,6 @@ export const content: Record<string, TrickContent> = {
     ],
     pre: ["carousel-spin"],
   },
-  "genie": {
-    intro: "Une figure tenue jambes croisées en lotus autour de la barre, buste droit : une pose posée et élégante.",
-    tip: "Travaille l'ouverture de hanches en dehors des cours : le lotus doit être confortable au sol d'abord.",
-    steps: [
-      { title: "Monte en pole sit", text: "Assise, cuisses serrées." },
-      { title: "Plie les jambes", text: "Croise-les en lotus autour de la barre." },
-      { title: "Redresse le buste", text: "Dos droit, épaules basses." },
-      { title: "Lâche les mains", text: "Mains jointes devant toi, puis reprends la barre." },
-    ],
-    pre: ["crucifix"],
-  },
   "inverted-crucifix": {
     intro: "Le crucifix tête en bas : tenue par les cuisses, les bras ouverts vers le sol.",
     tip: "Serre l'intérieur des cuisses et des genoux avant de lâcher : sans prise solide, ne lâche pas.",
@@ -426,17 +393,6 @@ export const content: Record<string, TrickContent> = {
       { title: "Ouvre les bras", text: "Bras en croix, puis reprends la barre pour sortir." },
     ],
     pre: ["basic-invert", "crucifix"],
-  },
-  "hello-boys": {
-    intro: "Une inversion jambes grandes ouvertes en straddle, tenue par les mains : une figure joueuse et pleine d'énergie.",
-    tip: "Les jambes s'ouvrent loin de la barre, mais les hanches restent proches.",
-    steps: [
-      { title: "Inverse-toi", text: "Basic invert, mains en split grip." },
-      { title: "Éloigne les jambes", text: "Jambes tendues, de chaque côté de la barre." },
-      { title: "Ouvre en grand écart", text: "Straddle le plus large possible." },
-      { title: "Referme", text: "Ramène les jambes et redescends." },
-    ],
-    pre: ["basic-invert"],
   },
   // ——— Avancée ———
   "jade-split": {
