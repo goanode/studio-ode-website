@@ -6,8 +6,15 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 <BaseLayout viewTransition="main" title="Website Name" description="Place website meta description here" wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <Fragment slot="head">
   <script is:inline>
-    // Preloader (P3): only on the first homepage view of a visit, never with reduced motion or when opening a #section link
-    try { if (!sessionStorage.getItem("odePre") && !matchMedia("(prefers-reduced-motion: reduce)").matches && !location.hash) { document.documentElement.classList.add("ode-pre", "ode-hold"); sessionStorage.setItem("odePre", "1"); } } catch (e) {}
+    // Preloader (P3): plays whenever the homepage is opened or reloaded, but not when coming from another page of
+    // the site (menu click), when going back/forward, with reduced motion, or when opening a #section link
+    try {
+      const nav = performance.getEntriesByType("navigation")[0];
+      const type = nav ? nav.type : "navigate";
+      const internal = document.referrer && new URL(document.referrer).origin === location.origin;
+      const show = type === "reload" || (type === "navigate" && !internal);
+      if (show && !matchMedia("(prefers-reduced-motion: reduce)").matches && !location.hash) document.documentElement.classList.add("ode-pre", "ode-hold");
+    } catch (e) {}
   </script>
   <style is:inline>
     strong, b {
