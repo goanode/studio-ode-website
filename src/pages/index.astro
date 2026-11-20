@@ -6,7 +6,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 <BaseLayout viewTransition="main" title="Website Name" description="Place website meta description here" wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <Fragment slot="head">
   <script is:inline>
-    // Preloader (P3): plays whenever the homepage is opened or reloaded, but not when coming from another page of
+    // Preloader (P1): plays whenever the homepage is opened or reloaded, but not when coming from another page of
     // the site (menu click), when going back/forward, with reduced motion, or when opening a #section link
     try {
       const nav = performance.getEntriesByType("navigation")[0];
@@ -32,23 +32,17 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   </Fragment>
 
   <Fragment slot="body-start">
-  <!-- Preloader (P3): small photos around "Ode" fly to the centre, the middle photo grows into the header photo, then "ODE" rises -->
+  <!-- Preloader (P1, like oharchitecture.com.au): "Ode" rolls up into "Lille · 2027" while a thin burgundy line crosses the screen, then it fades away and ODE rises -->
   <div id="ode-pre" aria-hidden="true">
-    <img class="t t0" src="/images/please-look-at-the-first-pose----265877-w4L-p-300.webp" alt="" />
-    <img class="t t1" src="/images/Hello-please-take-the-style-of-t-11755-EU2-p-300.webp" alt="" />
-    <img class="t t2" src="/images/please-look-at-the-first-pose----820406-SN7-p-300.webp" alt="" />
-    <img class="t t3" src="/images/Hello-please-take-the-style-of-t-329741-ZHu-p-300.webp" alt="" />
-    <img class="t t4" src="/images/f830ef2fd533f1f45b6d4d1beba1face-p-300.webp" alt="" />
-    <img class="t t5" src="/images/a919359daba17134b7c9ce30dbfe9490-p-300.webp" alt="" />
-    <img class="m" fetchpriority="high" src="/images/please-keep-the-background--the-233555-iP0.webp" sizes="(max-width: 939px) 100vw, 939px" srcset="/images/please-keep-the-background--the-233555-iP0-p-500.webp 500w, /images/please-keep-the-background--the-233555-iP0-p-800.webp 800w, /images/please-keep-the-background--the-233555-iP0.webp 1140w" alt="" />
-    <p class="w">Ode</p>
+    <p class="roll"><span>Ode</span><span>Lille · 2027</span></p>
+    <i class="line"></i>
   </div>
   <script is:inline>
     (() => {
       const root = document.documentElement, pre = document.getElementById("ode-pre");
       if (!root.classList.contains("ode-pre")) { pre.remove(); return; }
-      setTimeout(() => root.classList.remove("ode-hold"), 1050); // the big ODE starts rising as the photo settles
-      setTimeout(() => { root.classList.remove("ode-pre"); pre.remove(); if (window.lenis) { lenis.start(); lenis.resize(); } }, 1400);
+      setTimeout(() => root.classList.remove("ode-hold"), 1250); // the big ODE starts rising as the photo settles
+      setTimeout(() => { root.classList.remove("ode-pre"); pre.remove(); if (window.lenis) { lenis.start(); lenis.resize(); } }, 1650);
     })();
   </script>
   <div class="cursor_wrapper">
@@ -1024,34 +1018,20 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
   <WaitlistModal slot="after-footer" />
   <style is:global>
-    /* Preloader (P3) */
+    /* Preloader (P1) */
     html:not(.ode-pre) #ode-pre { display: none; }
     html.ode-pre, html.ode-pre body { overflow: hidden; }
     html.ode-hold .ode-hero-word .gsap_split_letter, html.ode-hold [fade-in] { animation-play-state: paused; }
-    #ode-pre { position: fixed; inset: 0; z-index: 2000; pointer-events: none; background: #f4f2f2; animation: opre-out 1.4s ease forwards; }
-    #ode-pre .t { position: absolute; left: var(--x); top: var(--y); width: var(--w); aspect-ratio: 3 / 4; object-fit: cover; border-radius: 2px; opacity: 0; animation: opre-t 1.4s cubic-bezier(.76, 0, .24, 1) var(--d, 0s) both; }
-    #ode-pre .m { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; clip-path: inset(33% 42.5% round 2px); animation: opre-m 1.4s cubic-bezier(.76, 0, .24, 1) both; }
-    #ode-pre .w { position: absolute; left: 0; right: 0; top: 50%; margin: 0; transform: translateY(-50%); text-align: center; font-family: var(--_typography---font--secondary-family); font-size: clamp(3rem, 5vw, 4.5rem); line-height: 1; letter-spacing: -.03em; color: #fff; text-shadow: 0 2px 18px rgb(0 0 0 / 25%); animation: opre-w 1.4s ease both; }
-    .t0 { --x: 17%; --y: 20%; --w: 7%; --tx: 26vw; --ty: 18vh; }
-    .t1 { --x: 72%; --y: 16%; --w: 8%; --tx: -20vw; --ty: 22vh; --d: .05s; }
-    .t2 { --x: 11%; --y: 60%; --w: 6.5%; --tx: 33vw; --ty: -14vh; --d: .1s; }
-    .t3 { --x: 80%; --y: 62%; --w: 7.5%; --tx: -28vw; --ty: -16vh; --d: .15s; }
-    .t4 { --x: 38%; --y: 8%; --w: 5.5%; --tx: 8vw; --ty: 30vh; --d: .2s; }
-    .t5 { --x: 58%; --y: 72%; --w: 6%; --tx: -6vw; --ty: -26vh; --d: .25s; }
-    @keyframes opre-t { 0% { opacity: 0; transform: translateY(1rem); } 16%, 38% { opacity: 1; transform: none; } 58%, 100% { opacity: 0; transform: translate(var(--tx), var(--ty)) scale(.4); } }
-    @keyframes opre-m { 0%, 40% { clip-path: inset(33% 42.5% round 2px); } 76%, 100% { clip-path: inset(0% 0% round 0px); } }
-    @keyframes opre-w { 0%, 4% { opacity: 0; } 14%, 36% { opacity: 1; } 48%, 100% { opacity: 0; } }
-    @keyframes opre-out { 0%, 74% { opacity: 1; } 100% { opacity: 0; } }
-    @media (max-width: 767px) {
-      #ode-pre .m { clip-path: inset(36% 31% round 2px); }
-      @keyframes opre-m { 0%, 40% { clip-path: inset(36% 31% round 2px); } 76%, 100% { clip-path: inset(0% 0% round 0px); } }
-      .t0 { --x: 8%; --y: 12%; --w: 22%; --tx: 30vw; --ty: 22vh; }
-      .t1 { --x: 66%; --y: 9%; --w: 24%; --tx: -26vw; --ty: 24vh; }
-      .t2 { --x: 4%; --y: 66%; --w: 21%; --tx: 34vw; --ty: -18vh; }
-      .t3 { --x: 70%; --y: 70%; --w: 23%; --tx: -30vw; --ty: -20vh; }
-      .t4 { --x: 38%; --y: 3%; --w: 18%; --tx: 2vw; --ty: 30vh; }
-      .t5 { --x: 40%; --y: 82%; --w: 19%; --tx: 0vw; --ty: -30vh; }
-    }
+    #ode-pre { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; pointer-events: none; background: #f4f2f2; color: #1f1d1e; animation: opre-out 1.65s cubic-bezier(.53, .23, .25, 1) forwards; }
+    #ode-pre .roll { position: relative; height: 4.5rem; margin: 0; overflow: hidden; text-align: center; }
+    #ode-pre .roll span { display: flex; align-items: center; justify-content: center; height: 4.5rem; animation: opre-roll 1.65s cubic-bezier(.83, 0, .17, 1) forwards; }
+    #ode-pre .roll span:first-child { font-family: var(--_typography---font--secondary-family); font-size: 4rem; line-height: 1; letter-spacing: -.03em; }
+    #ode-pre .roll span + span { font-size: .8125rem; letter-spacing: .16em; text-transform: uppercase; }
+    #ode-pre .line { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: #401f28; transform-origin: left; animation: opre-line 1.65s cubic-bezier(.76, 0, .24, 1) forwards; }
+    @keyframes opre-roll { 0%, 18% { transform: none; } 70%, 100% { transform: translateY(-100%); } }
+    @keyframes opre-line { 0% { transform: scaleX(0); } 55% { transform: scaleX(.58); } 100% { transform: scaleX(1); } }
+    @keyframes opre-out { 0%, 76% { opacity: 1; } 100% { opacity: 0; } }
+    @media (max-width: 767px) { #ode-pre .roll, #ode-pre .roll span { height: 3.5rem; } #ode-pre .roll span:first-child { font-size: 3rem; } }
     /* Hero: the big ODE letters rise into place and the text + button fade in, as soon as the page shows (pure CSS, no waiting for scripts) */
     .ode-hero-word .gsap_split_word { position: relative; display: inline-block; }
     .ode-hero-word .gsap_split_letter { position: relative; display: inline-block; animation: ode-rise 1s cubic-bezier(.165, .84, .44, 1) calc(var(--i) * .05s) both; }
