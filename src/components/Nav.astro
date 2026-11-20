@@ -16,7 +16,7 @@ const HEART = "/images/ode-heart-s.webp";
 <a href="#main" class="onav-skip">Aller au contenu</a>
 <header class:list={["onav", lightText ? "is-light" : "is-dark"]} data-onav data-base={lightText ? "light" : "dark"}>
   <a class="onav-logo" href="/" aria-label="Studio Ode, accueil" aria-current={path === "/" ? "page" : undefined}>
-    <img src="/images/ode-logo-300.webp" alt="Studio Ode" width="300" height="80" />
+    <img src="/images/ode-logo-300.webp" srcset="/images/ode-logo-150.webp 150w, /images/ode-logo-300.webp 300w" sizes="(max-width: 991px) 5.25rem, 6.25rem" alt="Studio Ode" width="300" height="80" fetchpriority="high" />
   </a>
   <nav class="onav-links" aria-label="Navigation principale">
     {links.map((l) => (

@@ -37,14 +37,16 @@ const PILLARS = [
   ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui. Gagner en amplitude, en confiance, et en douceur."],
   ["Communauté", "Huit élèves maximum, une professeure qui connaît chaque corps. On s'encourage, on progresse ensemble, dans un lieu calme et lumineux à Lille."],
 ];
-// collage photos: offer the 500px and 800px versions so phones can take the smaller one
+// collage photos: offer 300/500/800px versions so each screen takes the smallest that is sharp enough
 import { existsSync } from "node:fs";
 const cset = (src: string) => {
   const m = src.match(/^(.*?)(?:-p-(?:500|800))?\.(webp|avif)$/);
   if (!m) return undefined;
-  const c = [500, 800].map((n) => [`${m[1]}-p-${n}.${m[2]}`, n] as const).filter(([u]) => existsSync(`public${u}`));
+  const c = ([[`${m[1]}-p-300.webp`, 300], [`${m[1]}-p-500.${m[2]}`, 500], [`${m[1]}-p-800.${m[2]}`, 800]] as const).filter(([u]) => existsSync(`public${u}`));
   return c.length ? c.map(([u, n]) => `${u} ${n}w`).join(", ") : undefined;
 };
+// the two biggest photos that show on every screen (one of them counts as "loaded" on desktop, the other on phones) get download priority
+const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((c) => !c[2]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((c) => c[1]));
 ---
 
 <BaseLayout viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode, à Lille : force, expression, souplesse, communauté." wfPage="6adb80ddd07ffba4e0c0cb69">
@@ -54,7 +56,7 @@ const cset = (src: string) => {
         <div class="col">
           {COL.map(([src, x, y, w, h, faded, hm, depth], i) => (
             <figure class:list={["cf", { faded, hm }]} data-depth={depth} data-side={x + w / 2 < 720 ? -1 : 1} style={`--x:${pct(x, 1440)};--y:${pct(y, 900)};--w:${pct(w, 1440)};--h:${pct(h, 900)}`}>
-              <img src={src} srcset={cset(src)} sizes={`(max-width: 767px) 40vw, ${(w / 14.4).toFixed(1)}vw`} alt="" decoding="async" loading={hm ? "lazy" : undefined} />
+              <img src={src} srcset={cset(src)} sizes={`(max-width: 767px) 40vw, ${(w / 14.4).toFixed(1)}vw`} alt="" decoding="async" loading={hm ? "lazy" : undefined} fetchpriority={lead.has(i) ? "high" : undefined} />
             </figure>
           ))}
         </div>
