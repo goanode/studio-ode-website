@@ -63,7 +63,6 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         <span class="slot" aria-hidden="true" style={`--x:${pct(1120, 1440)};--y:${pct(60, 900)};--w:${pct(240, 1440)};--h:${pct(370, 900)}`}></span>
         <div class="center">
           <h1 class="ttl"><span class="ode-th"><span id="communaute-title" class="vt-title">Communauté</span><img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
-          <p class="sub">Des cours en petit groupe où l’on s’encourage, on partage et on progresse ensemble.</p>
         </div>
         <figure class="grow">
           <img src={I.big} alt="La communauté du studio Ode" />
@@ -252,6 +251,8 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .tick-wrap { position: absolute; left: 0; right: 0; bottom: calc(50% - .5rem); }
   .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
   .tick .ode-title-heart { animation: none; }
+  /* phones: the icons sit clear of the word instead of touching it */
+  @media (max-width: 767px) { .ttl .ode-title-heart, .tick .ode-title-heart { right: -.85em; top: -.2em; } }
   .tick .w { will-change: opacity; }
   .para { position: absolute; left: 50%; top: calc(50% + 2.5rem); width: 26rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
   .para p { position: absolute; top: 0; left: 0; right: 0; }
