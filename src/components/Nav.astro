@@ -6,10 +6,10 @@
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/index$/, "").replace(/\/$/, "") || "/";
 const lightText = path === "/" || path === "/menu";
 const links = [
-  { label: "Concept", href: "/concept", on: path === "/concept" },
-  { label: "Cours", href: "/#cours", on: false },
-  { label: "Figures", href: "/figures", on: path === "/figures" || path.startsWith("/figures/") },
-  { label: "Formules", href: "/#formules", on: false },
+  { label: "Concept", href: "/concept", on: path === "/concept", icon: "/images/ode-icon-sparkle-s.webp" },
+  { label: "Cours", href: "/#cours", on: false, icon: "/images/ode-heart-s.webp" },
+  { label: "Figures", href: "/figures", on: path === "/figures" || path.startsWith("/figures/"), icon: "/images/ode-icon-book-s.webp" },
+  { label: "Formules", href: "/#formules", on: false, icon: "/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" },
 ];
 const HEART = "/images/ode-heart-s.webp";
 ---
@@ -32,7 +32,7 @@ const HEART = "/images/ode-heart-s.webp";
 </header>
 <div class="onav-sheet" id="onav-sheet" hidden>
   <ul>
-    {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}>{l.label}</a></li>)}
+    {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><span>{l.label}</span><img class="onav-ic" src={l.icon} alt="" aria-hidden="true" loading="lazy" /></a></li>)}
   </ul>
   <div class="onav-foot">
     <button type="button" class="onav-cta is-wide" data-modal-trigger="waitlist">Rejoins la liste<img class="onav-heart" src={HEART} alt="" aria-hidden="true" /></button>
@@ -71,10 +71,9 @@ const HEART = "/images/ode-heart-s.webp";
   .onav-sheet[hidden] { display: none; }
   .onav-sheet.is-open { opacity: 1; }
   .onav-sheet ul { list-style: none; margin: 0; padding: 0; }
-  .onav-sheet li { border-top: 1px solid rgb(255 255 255 / 18%); opacity: 0; transform: translateY(1rem); transition: opacity .45s ease calc(.06s * var(--i) + .1s), transform .55s cubic-bezier(.2, .8, .2, 1) calc(.06s * var(--i) + .1s); }
-  .onav-sheet li:last-child { border-bottom: 1px solid rgb(255 255 255 / 18%); }
+  .onav-sheet li { opacity: 0; transform: translateY(1rem); transition: opacity .45s ease calc(.06s * var(--i) + .1s), transform .55s cubic-bezier(.2, .8, .2, 1) calc(.06s * var(--i) + .1s); }
   .onav-sheet.is-open li { opacity: 1; transform: none; }
-  .onav-sheet li a { display: block; padding: 1rem 0 .75rem; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.25rem; line-height: 1; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: #fff; text-decoration: none; }
+  .onav-sheet li a { display: inline-flex; align-items: center; gap: .28em; padding: .2rem 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.25rem; line-height: 1; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: #fff; text-decoration: none; }
   .onav-sheet li a.on { color: #d9b8c1; }
   .onav-cta.is-wide { display: flex; width: 100%; height: 3.25rem; font-size: 1rem; margin-bottom: 1.375rem; --fg: #fff; }
   .onav-inf { display: flex; justify-content: space-between; font-size: .75rem; letter-spacing: .06em; opacity: .7; }
@@ -100,12 +99,22 @@ const HEART = "/images/ode-heart-s.webp";
     /* the full-screen menu, roomier on large screens */
     .onav-sheet { padding: calc(var(--nav--height-total) + 3rem) var(--site--margin, 2.5rem) 2.5rem; }
     .onav-sheet ul { max-width: 52rem; }
-    .onav-sheet li a { padding: 1.25rem 0 1rem; font-size: 5.5rem; }
+    .onav-sheet li a { padding: .15rem 0; font-size: 6.75rem; line-height: 1.08; }
     .onav-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; }
     .onav-cta.is-wide { width: auto; padding: 0 2.25rem; margin-bottom: 0; }
     .onav-inf { gap: 2.5rem; }
   }
   @media (prefers-reduced-motion: reduce) { .onav-sheet, .onav-sheet li, .onav-heart { transition: none; } }
+  /* menu A: each link carries its chrome icon (as on the section titles). Desktop: the icon pops in on hover (and stays on the
+     current page). Phones (no hover): the icons pop in one after another when the menu opens. */
+  .onav-ic { width: .6em; height: auto; flex: none; filter: drop-shadow(0 .08em .14em rgb(0 0 0 / 35%)); opacity: 0; transform: translateY(.3em) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; }
+  .onav-sheet li a:hover .onav-ic, .onav-sheet li a:focus-visible .onav-ic, .onav-sheet li a.on .onav-ic { opacity: 1; transform: rotate(10deg); }
+  @media (hover: none) {
+    .onav-sheet .onav-ic { transition-delay: calc(.35s + .07s * var(--i, 0)); }
+    .onav-sheet.is-open .onav-ic { opacity: 1; transform: rotate(10deg); }
+    .onav-sheet li { --i: inherit; }
+  }
+  @media (prefers-reduced-motion: reduce) { .onav-ic { transition: none; } }
   /* on load the bar comes in: logo first, then the links' letters rise one link after another, then the button / Menu */
   @keyframes onav-in { from { opacity: 0; transform: translateY(-.75rem); } }
   @keyframes onav-ch { from { transform: translateY(115%); } }
