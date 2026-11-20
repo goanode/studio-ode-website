@@ -44,7 +44,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     {canonical && <link rel="canonical" href={canonical} />}
 
     <!-- Hide animated elements until the site's animations have set their starting state (prevents a flash) -->
-    <style is:inline>html.w-mod-js:not(.w-mod-ix3):is([slide-down]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([slide-down]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3) :is([data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"]:is(.footer_bottom_letter), [data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"] :is(.footer_bottom_letter), [slide-down], [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"]:is([text-blur]), [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"] :is([text-blur]), [random-stagger-in], .heading, [fade-in]) {visibility: hidden !important;}</style>
+    <style is:inline>html.w-mod-js:not(.w-mod-ix3) :is([random-stagger-in], .footer_bottom_letter) {visibility: hidden !important;}</style>
 
     <!-- Fonts: only what the site uses — Instrument Sans (Google Fonts) and freight-big-pro (Adobe Fonts kit xbu1shi) -->
     <!-- Instrument Sans is served from the site itself (no trip to Google); freight-big-pro comes from the Adobe Fonts kit as a stylesheet, not a blocking script -->
@@ -67,7 +67,8 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         <>
           {/* Fluted Glass by The Lazy God (self-hosted) */}
           <script is:inline type="importmap">{ "imports": { "three": "/vendor/three.module.min.js" } }</script>
-          <script is:inline type="module" src="/vendor/tlg-fluted-glass.js"></script>
+          {/* loaded only once the page has appeared, so the 3D library never holds up the first paint */}
+          <script is:inline>addEventListener("load", () => setTimeout(() => import("/vendor/tlg-fluted-glass.js"), 0));</script>
         </>
       )
     }
@@ -103,11 +104,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         try {
           if (!reduce) {
             // big hero words: letters rise into place on load, then the [fade-in] text and buttons appear
-            const heads = [...document.querySelectorAll(".heading")];
-            const tl = gsap.timeline();
-            heads.forEach((h) => tl.fromTo(split(h), { yPercent: 100 }, { yPercent: 0, duration: 1, ease: "power4.out", stagger: 0.05 }, 0));
-            const fades = document.querySelectorAll("[fade-in]");
-            if (fades.length) tl.from(fades, { opacity: 0, duration: 1, ease: "power2.out", stagger: 0.05 }, heads.length ? 1 : 0);
+            // (the hero letters rising and the [fade-in] text/buttons are pure CSS now, see the homepage, so they start as soon as the page shows)
             // sections marked [slide-down] drift down a little as you scroll past them
             document.querySelectorAll("[slide-down]").forEach((el) => gsap.fromTo(el, { yPercent: 0 }, { yPercent: 25, ease: "none", scrollTrigger: scrub(el) }));
             // [random-stagger-in] titles: letters appear in random order while scrolling

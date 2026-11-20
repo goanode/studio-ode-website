@@ -1,6 +1,15 @@
 import * as THREE from 'three';
 
-document.addEventListener("DOMContentLoaded", function() {
+// Ode change: pick a texture size that fits the (half-resolution) canvas instead of always the full-size photo
+const __odePick = (img, cssWidth) => {
+  const need = cssWidth * Math.max(0.75, Math.min(window.devicePixelRatio || 1, 2) * 0.5);
+  const set = (img.getAttribute("srcset") || "").split(",").map((p) => p.trim().split(/\s+/)).filter((p) => p[0] && /w$/.test(p[1] || "")).map(([u, w]) => [u, parseInt(w)]).sort((a, b) => a[1] - b[1]);
+  const hit = set.find(([, w]) => w >= need) || set[set.length - 1];
+  return hit ? new URL(hit[0], location.href).href : (img.currentSrc || img.src);
+};
+// Ode change: also start when this file is loaded after the page is ready (it is imported after "load")
+const __odeStart = (fn) => (document.readyState === "loading" ? document.addEventListener("DOMContentLoaded", fn) : fn());
+__odeStart(function() {
   var vertex = `
 varying vec2 vUv;
 void main() {
@@ -209,10 +218,10 @@ void main() {
         // Calculate the aspect ratio automatically
         this.imageAspect = image.naturalWidth / image.naturalHeight;
         // Once the image is loaded and the aspect ratio is calculated, set up the material and geometry
-        this.setupMaterialAndGeometry(randomImageElement.src);
+        this.setupMaterialAndGeometry(image.src);
       };
       // Set the image source to start loading
-      image.src = randomImageElement.src;
+      image.src = __odePick(randomImageElement, Math.max(this.container.offsetWidth, this.container.offsetHeight));
     }
 
 
@@ -226,7 +235,9 @@ void main() {
       // Append the renderer element to the container
       this.container.appendChild(rendererElement);
 
-      let texture = new THREE.TextureLoader().load(imageSrc, () => this.render());
+      rendererElement.style.opacity = '0';
+      rendererElement.style.transition = 'opacity .6s ease';
+      let texture = new THREE.TextureLoader().load(imageSrc, () => { this.render(); requestAnimationFrame(() => requestAnimationFrame(() => { rendererElement.style.opacity = '1'; })); });
       texture.minFilter = THREE.LinearFilter;
 
       this.mouse = new THREE.Vector2(0.5, 0.5);
