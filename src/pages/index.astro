@@ -994,6 +994,18 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
   <WaitlistModal slot="after-footer" />
   <style is:global>
+    /* phones: the three price cards become a row you swipe through (one card + the next peeking in), with dots */
+    @media (max-width: 767px) {
+      #formules .u-grid-wrapper { overflow: visible; }
+      #formules .u-grid { display: flex !important; flex-direction: row !important; gap: .75rem; width: calc(100% + 2 * var(--site--margin)); max-width: none; margin: 0 calc(-1 * var(--site--margin)); padding: 0 var(--site--margin) .25rem; overflow-x: auto; scroll-snap-type: x mandatory; scroll-padding: 0 var(--site--margin); overscroll-behavior-x: contain; scrollbar-width: none; }
+      #formules .u-grid::-webkit-scrollbar { display: none; }
+      #formules .u-grid > .card_primary_wrap { flex: 0 0 84%; scroll-snap-align: start; }
+      .ode-price-dots { display: flex; justify-content: center; gap: .25rem; margin-top: 1rem; }
+      .ode-price-dots button { width: 1.5rem; height: 1.5rem; padding: 0; border: 0; background: none; cursor: pointer; display: grid; place-items: center; }
+      .ode-price-dots button::before { content: ""; width: .5rem; height: .5rem; border-radius: 50%; background: rgb(255 255 255 / 35%); transition: background-color .3s; }
+      .ode-price-dots button[aria-current="true"]::before { background: #fff; }
+    }
+    @media (min-width: 768px) { .ode-price-dots { display: none; } }
     /* fluted glass: phones show sharp stills of the effect (no live WebGL there); desktop keeps the live effect */
     .fl-pic { display: contents; }
     /* the big ODE always stays on one line, so it doesn't jump when the Freight font arrives */
@@ -1030,6 +1042,29 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
 
   <Fragment slot="scripts">
+  <script is:inline>
+  // phones: dots under the swipeable price cards (tap to jump, follow the swipe)
+  document.addEventListener("DOMContentLoaded", () => {
+    const rail = document.querySelector("#formules .u-grid");
+    if (!rail) return;
+    const cards = [...rail.querySelectorAll(":scope > .card_primary_wrap")];
+    const dots = document.createElement("div");
+    dots.className = "ode-price-dots";
+    cards.forEach((c, i) => {
+      const b = document.createElement("button");
+      b.type = "button"; b.setAttribute("aria-label", `Formule ${i + 1}`);
+      b.addEventListener("click", () => rail.scrollTo({ left: c.offsetLeft - rail.offsetLeft - parseFloat(getComputedStyle(rail).paddingLeft), behavior: "smooth" }));
+      dots.append(b);
+    });
+    (rail.closest(".u-grid-wrapper") || rail).after(dots);
+    const mark = () => {
+      const x = rail.scrollLeft, w = rail.scrollWidth - rail.clientWidth;
+      const i = w <= 0 ? 0 : Math.round((x / w) * (cards.length - 1));
+      [...dots.children].forEach((b, k) => b.setAttribute("aria-current", String(k === i)));
+    };
+    rail.addEventListener("scroll", () => requestAnimationFrame(mark), { passive: true }); mark();
+  });
+  </script>
   <script is:inline src="/vendor/Flip.min.js"></script>
   <script is:inline>
   // course filters (All / Poledance / Flexibility / Flow / Strength) work like the Figures filters:
