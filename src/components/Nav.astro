@@ -88,6 +88,22 @@ const HEART = "/images/ode-heart-s.webp";
     .onav-menu { display: block; }
     .onav-logo img { height: 1.375rem; }
   }
+  /* desktop, after scrolling (like oharchitecture.com.au): the links in the middle slide away and a glass "Menu" button slides in next to
+     "Rejoins la liste"; scroll back up and it reverses. "Menu" opens the same full-screen menu as on phones. */
+  @media (min-width: 992px) {
+    .onav-links { transition: opacity .45s ease, transform .7s cubic-bezier(.16, 1, .3, 1); }
+    .onav.is-compact .onav-links, html.onav-open .onav-links { opacity: 0; transform: translate(-50%, -1rem); pointer-events: none; }
+    .onav-menu { display: inline-flex; align-items: center; height: 2.375rem; max-width: 0; margin-left: -1rem; padding: 0; overflow: hidden; white-space: nowrap; border: 1px solid transparent; border-radius: 9999px; opacity: 0; pointer-events: none; transform: translateY(-.5rem); transition: max-width .7s cubic-bezier(.16, 1, .3, 1), margin .7s cubic-bezier(.16, 1, .3, 1), padding .7s cubic-bezier(.16, 1, .3, 1), opacity .45s ease, transform .7s cubic-bezier(.16, 1, .3, 1), background-color .35s, border-color .35s, color .35s; }
+    .onav.is-compact .onav-menu, html.onav-open .onav-menu { max-width: 8rem; margin-left: 0; padding: 0 1.125rem; opacity: 1; pointer-events: auto; transform: none; border-color: color-mix(in srgb, var(--fg) 45%, transparent); background: color-mix(in srgb, var(--fg) 12%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+    .onav.is-compact .onav-menu:hover { background: #401f28; border-color: #401f28; color: #fff; }
+    /* the full-screen menu, roomier on large screens */
+    .onav-sheet { padding: calc(var(--nav--height-total) + 3rem) var(--site--margin, 2.5rem) 2.5rem; }
+    .onav-sheet ul { max-width: 52rem; }
+    .onav-sheet li a { padding: 1.25rem 0 1rem; font-size: 5.5rem; }
+    .onav-foot { display: flex; align-items: flex-end; justify-content: space-between; gap: 2rem; }
+    .onav-cta.is-wide { width: auto; padding: 0 2.25rem; margin-bottom: 0; }
+    .onav-inf { gap: 2.5rem; }
+  }
   @media (prefers-reduced-motion: reduce) { .onav-sheet, .onav-sheet li, .onav-heart { transition: none; } }
   /* on load the bar comes in: logo first, then the links' letters rise one link after another, then the button / Menu */
   @keyframes onav-in { from { opacity: 0; transform: translateY(-.75rem); } }
@@ -107,6 +123,7 @@ const HEART = "/images/ode-heart-s.webp";
   const base = bar.dataset.base;
   const lum = (c) => { const m = c.match(/[\d.]+/g); if (!m) return null; const [r, g, b, a = 1] = m.map(Number); return a < .5 ? null : (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
   const tone = () => {
+    bar.classList.toggle("is-compact", scrollY > 500);
     if (document.documentElement.classList.contains("onav-open")) return;
     let light = base === "light";
     if (document.body.classList.contains("cv-dark")) light = true;
@@ -141,6 +158,5 @@ const HEART = "/images/ode-heart-s.webp";
   btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
   sheet.addEventListener("click", (e) => { if (e.target.closest("a, [data-modal-trigger]")) set(false); });
   addEventListener("keydown", (e) => { if (e.key === "Escape" && btn.getAttribute("aria-expanded") === "true") { set(false); btn.focus(); } });
-  matchMedia("(min-width: 992px)").addEventListener("change", (m) => { if (m.matches) set(false); });
 })();
 </script>
