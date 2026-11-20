@@ -5,17 +5,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
 <BaseLayout viewTransition="main" title="Website Name" description="Place website meta description here" wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <Fragment slot="head">
-  <script is:inline>
-    // Preloader (P1): plays whenever the homepage is opened or reloaded, but not when coming from another page of
-    // the site (menu click), when going back/forward, with reduced motion, or when opening a #section link
-    try {
-      const nav = performance.getEntriesByType("navigation")[0];
-      const type = nav ? nav.type : "navigate";
-      const internal = document.referrer && new URL(document.referrer).origin === location.origin;
-      const show = type === "reload" || (type === "navigate" && !internal);
-      if (show && !matchMedia("(prefers-reduced-motion: reduce)").matches && !location.hash) document.documentElement.classList.add("ode-pre", "ode-hold");
-    } catch (e) {}
-  </script>
   <style is:inline>
     strong, b {
       font-weight: inherit;
@@ -32,19 +21,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   </Fragment>
 
   <Fragment slot="body-start">
-  <!-- Preloader (P1, like oharchitecture.com.au): "ODE" rolls up into "Coming soon 2027" while a thin burgundy line crosses the screen, then it fades away and ODE rises -->
-  <div id="ode-pre" aria-hidden="true">
-    <p class="roll"><span>ODE</span><span>Coming soon 2027</span></p>
-    <i class="line"></i>
-  </div>
-  <script is:inline>
-    (() => {
-      const root = document.documentElement, pre = document.getElementById("ode-pre");
-      if (!root.classList.contains("ode-pre")) { pre.remove(); return; }
-      setTimeout(() => root.classList.remove("ode-hold"), 1250); // the big ODE starts rising as the photo settles
-      setTimeout(() => { root.classList.remove("ode-pre"); pre.remove(); if (window.lenis) { lenis.start(); lenis.resize(); } }, 1650);
-    })();
-  </script>
   <div class="cursor_wrapper">
     <div class="cursor_element meet_teacher has-liquid-glass">
       <div class="cursor_text u-text-style-small">Contact me</div>
@@ -1018,20 +994,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
   <WaitlistModal slot="after-footer" />
   <style is:global>
-    /* Preloader (P1) */
-    html:not(.ode-pre) #ode-pre { display: none; }
-    html.ode-pre, html.ode-pre body { overflow: hidden; }
-    html.ode-hold .ode-hero-word .gsap_split_letter, html.ode-hold [fade-in] { animation-play-state: paused; }
-    #ode-pre { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; pointer-events: none; background: #f4f2f2; color: #1f1d1e; animation: opre-out 1.65s cubic-bezier(.53, .23, .25, 1) forwards; }
-    #ode-pre .roll { position: relative; height: 4.5rem; margin: 0; overflow: hidden; text-align: center; }
-    #ode-pre .roll span { display: flex; align-items: center; justify-content: center; height: 4.5rem; animation: opre-roll 1.65s cubic-bezier(.83, 0, .17, 1) forwards; }
-    #ode-pre .roll span:first-child { font-family: var(--_typography---font--secondary-family); font-size: 4rem; line-height: 1; letter-spacing: -.03em; }
-    #ode-pre .roll span + span { font-size: .8125rem; letter-spacing: .16em; text-transform: uppercase; }
-    #ode-pre .line { position: absolute; left: 0; right: 0; bottom: 0; height: 2px; background: #401f28; transform-origin: left; animation: opre-line 1.65s cubic-bezier(.76, 0, .24, 1) forwards; }
-    @keyframes opre-roll { 0%, 18% { transform: none; } 70%, 100% { transform: translateY(-100%); } }
-    @keyframes opre-line { 0% { transform: scaleX(0); } 55% { transform: scaleX(.58); } 100% { transform: scaleX(1); } }
-    @keyframes opre-out { 0%, 76% { opacity: 1; } 100% { opacity: 0; } }
-    @media (max-width: 767px) { #ode-pre .roll, #ode-pre .roll span { height: 3.5rem; } #ode-pre .roll span:first-child { font-size: 3rem; } }
     /* Hero: the big ODE letters rise into place and the text + button fade in, as soon as the page shows (pure CSS, no waiting for scripts) */
     .ode-hero-word .gsap_split_word { position: relative; display: inline-block; }
     .ode-hero-word .gsap_split_letter { position: relative; display: inline-block; animation: ode-rise 1s cubic-bezier(.165, .84, .44, 1) calc(var(--i) * .05s) both; }
