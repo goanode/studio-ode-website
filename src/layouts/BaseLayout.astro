@@ -105,6 +105,32 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
           if (!reduce) {
             // big hero words: letters rise into place on load, then the [fade-in] text and buttons appear
             // (the hero letters rising and the [fade-in] text/buttons are pure CSS now, see the homepage, so they start as soon as the page shows)
+            // section titles: the words rise one by one from behind an invisible line (like "ODE" on load),
+            // and the paragraph right under the title fades up just after. Plays once, when it comes into view.
+            const titles = [...document.querySelectorAll('main p[role="heading"][aria-level="2"], main .j-big')];
+            titles.forEach((t) => {
+              const walker = document.createTreeWalker(t, NodeFilter.SHOW_TEXT);
+              const nodes = []; while (walker.nextNode()) if (walker.currentNode.nodeValue.trim()) nodes.push(walker.currentNode);
+              const inner = [];
+              nodes.forEach((n) => {
+                const frag = document.createDocumentFragment();
+                n.nodeValue.split(/(\s+)/).forEach((part) => {
+                  if (!part) return;
+                  if (/^\s+$/.test(part)) { frag.append(part); return; }
+                  const w = document.createElement("span"); w.className = "rv-w";
+                  const i = document.createElement("span"); i.className = "rv-i"; i.textContent = part;
+                  w.append(i); frag.append(w); inner.push(i);
+                });
+                n.replaceWith(frag);
+              });
+              if (!inner.length) return;
+              const wrap = t.closest('[class*="u-heading"]') || t;
+              let para = wrap.nextElementSibling;
+              if (!(para && para.matches(".u-text, .j-perks"))) para = document.querySelector(`[data-reveal-after="${t.textContent.trim().slice(0, 12)}"]`);
+              const tl = gsap.timeline({ scrollTrigger: { trigger: t, start: "top 88%", once: true } });
+              tl.from(inner, { yPercent: 110, duration: 1.1, ease: "expo.out", stagger: 0.08 });
+              if (para) tl.from(para, { opacity: 0, y: 14, duration: 0.9, ease: "power2.out" }, 0.3);
+            });
             // sections marked [slide-down] drift down a little as you scroll past them
             document.querySelectorAll("[slide-down]").forEach((el) => gsap.fromTo(el, { yPercent: 0 }, { yPercent: 25, ease: "none", scrollTrigger: scrub(el) }));
             // [random-stagger-in] titles: letters appear in random order while scrolling
@@ -210,6 +236,9 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     </script>
     <style is:global>
       .slider_bullet_list { column-gap: .5rem !important; }
+      /* word masks for the title rise: clip only below the line, so italics and descenders are never cut */
+      .rv-w { display: inline-block; vertical-align: top; padding-bottom: .14em; margin-bottom: -.14em; clip-path: inset(-.5em -.4em 0 -.4em); }
+      .rv-i { display: inline-block; will-change: transform; }
       .ode-heart-btn { overflow: visible; }
       .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
       .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
