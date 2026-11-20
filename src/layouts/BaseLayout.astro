@@ -114,7 +114,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
               const split = new SplitText(el, { type: "lines", mask: "lines", linesClass: "rv-line", aria: "none" });
               gsap.from(split.lines, { yPercent: 120, rotate: 0.001, duration: 1, ease: EASE, stagger: 0.0625, delay, scrollTrigger: { trigger: el, start: "top 85%", once: true }, onComplete: () => split.revert() });
             };
-            const titles = [...document.querySelectorAll('main p[role="heading"][aria-level="2"], main .j-big')];
+            const titles = [...document.querySelectorAll('main p[role="heading"][aria-level="2"], main h2.ode-h2, main .j-big')];
             titles.forEach((t) => {
               // titles keep their chrome icon, so they are split into words and the words of one line move together
               const walker = document.createTreeWalker(t, NodeFilter.SHOW_TEXT);
