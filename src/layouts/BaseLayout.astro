@@ -43,7 +43,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     {canonical && <link rel="canonical" href={canonical} />}
 
-    <!-- Hide animated elements until Webflow interactions have started (prevents a flash) -->
+    <!-- Hide animated elements until the site's animations have set their starting state (prevents a flash) -->
     <style is:inline>html.w-mod-js:not(.w-mod-ix3):is([slide-down]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([slide-down]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([random-stagger-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3):is([fade-in]) * {visibility: hidden !important;}html.w-mod-js:not(.w-mod-ix3) :is([data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"]:is(.footer_bottom_letter), [data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f"] :is(.footer_bottom_letter), [slide-down], [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"]:is([text-blur]), [data-wf-component-id="b9130e59-aa4e-07ef-a822-eda529bf75ca"] :is([text-blur]), [random-stagger-in], .heading, [fade-in]) {visibility: hidden !important;}</style>
 
     <!-- Fonts: only what the site uses — Instrument Sans (Google Fonts) and freight-big-pro (Adobe Fonts kit xbu1shi) -->
@@ -84,11 +84,69 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     </div>
 
     <!-- Interaction & animation libraries (self-hosted copies of what Webflow loaded from CDNs) -->
-    <script is:inline src="/vendor/jquery-3.5.1.min.js"></script>
-    <script is:inline src="/vendor/webflow.js"></script>
     <script is:inline src="/vendor/gsap.min.js"></script>
     <script is:inline src="/vendor/ScrollTrigger.min.js"></script>
     <script is:inline src="/vendor/SplitText.min.js"></script>
+    <script is:inline>
+      // The site's own interactions (these used to come from Webflow's 450 KB webflow.js + jQuery):
+      // hero letters rising on load, scroll reveals, the footer "ODE STUDIO" letters, class-card photo stack on hover
+      // and the "Contact me" cursor over the teacher photo.
+      document.addEventListener("DOMContentLoaded", () => {
+        const root = document.documentElement;
+        const done = () => root.classList.add("w-mod-ix3"); // un-hides the elements that wait for these animations
+        if (!window.gsap || !window.ScrollTrigger) return done();
+        gsap.registerPlugin(ScrollTrigger, window.SplitText);
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+        const desktop = matchMedia("(min-width: 992px)").matches;
+        const split = (el) => (window.SplitText ? new SplitText(el, { type: "words,chars", wordsClass: "gsap_split_word", charsClass: "gsap_split_letter" }).chars : [el]);
+        const scrub = (trigger, start = "top bottom", end = "bottom top") => ({ trigger, start: `clamp(${start})`, end: `clamp(${end})`, scrub: 0.8 });
+        try {
+          if (!reduce) {
+            // big hero words: letters rise into place on load, then the [fade-in] text and buttons appear
+            const heads = [...document.querySelectorAll(".heading")];
+            const tl = gsap.timeline();
+            heads.forEach((h) => tl.fromTo(split(h), { yPercent: 100 }, { yPercent: 0, duration: 1, ease: "power4.out", stagger: 0.05 }, 0));
+            const fades = document.querySelectorAll("[fade-in]");
+            if (fades.length) tl.from(fades, { opacity: 0, duration: 1, ease: "power2.out", stagger: 0.05 }, heads.length ? 1 : 0);
+            // sections marked [slide-down] drift down a little as you scroll past them
+            document.querySelectorAll("[slide-down]").forEach((el) => gsap.fromTo(el, { yPercent: 0 }, { yPercent: 25, ease: "none", scrollTrigger: scrub(el) }));
+            // [random-stagger-in] titles: letters appear in random order while scrolling
+            document.querySelectorAll("[random-stagger-in]").forEach((el) => gsap.fromTo(split(el), { opacity: 0, y: "80%" }, { opacity: 1, y: "0%", ease: "power4.out", stagger: { each: 0.05, from: "random" }, scrollTrigger: scrub(el) }));
+            // footer: the big chrome letters rise from the centre outwards
+            document.querySelectorAll(".footer_bottom_logo").forEach((logo) => gsap.fromTo(logo.querySelectorAll(".footer_bottom_letter"), { y: "70%" }, { y: "0px", ease: "none", stagger: { each: 0.05, from: "center" }, scrollTrigger: scrub(logo, "top bottom", "bottom 70%") }));
+          }
+          if (desktop) {
+            // class cards: on hover the stacked photos fold away one by one onto the first one
+            document.querySelectorAll(".card_classes_wrap").forEach((card) => {
+              const img = (n) => card.querySelector(`.card_classes_img.u-cover-absolute._${n}`);
+              const [i1, i2, i3, i4] = [1, 2, 3, 4].map(img);
+              if (!i1) return;
+              gsap.set(i1, { scale: 1.3 });
+              card.addEventListener("mouseenter", () => {
+                gsap.to([i4, i3, i2].filter(Boolean), { scale: 0, duration: 0.5, ease: "power1.inOut", stagger: 0.1, overwrite: true });
+                gsap.to(i1, { scale: 1, duration: 0.5, ease: "power1.inOut", delay: 0.3, overwrite: true });
+              });
+              card.addEventListener("mouseleave", () => {
+                gsap.to(i1, { scale: 1.3, duration: 1.3, ease: "power1.inOut", overwrite: true });
+                gsap.to([i2, i3, i4].filter(Boolean), { scale: 1, duration: 0.5, ease: "power1.inOut", stagger: 0.1, delay: 0.1, overwrite: true });
+              });
+            });
+            // "Contact me" bubble follows the mouse over the teacher photo
+            const bubble = document.querySelector(".cursor_element.meet_teacher");
+            const zone = document.querySelector('[data-w-id="63b7eb76-e579-78ec-09bb-36ed4b1c98f9"]');
+            if (bubble) {
+              gsap.set(bubble, { opacity: 0 });
+              const x = gsap.quickTo(bubble, "x", { duration: 0.5, ease: "power3" }), y = gsap.quickTo(bubble, "y", { duration: 0.5, ease: "power3" });
+              addEventListener("mousemove", (e) => { x(e.clientX - innerWidth / 2); y(e.clientY - innerHeight / 2); }, { passive: true });
+              if (zone) {
+                zone.addEventListener("mouseenter", () => gsap.to(bubble, { opacity: 1, duration: 0.5, ease: "expo.out" }));
+                zone.addEventListener("mouseleave", () => gsap.to(bubble, { opacity: 0, duration: 0.5, ease: "expo.out" }));
+              }
+            }
+          }
+        } finally { done(); }
+      });
+    </script>
     <script is:inline src="/vendor/lenis.min.js" defer></script>
     <script is:inline src="/vendor/ukiyo.min.js" defer></script>
     <script is:inline defer>

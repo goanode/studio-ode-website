@@ -347,7 +347,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                     <div class="card_classes_info">
                       <div class="card_classes_teacher_name u-text-style-main">With Justine L.</div>
                       <div class="card_classes_level u-text-style-small u-color-faded">Beginner</div>
-                    </div><img loading="lazy" src="/images/teacher-justine-150.webp" alt="" width="150" height="200" class="card_classes_teacher_img">
+                    </div><img loading="lazy" src="/images/teacher-justine-96.webp" alt="" width="96" height="96" class="card_classes_teacher_img">
                   </div>
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn"></button></div>
                 </div>
@@ -370,7 +370,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                     <div class="card_classes_info">
                       <div class="card_classes_teacher_name u-text-style-main">With Justine L.</div>
                       <div class="card_classes_level u-text-style-small u-color-faded">Intermediate</div>
-                    </div><img loading="lazy" src="/images/teacher-justine-150.webp" alt="" width="150" height="200" class="card_classes_teacher_img">
+                    </div><img loading="lazy" src="/images/teacher-justine-96.webp" alt="" width="96" height="96" class="card_classes_teacher_img">
                   </div>
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn"></button></div>
                 </div>
@@ -393,7 +393,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                     <div class="card_classes_info">
                       <div class="card_classes_teacher_name u-text-style-main">With Justine L.</div>
                       <div class="card_classes_level u-text-style-small u-color-faded">Beginner</div>
-                    </div><img loading="lazy" src="/images/teacher-justine-150.webp" alt="" width="150" height="200" class="card_classes_teacher_img">
+                    </div><img loading="lazy" src="/images/teacher-justine-96.webp" alt="" width="96" height="96" class="card_classes_teacher_img">
                   </div>
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn"></button></div>
                 </div>
@@ -416,7 +416,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                     <div class="card_classes_info">
                       <div class="card_classes_teacher_name u-text-style-main">With Justine L.</div>
                       <div class="card_classes_level u-text-style-small u-color-faded">Advanced</div>
-                    </div><img loading="lazy" src="/images/teacher-justine-150.webp" alt="" width="150" height="200" class="card_classes_teacher_img">
+                    </div><img loading="lazy" src="/images/teacher-justine-96.webp" alt="" width="96" height="96" class="card_classes_teacher_img">
                   </div>
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn"></button></div>
                 </div>
@@ -439,7 +439,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                     <div class="card_classes_info">
                       <div class="card_classes_teacher_name u-text-style-main">With Justine L.</div>
                       <div class="card_classes_level u-text-style-small u-color-faded">Beginner</div>
-                    </div><img loading="lazy" src="/images/teacher-justine-150.webp" alt="" width="150" height="200" class="card_classes_teacher_img">
+                    </div><img loading="lazy" src="/images/teacher-justine-96.webp" alt="" width="96" height="96" class="card_classes_teacher_img">
                   </div>
                   <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" class="clickable_btn"></button></div>
                 </div>
@@ -1053,12 +1053,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     btns[0].closest(".button_main_wrap").classList.add("is-on");
   });
   </script>
-    <script is:inline src="/vendor/split-type.min.js"></script>
   <script is:inline>
 gsap.registerPlugin(ScrollTrigger);
 const splitTypes = document.querySelectorAll('.reveal-type');
 splitTypes.forEach((char,i) => {
-  const text = new SplitType(char, {types: ['chars','words']});
+  const text = new SplitText(char, { type: 'words,chars' });
   gsap.from(text.chars, {
     scrollTrigger: {
       trigger: char,
