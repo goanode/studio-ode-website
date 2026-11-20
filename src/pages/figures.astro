@@ -50,7 +50,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
       </div>
       <div class="center">
         <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart ode-icon-book" src="/images/ode-icon-book-s.webp" alt="" aria-hidden="true" /></span><span class="u-sr-only"> de pole dance</span></h1>
-        <p class="intro">Toutes les figures de pole dance, de la première rotation débutante aux inversions avancées, avec les étapes pour les réussir.</p>
+        <p class="intro">Toutes les figures de pole dance, de la première rotation aux inversions avancées.</p>
       </div>
     </section>
 
@@ -291,7 +291,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .ttl { margin-top: 0; font-size: 9.375rem; line-height: 1; white-space: nowrap; }
   .vt-title { view-transition-name: figures-title; }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
-  .intro { width: 24rem; max-width: calc(100vw - 2.5rem); font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
+  .intro { width: 30rem; max-width: calc(100vw - 3rem); text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
 
   /* title row: search + view switch */
   .bar { display: flex; justify-content: space-between; align-items: flex-end; gap: 2.5rem; margin-top: 2.5rem; }
