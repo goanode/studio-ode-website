@@ -82,14 +82,13 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         </div>
       </div>
     </section>
-    <!-- under the animated hero: "Deviens fondatrice" — three silver invitations fanned like a hand of cards; the front one opens the waitlist -->
+    <!-- under the animated hero: "Réserve ta place" — three silver invitations (Le Cercle des fondatrices) fanned like a hand of cards; the front one opens the waitlist -->
     <section class="join" aria-labelledby="join-title">
-      <h2 class="j-big" id="join-title">Deviens fondatrice.</h2>
-      <p class="j-perks"><span>Une place réservée</span><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Un tarif fondatrice</span><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" width="16" height="17" /><span>Ton premier cours offert</span></p>
+      <h2 class="j-big" id="join-title">Réserve ta place.</h2>
       <div class="fan">
-        <span class="fc c1" aria-hidden="true"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></span>
-        <span class="fc c3" aria-hidden="true"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /></span>
-        <button type="button" class="fc c2 inv" data-modal-trigger="waitlist" aria-label="Ouvrir l’invitation : deviens membre fondatrice"><img src="/images/ode-invitation.webp" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
+        <span class="fc c1" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <span class="fc c3" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <button type="button" class="fc c2 inv" data-modal-trigger="waitlist" aria-label="Ouvrir l’invitation : deviens membre fondatrice"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
       </div>
     </section>
 
@@ -201,9 +200,6 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .c2:hover .j-tab i { transform: translateX(4px); }
   @keyframes j-peek { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(4px); } }
   /* the founder perks: one quiet line of small capitals joined by chrome sparkles */
-  .j-big + .j-perks { margin-top: -.75rem; }
-  .j-perks { display: flex; justify-content: center; align-items: center; flex-wrap: wrap; gap: 1.375rem; margin: 0; font-size: .8125rem; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
-  .j-perks img { width: 1rem; height: auto; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 20%)); }
   @media (prefers-reduced-motion: reduce) { .j-tab { animation: none; } .fc { transition: none; } }
   @media (max-width: 767px) {
     .join { gap: 1.75rem; }
@@ -214,7 +210,6 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     .fan:hover .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
     .fan:hover .c3 { transform: rotate(10deg) translateX(1.625rem); }
     .j-tab { height: 2.25rem; padding: 0 1rem; font-size: .8125rem; bottom: -1.125rem; }
-    .j-perks { flex-direction: column; gap: .625rem; font-size: .78125rem; }
   }
   .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
   .cv p, .cv h1, .cv ul { margin: 0; padding: 0; }
