@@ -270,10 +270,6 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       .form_ui_label::before { inset: -9px -4px; }
       .back::before { inset: -12px -8px; }
       @media (max-width: 767px) {
-        /* waitlist window on phones: full-width Join button, heart clear of the "!" */
-        dialog .ode-heart-cta, dialog .ode-heart-cta .button_main_wrap, dialog .ode-heart-cta .button_main_element { width: 100%; }
-        dialog .ode-heart-cta .button_main_element { justify-content: center; }
-        dialog .ode-th .ode-title-heart { right: -1.05em; top: -.25em; }
       }
       .ode-heart-btn { overflow: visible; }
       .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
