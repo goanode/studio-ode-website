@@ -12,6 +12,7 @@ const links = [
   { label: "Formules", href: "/#formules", on: false },
   { label: "Questions", href: "/#faq", on: false },
 ];
+const SPARK = "/images/ode-icon-sparkle.webp";
 const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp";
 ---
 <a href="#main" class="onav-skip">Aller au contenu</a>
@@ -20,7 +21,12 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
     <img src="/images/odestudiotestsmall2x-p-500.webp" srcset="/images/odestudiotestsmall2x-p-500.webp 500w, /images/odestudiotestsmall2x-p-800.webp 800w" sizes="8rem" alt="Studio Ode" width="500" height="134" />
   </a>
   <nav class="onav-links" aria-label="Navigation principale">
-    {links.map((l) => <a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}>{l.label}</a>)}
+    {links.map((l) => (
+      <a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined} aria-label={l.label}>
+        <img class="sp" src="/images/ode-icon-sparkle.webp" alt="" aria-hidden="true" />
+        <span class="rl" aria-hidden="true">{[...l.label].map((ch, i) => <span class="ch" style={`--d:${i}`} data-c={ch}>{ch}</span>)}</span>
+      </a>
+    ))}
   </nav>
   <div class="onav-right">
     <button type="button" class="onav-cta" data-modal-trigger="waitlist">Rejoins la liste<img class="onav-heart" src={HEART} alt="" aria-hidden="true" /></button>
@@ -38,28 +44,29 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
 </div>
 
 <style is:global>
-  :root { --nav--height-total: calc(4rem + var(--site--margin, 2.5rem)); }
+  :root { --nav--height-total: calc(2.75rem + var(--site--margin, 2.5rem)); }
   .onav-skip { position: fixed; left: .75rem; top: .75rem; z-index: 1001; padding: .5rem .875rem; border-radius: 9999px; background: #fff; color: #1f1d1e; transform: translateY(-200%); transition: transform .2s; }
   .onav-skip:focus { transform: none; }
   .onav { --fg: #fff; position: fixed; z-index: 1000; left: 0; right: 0; top: 0; height: var(--nav--height-total); display: flex; align-items: center; justify-content: space-between; padding: 0 var(--site--margin, 2.5rem); color: var(--fg); transition: color .35s, background-color .35s, box-shadow .35s; font-family: var(--_typography---font--primary-family), sans-serif; }
   .onav.is-dark { --fg: #1f1d1e; }
-  .onav::before { content: ""; position: absolute; inset: 0; z-index: -1; background: rgb(255 255 255 / 72%); -webkit-backdrop-filter: blur(18px) saturate(1.3); backdrop-filter: blur(18px) saturate(1.3); box-shadow: 0 1px 0 rgb(31 29 30 / 8%); opacity: 0; transition: opacity .35s; }
-  .onav.is-solid { --fg: #1f1d1e; }
-  .onav.is-solid::before { opacity: 1; }
-  .onav-logo img { display: block; height: 1.875rem; width: auto; transition: filter .35s; }
-  .onav.is-light:not(.is-solid) .onav-logo img { filter: brightness(0) invert(1); }
-  .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.5rem; }
-  .onav-links a { position: relative; font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase; color: inherit; text-decoration: none; opacity: .8; transition: opacity .3s; }
-  .onav-links a::after { content: ""; position: absolute; left: 0; right: 0; bottom: -.375rem; height: 1px; background: currentColor; transform: scaleX(0); transform-origin: left; transition: transform .35s cubic-bezier(.6, 0, .2, 1); }
-  .onav-links a:hover, .onav-links a.on { opacity: 1; }
-  .onav-links a:hover::after, .onav-links a.on::after { transform: scaleX(1); }
+  .onav-logo img { display: block; height: 1.625rem; width: auto; transition: filter .35s; }
+  .onav.is-light .onav-logo img { filter: brightness(0) invert(1); }
+  .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.25rem; }
+  /* hover: the letters roll up one after another (a copy rises from below) and a chrome sparkle pops in; the current page keeps its sparkle */
+  .onav-links a { position: relative; display: block; font-size: .6875rem; line-height: 1; letter-spacing: .16em; text-transform: uppercase; color: inherit; text-decoration: none; }
+  .onav-links .rl { display: flex; overflow: hidden; padding: .125rem 0; }
+  .onav-links .ch { position: relative; display: block; white-space: pre; transition: transform .5s cubic-bezier(.7, 0, .2, 1) calc(var(--d) * .025s); }
+  .onav-links .ch::after { content: attr(data-c); position: absolute; left: 0; top: 100%; padding-top: .125rem; }
+  .onav-links a:hover .ch, .onav-links a:focus-visible .ch { transform: translateY(calc(-100% - .125rem)); }
+  .onav-links .sp { position: absolute; left: -1.125rem; top: 50%; width: .75rem; height: auto; margin-top: -.375rem; opacity: 0; transform: scale(.2) rotate(-90deg); transition: transform .5s cubic-bezier(.3, 1.8, .5, 1), opacity .25s; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 25%)); pointer-events: none; }
+  .onav-links a:hover .sp, .onav-links a:focus-visible .sp, .onav-links a.on .sp { opacity: 1; transform: none; }
   .onav-right { display: flex; align-items: center; gap: 1rem; }
-  .onav-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.75rem; padding: 0 1.375rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--fg) 45%, transparent); background: color-mix(in srgb, var(--fg) 12%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: inherit; font: inherit; font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; cursor: pointer; transition: background-color .35s, border-color .35s, color .35s; }
+  .onav-cta { position: relative; display: inline-flex; align-items: center; justify-content: center; height: 2.375rem; padding: 0 1.125rem; border-radius: 9999px; border: 1px solid color-mix(in srgb, var(--fg) 45%, transparent); background: color-mix(in srgb, var(--fg) 12%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); color: inherit; font: inherit; font-size: .6875rem; letter-spacing: .16em; text-transform: uppercase; white-space: nowrap; cursor: pointer; transition: background-color .35s, border-color .35s, color .35s; }
   .onav-cta:hover, .onav-cta:focus-visible { background: #401f28; border-color: #401f28; color: #fff; }
   .onav-cta:focus-visible, .onav-menu:focus-visible, .onav-links a:focus-visible, .onav-sheet a:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
   .onav-heart { position: absolute; right: -.5rem; top: -.875rem; width: 1.875rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.75rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 4px 6px rgb(0 0 0 / 30%)); }
   .onav-cta:hover .onav-heart, .onav-cta:focus-visible .onav-heart { opacity: 1; transform: translateY(-.25rem) rotate(12deg) scale(1); }
-  .onav-menu { display: none; padding: .5rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: .8125rem; letter-spacing: .14em; text-transform: uppercase; cursor: pointer; }
+  .onav-menu { display: none; padding: .5rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: .75rem; letter-spacing: .16em; text-transform: uppercase; cursor: pointer; }
   .onav-menu .c { display: none; }
 
   /* mobile: logo + Menu; the menu is a full-screen dark sheet over the blurred page */
@@ -72,10 +79,9 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
   .onav-sheet.is-open li { opacity: 1; transform: none; }
   .onav-sheet li a { display: block; padding: 1rem 0 .75rem; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.25rem; line-height: 1; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: #fff; text-decoration: none; }
   .onav-sheet li a.on { color: #d9b8c1; }
-  .onav-cta.is-wide { display: flex; width: 100%; height: 3.25rem; margin-bottom: 1.375rem; --fg: #fff; }
+  .onav-cta.is-wide { display: flex; width: 100%; height: 3.25rem; font-size: .8125rem; margin-bottom: 1.375rem; --fg: #fff; }
   .onav-inf { display: flex; justify-content: space-between; font-size: .75rem; letter-spacing: .06em; opacity: .7; }
   html.onav-open .onav { --fg: #fff; }
-  html.onav-open .onav::before { opacity: 0; }
   html.onav-open .onav-logo img { filter: brightness(0) invert(1); }
   html.onav-open .onav-menu .o { display: none; }
   html.onav-open .onav-menu .c { display: inline; }
@@ -83,7 +89,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
   @media (max-width: 991px) {
     .onav-links, .onav-right > .onav-cta { display: none; }
     .onav-menu { display: block; }
-    .onav-logo img { height: 1.5rem; }
+    .onav-logo img { height: 1.375rem; }
   }
   @media (prefers-reduced-motion: reduce) { .onav-sheet, .onav-sheet li, .onav-heart { transition: none; } }
 </style>
@@ -93,24 +99,39 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.w
   const bar = document.querySelector("[data-onav]");
   const sheet = document.getElementById("onav-sheet");
   const btn = bar.querySelector(".onav-menu");
-  // frosted backing once the page has scrolled
-  const solid = () => bar.classList.toggle("is-solid", scrollY > 24 && !document.documentElement.classList.contains("onav-open") && !document.body.classList.contains("cv-dark"));
-  addEventListener("scroll", solid, { passive: true }); solid();
-  // Concept page: the burgundy hero turns the bar white while it fills the screen
+  // text colour follows what is under the bar: white over dark sections/photos, dark over light ones
   const base = bar.dataset.base;
-  new MutationObserver(() => {
-    const dark = document.body.classList.contains("cv-dark");
-    bar.classList.toggle("is-light", base === "light" || dark);
-    bar.classList.toggle("is-dark", base === "dark" && !dark);
-    solid();
-  }).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  const lum = (c) => { const m = c.match(/[\d.]+/g); if (!m) return null; const [r, g, b, a = 1] = m.map(Number); return a < .5 ? null : (0.299 * r + 0.587 * g + 0.114 * b) / 255; };
+  const tone = () => {
+    if (document.documentElement.classList.contains("onav-open")) return;
+    let light = base === "light";
+    if (document.body.classList.contains("cv-dark")) light = true;
+    else if (scrollY > 24) {
+      const y = bar.offsetHeight / 2;
+      bar.style.pointerEvents = "none";
+      const el = document.elementFromPoint(innerWidth / 2, y) || document.body;
+      bar.style.pointerEvents = "";
+      let n = el.closest("section, footer, .u-section") || el, v = null;
+      for (let e = n; e && v === null; e = e.parentElement) {
+        if (e.classList && e.classList.contains("u-theme-dark")) v = 0;
+        else v = lum(getComputedStyle(e).backgroundColor);
+      }
+      light = v !== null ? v < .5 : base === "light";
+    }
+    bar.classList.toggle("is-light", light);
+    bar.classList.toggle("is-dark", !light);
+  };
+  let raf = 0;
+  addEventListener("scroll", () => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; tone(); }); }, { passive: true });
+  new MutationObserver(tone).observe(document.body, { attributes: true, attributeFilter: ["class"] });
+  tone();
   // mobile menu
   const set = (open) => {
     btn.setAttribute("aria-expanded", String(open));
     document.documentElement.classList.toggle("onav-open", open);
     if (window.lenis) open ? lenis.stop() : lenis.start();
-    if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add("is-open"))); bar.classList.remove("is-solid"); }
-    else { sheet.classList.remove("is-open"); setTimeout(() => { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, 350); solid(); }
+    if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add("is-open"))); }
+    else { sheet.classList.remove("is-open"); setTimeout(() => { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, 350); tone(); }
   };
   btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
   sheet.addEventListener("click", (e) => { if (e.target.closest("a, [data-modal-trigger]")) set(false); });
