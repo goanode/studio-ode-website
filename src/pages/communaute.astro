@@ -1,0 +1,275 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WaitlistModal from "../components/WaitlistModal.astro";
+// Communauté page: same design as the Concept page ("ConceptValues"), with its own words:
+// 1. a collage of photos around "Concept"; scrolling makes one photo grow to fill the screen
+// 2. on that photo, the four pillars slide past one by one as you scroll, with their text
+const I = {
+  r0: "/images/37165de30ebb4909ab52aaa06a86c422-p-500.avif",
+  r1: "/images/7053819a90a239bb9f6686d8d1df9a9d-p-500.webp",
+  r2: "/images/Hello-please-take-the-style-of-t-11755-EU2-p-800.webp",
+  r3: "/images/Hello-please-take-the-style-of-t-329741-ZHu-p-500.webp",
+  r4: "/images/Hello-please-take-the-style-of-t-391374-HCn.webp",
+  r5: "/images/a919359daba17134b7c9ce30dbfe9490-p-500.avif",
+  r6: "/images/ac743b8e553553c0be56bc5dbaabf5b6-p-800.avif",
+  r7: "/images/ea27f15c4ddd5e50ea8bd0309f3aae76-p-800.webp",
+  r8: "/images/f830ef2fd533f1f45b6d4d1beba1face-p-500.avif",
+  r9: "/images/please-look-at-the-first-pose----265877-w4L-p-500.webp",
+  big: "/images/please-look-at-the-first-pose----820406-SN7.webp",
+};
+// collage, laid out on a 1440 × 900 board: [image, x, y, w, h, faded, hidden on mobile, depth]
+const COL: [string, number, number, number, number, boolean, boolean, number][] = [
+  [I.r1, 140, 70, 90, 110, true, true, 1.4],
+  [I.r2, 330, 140, 190, 240, false, false, 1],
+  [I.r9, 570, 80, 90, 130, true, true, 1.6],
+  [I.r0, 1290, 120, 130, 170, true, false, 1.3],
+  [I.r3, -30, 230, 130, 180, true, false, 1.5],
+  [I.r8, 200, 500, 120, 150, true, true, 1.2],
+  [I.r6, 430, 600, 200, 220, false, false, 1],
+  [I.r7, 690, 610, 200, 290, false, true, 0.8],
+  [I.r5, 1140, 560, 120, 160, true, false, 1.4],
+  [I.r1, 1300, 700, 160, 200, true, true, 1.1],
+];
+const pct = (x: number, total: number) => `${((x / total) * 100).toFixed(3)}%`;
+const PILLARS = [
+  ["Ensemble", "Des cours en petit groupe, où chaque élève a sa place. On arrive seule, on repart avec des amies : la barre crée des liens."],
+  ["Soutien", "On s'encourage à chaque essai. Ici, personne ne se compare : chaque progrès se célèbre, de la première rotation à la première inversion."],
+  ["Partage", "Des moments pour échanger, apprendre les unes des autres et danser pour le plaisir, en cours comme en dehors."],
+  ["Confiance", "Un lieu bienveillant et sans jugement, où chaque corps est le bienvenu. On ose, on rit, et on prend confiance, ensemble."],
+];
+// collage photos: offer 300/500/800px versions so each screen takes the smallest that is sharp enough
+import { existsSync } from "node:fs";
+const cset = (src: string) => {
+  const m = src.match(/^(.*?)(?:-p-(?:500|800))?\.(webp|avif)$/);
+  if (!m) return undefined;
+  const c = ([[`${m[1]}-p-300.webp`, 300], [`${m[1]}-p-500.${m[2]}`, 500], [`${m[1]}-p-800.${m[2]}`, 800]] as const).filter(([u]) => existsSync(`public${u}`));
+  return c.length ? c.map(([u, n]) => `${u} ${n}w`).join(", ") : undefined;
+};
+// the two biggest photos that show on every screen (one of them counts as "loaded" on desktop, the other on phones) get download priority
+const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((c) => !c[2]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((c) => c[1]));
+---
+
+<BaseLayout viewTransition="communaute-title" title="Communauté — Studio Ode, pole dance à Lille" description="La communauté du studio de pole dance Ode à Lille : des cours en petit groupe où l’on s’encourage, on partage et on prend confiance, ensemble." wfPage="6adb80ddd07ffba4e0c0cb69">
+  <main id="main" class="page_main cv">
+    <section class="intro u-theme-light" aria-label="Communauté">
+      <div class="stage">
+        <div class="col">
+          {COL.map(([src, x, y, w, h, faded, hm, depth], i) => (
+            <figure class:list={["cf", { faded, hm }]} data-depth={depth} data-side={x + w / 2 < 720 ? -1 : 1} style={`--x:${pct(x, 1440)};--y:${pct(y, 900)};--w:${pct(w, 1440)};--h:${pct(h, 900)}`}>
+              <img src={src} srcset={cset(src)} sizes={`(max-width: 767px) 40vw, ${(w / 14.4).toFixed(1)}vw`} alt="" decoding="async" loading={hm ? "lazy" : undefined} fetchpriority={lead.has(i) ? "high" : undefined} />
+            </figure>
+          ))}
+        </div>
+        <span class="slot" aria-hidden="true" style={`--x:${pct(1030, 1440)};--y:${pct(60, 900)};--w:${pct(260, 1440)};--h:${pct(400, 900)}`}></span>
+        <h1 class="ttl"><span class="ode-th"><span id="communaute-title" class="vt-title">Communauté</span><img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
+        <figure class="grow">
+          <img src={I.big} alt="La communauté du studio Ode" />
+          <span class="dim" aria-hidden="true"></span>
+        </figure>
+        <div class="pil u-theme-dark" aria-label="Notre communauté">
+          <div class="tick-wrap"><ul class="tick" role="list">
+            {PILLARS.map(([name]) => <li class="w"><span class="ode-th">{name}<img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></li>)}
+          </ul></div>
+          <div class="para">
+            {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
+          </div>
+          <div class="b-pil">
+            <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
+            <div data-wf--clickable--variant="focus-ring-outside" class="clickable_wrap u-cover-absolute"><button type="button" aria-label="Réserve ta place" data-modal-trigger="waitlist" class="clickable_btn"></button></div>
+            <div data-button="" class="button_main_element w-variant-e85564cd-af30-a478-692b-71732aefb3ab"><div aria-hidden="true" class="button_main_text u-text-style-main">Réserve ta place</div></div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- under the animated hero: "Réserve ta place" — three silver invitations (Le Cercle des fondatrices) fanned like a hand of cards; the front one opens the waitlist -->
+    <section class="join" aria-labelledby="join-title">
+      <h2 class="j-big" id="join-title">Réserve ta place.</h2>
+      <p class="j-perks">Ton premier cours offert, un tarif fondatrice et une place réservée à l’ouverture du studio, à Lille en 2027.</p>
+      <div class="fan">
+        <span class="fc c1" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <span class="fc c3" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <button type="button" class="fc c2 inv" data-modal-trigger="waitlist" aria-label="Ouvrir l’invitation : deviens membre fondatrice"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
+      </div>
+    </section>
+
+  </main>
+  <WaitlistModal slot="after-footer" />
+  <Fragment slot="head">
+    <script is:inline>
+      // arriving with the page transition: the heart pops in after the title has landed
+      addEventListener("pagereveal", (e) => { if (e.viewTransition) document.documentElement.classList.add("vt-in"); });
+    </script>
+  </Fragment>
+
+  <Fragment slot="scripts">
+    <script is:inline>
+    document.addEventListener("DOMContentLoaded", () => {
+      const root = document.querySelector(".cv");
+      if (!root) return;
+      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const intro = root.querySelector(".intro");
+      const stage = root.querySelector(".stage");
+      const figs = [...root.querySelectorAll(".cf")];
+      const slot = root.querySelector(".slot");
+      const grow = root.querySelector(".grow");
+      const gimg = grow.querySelector("img");
+      const words = [...root.querySelectorAll(".tick .w")];
+      const paras = [...root.querySelectorAll(".para p")];
+      const tick = root.querySelector(".tick");
+      const N = words.length;
+
+
+
+
+      if (reduce || !window.gsap || !window.ScrollTrigger) { root.classList.add("still"); return; }
+      gsap.registerPlugin(ScrollTrigger);
+      // keep ScrollTrigger in step with the smooth scroll, so nothing lags or jumps
+      if (window.lenis) window.lenis.on("scroll", ScrollTrigger.update);
+
+      // the growing photo: a full-screen photo seen through a window the size of the collage slot
+      const box = () => {
+        const s = stage.getBoundingClientRect(), r = slot.getBoundingClientRect();
+        return { t: r.top - s.top, l: r.left - s.left, b: s.bottom - r.bottom, rr: s.right - r.right, w: r.width, h: r.height, W: s.width, H: s.height };
+      };
+      const clipFrom = () => { const b = box(); return `inset(${b.t}px ${b.rr}px ${b.b}px ${b.l}px)`; };
+      const imgFrom = () => {
+        const b = box(); const sc = Math.max(b.w / b.W, b.h / b.H) * 1.08;
+        return { x: b.l + b.w / 2 - b.W / 2, y: b.t + b.h / 2 - b.H / 2, scale: sc };
+      };
+      gsap.set(grow, { clipPath: clipFrom() });
+      gsap.set(gimg, imgFrom());
+
+
+      // pinned scroll: the photo opens up to full screen and blurs (homepage frosted glass, 20px) while it grows, then the four pillars slide past
+      gsap.set(words, { opacity: (k) => (k === 0 ? 1 : .3) });
+      gsap.set(paras, { opacity: (k) => (k === 0 ? 1 : 0) });
+      let dark = false;
+      const tl = gsap.timeline({
+        defaults: { ease: "none" },
+        scrollTrigger: {
+          trigger: intro, start: "top top", end: "bottom bottom", scrub: true, invalidateOnRefresh: true,
+          onUpdate: (st) => { const d = st.progress > 0.1 && st.progress < 0.995; if (d !== dark) { dark = d; document.body.classList.toggle("cv-dark", d); } },
+        },
+      });
+      tl.fromTo(grow, { clipPath: clipFrom }, { clipPath: "inset(0px 0px 0px 0px)", duration: 1.4, ease: "power1.inOut" }, 0)
+        .fromTo(gimg, { x: () => imgFrom().x, y: () => imgFrom().y, scale: () => imgFrom().scale }, { x: 0, y: 0, scale: 1, duration: 1.4, ease: "power1.inOut" }, 0)
+        .to(figs, { y: (i, el) => -innerHeight * 0.45 * +el.dataset.depth, x: (i, el) => +el.dataset.side * innerWidth * 0.06 * +el.dataset.depth, opacity: 0, duration: 1.2, ease: "power1.in" }, 0)
+        .fromTo(".cv .dim", { opacity: 0 }, { opacity: 1, duration: 1.2, ease: "power1.in" }, .2)
+        .fromTo(".cv .pil", { autoAlpha: 0 }, { autoAlpha: 1, duration: .4 }, 1.2)
+
+      // the active word sits in the middle of the screen: shift the row so word k's centre lands on the screen's centre
+      const off = (k) => innerWidth / 2 - (words[k].offsetLeft + words[k].offsetWidth / 2);
+      tl.fromTo(tick, { x: () => off(0) }, { x: () => off(0), duration: 0.01 }, 0); // part of the scroll timeline so it re-measures on resize
+      let t = 2.2;
+      for (let k = 1; k < N; k++) {
+        tl.to(tick, { x: () => off(k), duration: 1, ease: "power1.inOut" }, t)
+          .to(words[k - 1], { opacity: .3, duration: .5 }, t)
+          .to(words[k], { opacity: 1, duration: .5 }, t + .5)
+          .to(paras[k - 1], { opacity: 0, duration: .4 }, t)
+          .to(paras[k], { opacity: 1, duration: .4 }, t + .6);
+        t += 1.8;
+      }
+      tl.to({}, { duration: .5 }, t);
+
+
+
+      addEventListener("load", () => ScrollTrigger.refresh());
+      document.fonts?.ready.then(() => ScrollTrigger.refresh());
+    });
+    </script>
+  </Fragment>
+</BaseLayout>
+
+<style>
+  /* 3 · join section under the hero: big call to action, three invitations fanned out (spread on hover), perks line */
+  .join { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2.25rem; padding: var(--_spacing---section-space--main) var(--site--margin); background: #fff; overflow: hidden; }
+  .j-perks { max-width: 30rem; margin: -.5rem auto 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
+  .j-big { margin: 0; text-align: center; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: calc(var(--_typography---font-size--h1) * 1.125); line-height: .9; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: var(--ink); }
+  .fan { position: relative; width: 38.75rem; height: 28rem; margin-top: 1.25rem; }
+  .fc { position: absolute; left: 11.25rem; top: 1.25rem; display: block; width: 16.25rem; aspect-ratio: 620 / 827; padding: 0; border: 0; border-radius: 1rem; background: #8a8888; box-shadow: 0 22px 48px rgb(31 29 30 / 24%); transform-origin: 50% 120%; transition: transform .5s cubic-bezier(.3, 1.3, .5, 1), box-shadow .35s; }
+  .fc img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1rem; }
+  .c1 { transform: rotate(-14deg) translateX(-1.875rem); }
+  .c3 { transform: rotate(14deg) translateX(1.875rem); }
+  .c2 { z-index: 2; cursor: pointer; }
+  .fan:hover .c1 { transform: rotate(-20deg) translateX(-5.625rem); }
+  .fan:hover .c3 { transform: rotate(20deg) translateX(5.625rem); }
+  .c2:hover { transform: translateY(-6px); box-shadow: 0 28px 56px rgb(31 29 30 / 30%); }
+  .c2:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  /* burgundy tab on the bottom edge of the front card: makes it clear the card opens something */
+  .j-tab { position: absolute; z-index: 3; left: 50%; bottom: -1.25rem; display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.125rem; border-radius: 9999px; background: var(--red); color: #fff; font-size: .875rem; white-space: nowrap; box-shadow: 0 8px 18px rgb(64 31 40 / 30%); transform: translateX(-50%); animation: j-peek 3s ease-in-out infinite; }
+  .j-tab i { font-style: normal; transition: transform .3s; }
+  .c2:hover .j-tab i { transform: translateX(4px); }
+  @keyframes j-peek { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(4px); } }
+  /* the founder perks: one quiet line of small capitals joined by chrome sparkles */
+  @media (prefers-reduced-motion: reduce) { .j-tab { animation: none; } .fc { transition: none; } }
+  @media (max-width: 767px) {
+    .join { gap: 1.75rem; }
+    .fan { width: 21.25rem; height: 25rem; margin-top: 0; }
+    .fc { left: 3.75rem; width: 13.75rem; }
+    .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
+    .c3 { transform: rotate(10deg) translateX(1.625rem); }
+    .fan:hover .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
+    .fan:hover .c3 { transform: rotate(10deg) translateX(1.625rem); }
+    .j-tab { height: 2.25rem; padding: 0 1rem; font-size: .8125rem; bottom: -1.125rem; }
+  }
+  .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
+  .cv p, .cv h1, .cv ul { margin: 0; padding: 0; }
+  .cv p::before, .cv p::after, .cv h1::before, .cv h1::after { content: none; }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+  /* titles: Freight Big Pro, exactly like the homepage headings */
+  .ttl, .tick, .line { font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); letter-spacing: var(--_typography---letter-spacing--tight, -.01em); }
+
+  /* 1 · collage + growing photo (pinned) */
+  .intro { position: relative; height: 520svh; background: #fff; }
+  .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  .col { position: absolute; inset: 0; z-index: 1; }
+  .cf, .slot { position: absolute; left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
+  .cf { margin: 0; overflow: hidden; }
+  .cf { will-change: transform, opacity; }
+  .cf.faded img { opacity: .35; }
+  .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
+  .slot { visibility: hidden; pointer-events: none; }
+  /* "Communauté" is longer than "Concept": a little smaller and left of centre, so it clears the photo slot on the right */
+  .ttl { position: absolute; left: 44%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: 7.5rem; line-height: 1; white-space: nowrap; color: var(--ink); }
+  .vt-title { view-transition-name: communaute-title; }
+  :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
+  .b-pil :global(.button_main_text) { white-space: nowrap; }
+  .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
+  .grow { position: absolute; inset: 0; z-index: 3; margin: 0; overflow: hidden; background: var(--red); will-change: clip-path; }
+  .grow img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 50% 35%; display: block; transform-origin: 50% 50%; will-change: transform; }
+  .dim { position: absolute; inset: 0; background: rgb(31 29 30 / 35%); -webkit-backdrop-filter: blur(20px); backdrop-filter: blur(20px); opacity: 0; will-change: opacity; }
+
+  /* 2 · pillars over the photo */
+  .pil { position: absolute; inset: 0; z-index: 4; color: #fff; visibility: hidden; background: none; }
+  .tick-wrap { position: absolute; left: 0; right: 0; bottom: calc(50% - .5rem); }
+  .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
+  .tick .ode-title-heart { animation: none; }
+  .tick .w { will-change: opacity; }
+  .para { position: absolute; left: 50%; top: calc(50% + 2.5rem); width: 26rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
+  .para p { position: absolute; top: 0; left: 0; right: 0; }
+
+  /* no motion: everything shown in place, pillars listed on the photo */
+  .still .intro { height: auto; }
+  .still .stage { position: relative; height: auto; overflow: visible; }
+  .still .col { position: relative; height: 100svh; }
+  .still .grow { position: relative; height: 100svh; clip-path: none; }
+  .still .dim { opacity: 1; }
+  .still .pil { visibility: visible; top: 100svh; height: 100svh; }
+  .still .tick { flex-direction: column; gap: .25rem; }
+  .still .para, .still .slot { display: none; }
+
+  @media (max-width: 767px) {
+    .cf.hm { display: none; }
+    .slot { --mx: 52%; --my: 13%; --mw: 40%; --mh: 30%; }
+    .cf:nth-child(2) { --mx: 8%; --my: 19%; --mw: 34%; --mh: 22%; }
+    .cf:nth-child(4) { --mx: 74%; --my: 57%; --mw: 22%; --mh: 13%; }
+    .cf:nth-child(5) { --mx: -4%; --my: 49%; --mw: 22%; --mh: 14%; }
+    .cf:nth-child(7) { --mx: 20%; --my: 60%; --mw: 38%; --mh: 20%; }
+    .cf:nth-child(9) { --mx: 64%; --my: 72%; --mw: 24%; --mh: 13%; }
+    .ttl { left: 50%; font-size: 3.75rem; }
+    .tick-wrap { left: 0; bottom: calc(50% - .25rem); }
+    .tick { font-size: 3.75rem; gap: 5rem; }
+    .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
+  }
+</style>

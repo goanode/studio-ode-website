@@ -311,6 +311,10 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       ::view-transition-group(concept-title) { animation-duration: 1.1s; animation-delay: .15s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
       ::view-transition-old(concept-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-out; }
       ::view-transition-new(concept-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-in; }
+      /* homepage "Communauté" → communauté page title, same glide */
+      ::view-transition-group(communaute-title) { animation-duration: 1.1s; animation-delay: .15s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
+      ::view-transition-old(communaute-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-out; }
+      ::view-transition-new(communaute-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-in; }
       /* homepage "Figures" → figures page title, same glide */
       ::view-transition-group(figures-title) { animation-duration: 1.1s; animation-delay: .15s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
       ::view-transition-old(figures-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-out; }
