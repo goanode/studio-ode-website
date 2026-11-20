@@ -11,17 +11,17 @@ const catCount = (c: string) => tricks.filter((t) => t.category === c).length;
 // hero collage, laid out on a 1440 × 900 board like the Concept page: [image, x, y, w, h, faded, hidden on mobile, depth]
 const IMG = "/images/";
 const COL: [string, number, number, number, number, boolean, boolean, number][] = [
-  [IMG + "7053819a90a239bb9f6686d8d1df9a9d.webp", 140, 70, 90, 110, true, true, 1.4],
+  [IMG + "7053819a90a239bb9f6686d8d1df9a9d-p-500.webp", 140, 70, 90, 110, true, true, 1.4],
   [IMG + "Hello-please-take-the-style-of-t-11755-EU2-p-800.webp", 330, 140, 190, 240, false, false, 1],
   [IMG + "please-look-at-the-first-pose----265877-w4L-p-500.webp", 570, 80, 90, 130, true, true, 1.6],
   [IMG + "please-look-at-the-first-pose----820406-SN7-p-800.webp", 1030, 60, 260, 400, false, false, 0.9],
-  [IMG + "37165de30ebb4909ab52aaa06a86c422.avif", 1290, 120, 130, 170, true, false, 1.3],
+  [IMG + "37165de30ebb4909ab52aaa06a86c422-p-500.avif", 1290, 120, 130, 170, true, false, 1.3],
   [IMG + "Hello-please-take-the-style-of-t-329741-ZHu-p-500.webp", -30, 230, 130, 180, true, false, 1.5],
-  [IMG + "f830ef2fd533f1f45b6d4d1beba1face.avif", 200, 500, 120, 150, true, true, 1.2],
+  [IMG + "f830ef2fd533f1f45b6d4d1beba1face-p-500.avif", 200, 500, 120, 150, true, true, 1.2],
   [IMG + "Hello-please-take-the-style-of-t-391374-HCn-p-800.webp", 430, 600, 200, 220, false, false, 1],
   [IMG + "please-keep-the-background--the-233555-iP0-p-800.webp", 690, 610, 200, 290, false, true, 0.8],
-  [IMG + "a919359daba17134b7c9ce30dbfe9490.avif", 1140, 560, 120, 160, true, false, 1.4],
-  [IMG + "ac743b8e553553c0be56bc5dbaabf5b6.avif", 1300, 700, 160, 200, true, true, 1.1],
+  [IMG + "a919359daba17134b7c9ce30dbfe9490-p-500.avif", 1140, 560, 120, 160, true, false, 1.4],
+  [IMG + "ac743b8e553553c0be56bc5dbaabf5b6-p-500.avif", 1300, 700, 160, 200, true, true, 1.1],
 ];
 const pct = (x: number, total: number) => `${((x / total) * 100).toFixed(3)}%`;
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1000w`;
@@ -39,7 +39,7 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
         ))}
       </div>
       <div class="center">
-        <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart ode-icon-book" src="/images/ode-icon-book.webp" alt="" aria-hidden="true" /></span></h1>
+        <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart ode-icon-book" src="/images/ode-icon-book-s.webp" alt="" aria-hidden="true" /></span></h1>
         <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
       </div>
     </section>
@@ -69,12 +69,12 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
 
     <div class="frows">
       <div class="filters" role="group" aria-label="Niveau" data-key="level">
-        <button type="button" class="f" aria-pressed="true" data-value="">Toutes<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
-        {LEVELS.map((l) => <button type="button" class="f" aria-pressed="false" data-value={l}>{l}<sup>{levelCount(l)}</sup><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>)}
+        <button type="button" class="f" aria-pressed="true" data-value="">Toutes<img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>
+        {LEVELS.map((l) => <button type="button" class="f" aria-pressed="false" data-value={l}>{l}<sup>{levelCount(l)}</sup><img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>)}
       </div>
       <div class="filters" role="group" aria-label="Type de mouvement" data-key="cat">
-        <button type="button" class="f" aria-pressed="true" data-value="">Tous les types<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
-        {CATEGORIES.map((c) => <button type="button" class="f" aria-pressed="false" data-value={c}>{c}<sup>{catCount(c)}</sup><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>)}
+        <button type="button" class="f" aria-pressed="true" data-value="">Tous les types<img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>
+        {CATEGORIES.map((c) => <button type="button" class="f" aria-pressed="false" data-value={c}>{c}<sup>{catCount(c)}</sup><img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>)}
       </div>
     </div>
 
@@ -88,11 +88,11 @@ const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 80
       ))}
     </div>
 
-    <div class="more-wrap"><button type="button" class="pill" id="fg-more"><span class="pill-t">Voir plus</span><img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button></div>
+    <div class="more-wrap"><button type="button" class="pill" id="fg-more"><span class="pill-t">Voir plus</span><img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button></div>
     <div class="empty" id="fg-empty" hidden>
       <p class="empty-t">Aucune figure ne correspond à ta recherche.</p>
       <p>Essaie un autre nom, ou retire un filtre.</p>
-      <button type="button" class="pill" id="fg-reset">Voir toutes les figures<img class="hrt" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp" alt="" aria-hidden="true" /></button>
+      <button type="button" class="pill" id="fg-reset">Voir toutes les figures<img class="hrt" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>
     </div>
   </main>
   <WaitlistModal slot="after-footer" />

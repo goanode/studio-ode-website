@@ -109,6 +109,11 @@ void main() {
       this.camera.position.set(0, 0, 2);
 
       this.isPlaying = true;
+      // pause while off screen
+      new IntersectionObserver((entries) => {
+        this.isPlaying = entries[0].isIntersecting;
+        if (this.isPlaying) this.render();
+      }).observe(this.container);
       this.addObjects();
       this.resize();
       this.render();
@@ -147,6 +152,7 @@ void main() {
         const maxMovement = 0.2; // Full rotation
         if (this.material) {
           this.material.uniforms.uMotionValue.value = progress * maxMovement * this.motionFactor;
+          this.render();
         }
       }
     }
@@ -156,6 +162,7 @@ void main() {
       this.mouse.y = 1.0 - event.clientY / window.innerHeight;
       if (this.material) {
         this.material.uniforms.uMotionValue.value = 0.5 + this.mouse.x * this.motionFactor * 0.1;
+        this.render();
       }
     }
 
@@ -174,6 +181,7 @@ void main() {
         this.material.uniforms.resolution.value.y = this.height;
       }
       this.camera.updateProjectionMatrix();
+      this.render();
     }
 
     addObjects() {
@@ -216,7 +224,7 @@ void main() {
       // Append the renderer element to the container
       this.container.appendChild(rendererElement);
 
-      let texture = new THREE.TextureLoader().load(imageSrc);
+      let texture = new THREE.TextureLoader().load(imageSrc, () => this.render());
       texture.minFilter = THREE.LinearFilter;
 
       this.mouse = new THREE.Vector2(0.5, 0.5);
@@ -267,11 +275,14 @@ void main() {
       this.handleScroll();
     }
 
-    render(time = 0) {
-      if (!this.isPlaying) return;
-
-      requestAnimationFrame(this.render.bind(this));
-      this.renderer.render(this.scene, this.camera);
+    // Ode change (performance): draw only when something changes (scroll, mouse, resize, texture loaded)
+    // and only while the canvas is on screen, instead of redrawing every frame forever.
+    render() {
+      if (this._raf) return;
+      this._raf = requestAnimationFrame(() => {
+        this._raf = 0;
+        if (this.isPlaying) this.renderer.render(this.scene, this.camera);
+      });
     }
   }
 
