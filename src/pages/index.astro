@@ -5,6 +5,22 @@ import WaitlistModal from "../components/WaitlistModal.astro";
 
 <BaseLayout viewTransition="main" title="Cours de pole dance à Lille — Studio Ode" description="Ode, nouveau studio de pole dance à Lille : cours de débutante à avancée, pole flow, souplesse et renforcement, en petit groupe. Ouverture en 2027." wfPage="6a96e3c256f4431a13f9f238" flutedGlass>
   <Fragment slot="head">
+  <script is:inline>
+    (() => {
+      const MAP = { "/concept": [".vt-concept", "concept-title"], "/communaute": [".vt-communaute", "communaute-title"], "/figures": [".vt-figures", "figures-title"] };
+      const key = (u) => { try { return new URL(u, location.href).pathname.replace(/\.html$/, "").replace(/\/$/, ""); } catch { return ""; } };
+      const name = (u) => { const m = MAP[key(u)]; if (!m) return null; const el = document.querySelector(m[0]); if (el) el.style.viewTransitionName = m[1]; return el; };
+      // leaving the homepage for one of the three pages
+      addEventListener("pageswap", (e) => { if (e.viewTransition && e.activation && e.activation.entry) name(e.activation.entry.url); });
+      // coming back to the homepage from one of them
+      addEventListener("pagereveal", (e) => {
+        const from = window.navigation && navigation.activation && navigation.activation.from;
+        if (!e.viewTransition || !from) return;
+        const el = name(from.url);
+        if (el) e.viewTransition.finished.finally(() => { el.style.viewTransitionName = ""; });
+      });
+    })();
+  </script>
   <script is:inline>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("has-pl");</script>
   <style is:inline>
     .pl { display: none; }
@@ -19,8 +35,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     @keyframes pl-swap { 0% { opacity: 0; transform: scale(.6) rotate(-15deg); } 40%, 70% { opacity: 1; transform: scale(1) rotate(8deg); } 100% { opacity: 0; transform: scale(.85) rotate(20deg); } }
     .pl-slot img.last { animation: pl-land .5s cubic-bezier(.3, 1.6, .5, 1) 1.5s both; }
     @keyframes pl-land { from { opacity: 0; transform: scale(.4) rotate(-30deg); } to { opacity: 1; transform: scale(1) rotate(10deg); } }
-    .pl-foot, .pl-cnt { position: absolute; bottom: 1.5rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(31 29 30 / 55%); opacity: 0; animation: pl-fade .6s ease .2s forwards; }
-    .pl-foot { left: var(--site--margin, 2.5rem); }
+    .pl-cnt { position: absolute; bottom: 1.5rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(31 29 30 / 55%); opacity: 0; animation: pl-fade .6s ease .2s forwards; }
     .pl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgb(64 31 40 / 12%); }
     .pl-cnt { right: var(--site--margin, 2.5rem); bottom: 1.25rem; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 2.75rem; line-height: 1; letter-spacing: -.02em; text-transform: none; font-variant-numeric: tabular-nums; color: #1f1d1e; }
     .pl-cnt b { font-weight: 400; }
@@ -60,7 +75,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
       <span class="pl-slot"><img src="/images/ode-icon-sparkle-s.webp" alt="" style="--k:0" /><img src="/images/ode-icon-book-s.webp" alt="" style="--k:1" /><img src="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" alt="" style="--k:2" /><img class="last" src="/images/ode-heart-s.webp" alt="" /></span>
     </div>
     <i class="pl-line"></i>
-    <span class="pl-foot">Pole dance studio</span>
     <span class="pl-cnt" aria-hidden="true"><b>00</b>%</span>
   </div>
   <script is:inline>
@@ -90,7 +104,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
               <div data-wf--content-wrapper--variant="right" style="" class="u-content-wrapper w-variant-405b6754-709a-81de-bf32-f0102c0c7aa2">
                 <div class="u-display-contents">
                   <div fade-in="" style="--i:0" data-number="40" data-wf--typography-paragraph--variant="text-main" class="u-text w-variant-61d538b2-709c-eb7a-4258-8c0890dc07fc u-rich-text w-richtext">
-                    <h1 class="ode-hero-h1">Ode est le nouveau studio de pole dance à Lille. Cours de pole, souplesse et renforcement, de débutante à avancée. Réserve ta place parmi les 100 fondatrices, gratuitement et sans engagement.</h1>
+                    <h1 class="ode-hero-h1">Ode, le nouveau studio de pole dance à Lille. Réserve ta place parmi les 100 fondatrices, gratuitement et sans engagement.</h1>
                   </div>
                   <div fade-in="" style="--i:1" class="u-button-wrapper">
                     <div class="u-display-contents">
@@ -1081,9 +1095,8 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     #cours .slider_bullet_list, .slider_bullet_list { visibility: hidden; }
     .ode-course-filters .button_main_wrap.is-on .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
     /* the homepage "Concept" word glides into the concept page title */
-    .vt-concept { view-transition-name: concept-title; }
-    .vt-figures { view-transition-name: figures-title; }
-    .vt-communaute { view-transition-name: communaute-title; }
+    /* the title glide to Concept / Communauté / Figures: only the title of the page you go to (or come back from) gets a
+       transition name, so the other two don't linger on screen during the transition (set in pageswap / pagereveal below) */
     /* Formules: frosted pill with a white thumb that slides to the chosen option (design T1) */
     .ode-toggle { position: relative; display: grid !important; grid-template-columns: repeat(3, 1fr); gap: 0 !important; padding: 5px !important; border-radius: 9999px; background: rgb(255 255 255 / 14%) !important; border: 1px solid rgb(255 255 255 / 25%); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
     .ode-toggle .compare_toggle_option { position: relative; z-index: 1; margin: 0; padding: .75rem 1.625rem !important; border: 0; border-radius: 9999px; background: none !important; font: inherit; font-size: 1rem; color: #fff !important; text-align: center; cursor: pointer; transition: color .35s; }
