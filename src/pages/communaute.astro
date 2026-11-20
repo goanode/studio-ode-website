@@ -252,7 +252,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .tick { display: flex; gap: 14vw; list-style: none; font-size: clamp(4.5rem, 8.3vw, 8.5rem); line-height: 1; white-space: nowrap; will-change: transform; }
   .tick .ode-title-heart { animation: none; }
   /* phones: the icons sit clear of the word instead of touching it */
-  @media (max-width: 767px) { .ttl .ode-title-heart, .tick .ode-title-heart { right: -.85em; top: -.2em; } }
+  @media (max-width: 767px) { .ttl .ode-title-heart, .tick .ode-title-heart { right: -.625em; top: -.15em; } }
   .tick .w { will-change: opacity; }
   .para { position: absolute; left: 50%; top: calc(50% + 2.5rem); width: 26rem; transform: translateX(-50%); font-size: .9375rem; line-height: 1.5; text-align: center; }
   .para p { position: absolute; top: 0; left: 0; right: 0; }
