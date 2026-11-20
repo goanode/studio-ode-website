@@ -99,7 +99,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         gsap.registerPlugin(ScrollTrigger, window.SplitText);
         const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
         const desktop = matchMedia("(min-width: 992px)").matches;
-        const split = (el) => (window.SplitText ? new SplitText(el, { type: "words,chars", wordsClass: "gsap_split_word", charsClass: "gsap_split_letter" }).chars : [el]);
+        const split = (el) => (window.SplitText ? new SplitText(el, { type: "words,chars", wordsClass: "gsap_split_word", charsClass: "gsap_split_letter", aria: "none" }).chars : [el]);
         const scrub = (trigger, start = "top bottom", end = "bottom top") => ({ trigger, start: `clamp(${start})`, end: `clamp(${end})`, scrub: 0.8 });
         try {
           if (!reduce) {
@@ -209,6 +209,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       });
     </script>
     <style is:global>
+      .slider_bullet_list { column-gap: .5rem !important; }
       .ode-heart-btn { overflow: visible; }
       .ode-heart-btn .button_main_element { transition: background-color .35s, border-color .35s, color .35s; }
       .ode-heart-btn:hover .button_main_element, .ode-heart-btn:focus-within .button_main_element, .card_primary_wrap:hover .ode-heart-btn .button_main_element, .card_primary_wrap:focus-within .ode-heart-btn .button_main_element { background-color: #401f28 !important; border-color: #401f28 !important; color: #fff !important; }
