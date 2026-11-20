@@ -18,13 +18,11 @@ const pad = (n: number) => String(n).padStart(2, "0");
 const c = content[trick.slug];
 const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : trick.category === "Sol" ? "Un mouvement au sol" : trick.category === "Rotation" ? "Une rotation" : trick.category === "Montée" ? "Une montée" : trick.category === "Assise" ? "Une assise" : "Une figure tenue"} de niveau ${trick.level.toLowerCase()}, enseignée au studio Ode à Lille.`;
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1024w`;
-// second photo: the other studio shot
-const second = trick.image.includes("SN7") ? "/images/please-keep-the-background--the-233555-iP0" : "/images/please-look-at-the-first-pose----820406-SN7";
 ---
 
 <BaseLayout title={`${trick.name} — Figures — Studio Ode`} viewTransition="trick-main" description={intro} wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main tp u-theme-light">
-    <a class="back" href="/figures"><span aria-hidden="true">←</span> Toutes les figures</a>
+    <a class="back" href="/figures" data-back><span aria-hidden="true">←</span> Toutes les figures</a>
     <div class="cols">
       <div class="left">
         <div class="stick">
@@ -55,7 +53,6 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
         ) : (
           <p class="soon">Les étapes de cette figure arrivent bientôt. En attendant, viens la travailler en cours avec Justine.</p>
         )}
-        <figure class="photo2"><img src={`${second}-p-800.webp`} srcset={srcset(second)} sizes="(max-width: 767px) 100vw, 36vw" alt="" loading="lazy" /></figure>
       </div>
     </div>
 
@@ -73,6 +70,21 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
       // arriving from the catalogue with a page transition: let the photo land before the name rises
       addEventListener("pagereveal", (e) => {
         if (e.viewTransition) document.documentElement.classList.add("from-grid");
+      });
+      // "Toutes les figures" behaves like the browser's back button when the catalogue is in this tab's history:
+      // the grid comes back with its filters and scroll position, and the photo glides back into its tile.
+      addEventListener("click", (e) => {
+        const a = e.target instanceof Element && e.target.closest("a[data-back]");
+        if (!a || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
+        const isGrid = (u) => { try { const x = new URL(u); return x.origin === location.origin && x.pathname.replace(/\/$/, "") === "/figures"; } catch { return false; } };
+        const nav = window.navigation;
+        if (nav && nav.entries && nav.currentEntry) {
+          const list = nav.entries().slice(0, nav.currentEntry.index).reverse();
+          const hit = list.find((en) => isGrid(en.url));
+          if (hit) { e.preventDefault(); nav.traverseTo(hit.key); }
+          return;
+        }
+        if (isGrid(document.referrer) && history.length > 1) { e.preventDefault(); history.back(); }
       });
     </script>
   </Fragment>
@@ -108,7 +120,7 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   /* right: tall photo, then the text */
   .right { padding-top: 1.5rem; }
   .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7 center / cover no-repeat; view-transition-name: trick-photo; }
-  .photo img, .photo2 img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .intro { margin-top: 3.5rem !important; font-size: 1.625rem; line-height: 1.3; color: var(--ink); }
   .tip { margin-top: 1.75rem !important; padding: 1.125rem 1.25rem !important; border-left: 2px solid var(--red); background: #faf8f8; font-size: .9375rem; line-height: 1.5; }
   .tip b { color: var(--red); font-weight: 500; }
@@ -118,7 +130,6 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
   .st { margin: 0; font-size: 1.875rem; line-height: 1.1; }
   .steps p { margin-top: .5rem !important; font-size: .9375rem; line-height: 1.5; }
   .soon { margin-top: 4.5rem !important; padding: 1.625rem 0 !important; border-top: 1px solid rgb(31 29 30 / 14%); border-bottom: 1px solid rgb(31 29 30 / 14%); font-size: 1.0625rem; line-height: 1.5; }
-  .photo2 { margin: 4.5rem 0 0; height: 32.5rem; overflow: hidden; background: #d9d7d7; }
 
   .next { display: flex; justify-content: space-between; align-items: flex-end; gap: 2rem; margin-top: 8.75rem; padding: 2.5rem var(--site--margin, 2.5rem) 4rem; border-top: 1px solid rgb(31 29 30 / 14%); }
   .lab { font-size: .75rem; color: #8a8586; margin-bottom: .375rem !important; }
@@ -143,7 +154,6 @@ const second = trick.image.includes("SN7") ? "/images/please-keep-the-background
     .intro { margin-top: 2.25rem !important; font-size: 1.3125rem; }
     .st { font-size: 1.5rem; }
     .steps li { grid-template-columns: 2.25rem 1fr; }
-    .photo2 { height: 22.5rem; }
     .next { flex-direction: column; align-items: flex-start; gap: 1.25rem; margin-top: 5rem; padding: 1.75rem .75rem 3rem; }
   }
 </style>
