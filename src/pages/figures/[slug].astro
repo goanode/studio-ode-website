@@ -20,9 +20,16 @@ const kind = trick.category === "Inversion" ? "une inversion" : trick.category =
 const lvl = trick.level.toLowerCase();
 // SEO: every page names the figure, its alias, "pole dance", its level and Lille
 const intro = c?.intro ?? `${trick.name}${trick.alias ? `, aussi appelée « ${trick.alias} »,` : ""} est ${kind} de pole dance de niveau ${lvl}, enseignée en cours au studio Ode à Lille.`;
-const description = c
-  ? `${trick.name}${trick.alias ? ` (${trick.alias})` : ""}, figure de pole dance ${lvl} au studio Ode à Lille. ${c.intro}`
-  : `${trick.name}${trick.alias ? ` (${trick.alias})` : ""} : ${kind} de pole dance de niveau ${lvl}. Étapes, conseils et cours au studio Ode à Lille.`;
+// the catalogue aims at pole dancers everywhere (not only Lille): "how to do X in pole dance", steps, tips, level
+const aka = trick.alias ? ` (${trick.alias})` : "";
+const description = `${trick.name}${aka} en pole dance, niveau ${lvl} : ${c ? c.intro + " " : ""}Les étapes, le conseil clé et les figures à maîtriser avant.`;
+// internal links: figures to master first, then others of the same level (same type first)
+const bySlug = Object.fromEntries(tricks.map((t) => [t.slug, t]));
+const pre = (c?.pre ?? []).map((sl) => bySlug[sl]).filter(Boolean);
+const related = tricks
+  .filter((t) => t.slug !== trick.slug && t.level === trick.level && !pre.includes(t))
+  .sort((a, b) => Number(b.category === trick.category) - Number(a.category === trick.category))
+  .slice(0, 4);
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1024w`;
 // the title heart hangs off the last word, wherever the name wraps
 const _w = trick.name.split(" ");
@@ -30,7 +37,7 @@ const last = _w.pop();
 const head = _w.length ? _w.join(" ") + " " : "";
 ---
 
-<BaseLayout title={`${trick.name} : figure de pole dance ${lvl} — Ode Lille`} viewTransition="trick-main" description={description} wfPage="6a96e3c256f4431a13f9f238">
+<BaseLayout title={`${trick.name} en pole dance : étapes et conseils (${lvl}) | Ode`} viewTransition="trick-main" description={description} wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main tp u-theme-light">
     <a class="back" href="/figures" data-back><span aria-hidden="true">←</span> Toutes les figures</a>
     <div class="cols">
@@ -47,7 +54,7 @@ const head = _w.length ? _w.join(" ") + " " : "";
       </div>
       <div class="right">
         <figure id="trick-main" class="photo" style={`background-image: url(${trick.image}-p-500.webp)`}>
-          <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name}, figure de pole dance ${lvl} au studio Ode à Lille`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
+          <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name}${aka}, figure de pole dance ${lvl}`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
         </figure>
         <p class="intro">{intro}</p>
         {c?.tip && <p class="tip"><b>Conseil</b> : {c.tip}</p>}
@@ -61,8 +68,19 @@ const head = _w.length ? _w.join(" ") + " " : "";
             ))}
           </ol>
         ) : (
-          <p class="soon">Les étapes détaillées de cette figure arrivent bientôt. En attendant, viens l’apprendre en cours de pole dance avec Justine, au studio Ode à Lille.</p>
+          <p class="soon">Les étapes détaillées de cette figure arrivent bientôt.</p>
         )}
+        {pre.length > 0 && (
+          <div class="links">
+            <h2 class="lk-h">Avant de commencer</h2>
+            <p>Maîtrise d’abord {pre.map((t, i) => <>{i > 0 && (i === pre.length - 1 ? " et " : ", ")}<a href={`/figures/${t.slug}`}>{t.name}</a></>)}.</p>
+          </div>
+        )}
+        <div class="links">
+          <h2 class="lk-h">Dans le même niveau</h2>
+          <ul>{related.map((t) => <li><a href={`/figures/${t.slug}`}>{t.name}</a><span>{t.category}</span></li>)}</ul>
+        </div>
+        <p class="cta">Envie de l’apprendre en cours&nbsp;? Ode ouvre à Lille en 2027. <button type="button" data-modal-trigger="waitlist">Réserve ta place →</button></p>
       </div>
     </div>
 
@@ -132,6 +150,17 @@ const head = _w.length ? _w.join(" ") + " " : "";
   .right { padding-top: 1.5rem; }
   .photo { margin: 0; height: min(84svh, 47.5rem); overflow: hidden; background: #d9d7d7 center / cover no-repeat; view-transition-name: trick-photo; }
   .photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .links { margin-top: 3rem; }
+  .lk-h { margin: 0 0 .875rem !important; font-size: .75rem !important; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; color: #6b6667; font-family: var(--_typography---font--primary-family), sans-serif !important; }
+  .links p { font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
+  .links a { color: var(--ink); text-decoration: underline; text-decoration-color: rgb(31 29 30 / 30%); text-underline-offset: .2em; transition: color .3s, text-decoration-color .3s; }
+  .links a:hover { color: var(--red); text-decoration-color: currentColor; }
+  .links ul { list-style: none; margin: 0; padding: 0; border-top: 1px solid rgb(31 29 30 / 14%); }
+  .links li { display: flex; justify-content: space-between; align-items: baseline; padding: .875rem 0; border-bottom: 1px solid rgb(31 29 30 / 14%); }
+  .links li a { font-family: var(--_typography---font--secondary-family); font-size: 1.5rem; letter-spacing: -.01em; text-decoration: none; }
+  .links li span { font-size: .8125rem; color: #6b6667; }
+  .cta { margin: 3rem 0 0 !important; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
+  .cta button { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: none; font: inherit; color: var(--red); cursor: pointer; }
   .intro { margin-top: 3.5rem !important; font-size: 1.625rem; line-height: 1.3; color: var(--ink); }
   .tip { margin-top: 1.75rem !important; padding: 1.125rem 1.25rem !important; border-left: 2px solid var(--red); background: #faf8f8; font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
   .tip b { color: var(--red); font-weight: 500; }
