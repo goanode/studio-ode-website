@@ -67,8 +67,8 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         <>
           {/* Fluted Glass by The Lazy God (self-hosted) */}
           <script is:inline type="importmap">{ "imports": { "three": "/vendor/three.module.min.js" } }</script>
-          {/* loaded only once the page has appeared, so the 3D library never holds up the first paint */}
-          <script is:inline>addEventListener("load", () => setTimeout(() => import("/vendor/tlg-fluted-glass.js"), 0));</script>
+          {/* desktop only, loaded once the page has appeared (phones show still images of the effect instead) */}
+          <script is:inline>if (matchMedia("(min-width: 768px)").matches) addEventListener("load", () => setTimeout(() => import("/vendor/tlg-fluted-glass.js"), 0));</script>
         </>
       )
     }
@@ -144,7 +144,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
               if (ph.closest("section[slide-down]")) return;
               const cover = document.createElement("div");
               cover.className = "rv-cover"; ph.append(cover);
-              const media = [...ph.children].filter((c) => c !== cover);
+              const media = [...ph.children].flatMap((c) => (c === cover ? [] : c.tagName === "PICTURE" ? [...c.querySelectorAll("img")] : [c]));
               gsap.set(media, { scale: 1.05 });
               ScrollTrigger.create({ trigger: ph, start: "top 90%", once: true, onEnter: () => {
                 gsap.to(media, { scale: 1, duration: 1.2, ease: EASE, clearProps: "transform" });

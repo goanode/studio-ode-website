@@ -97,7 +97,7 @@ void main() {
       // Ode change (performance): draw at half the screen's sharpness (never below 0.75) - behind the ribbed glass
       // the difference can't be seen, but phones draw roughly a quarter of the pixels they did before.
       this.renderer = new THREE.WebGLRenderer({ antialias: false, powerPreference: "low-power" });
-      this.renderer.setPixelRatio(Math.max(0.75, Math.min(window.devicePixelRatio || 1, 2) * 0.5));
+      this.renderer.setPixelRatio(window.__odeBakeRatio || Math.max(0.75, Math.min(window.devicePixelRatio || 1, 2) * 0.5));
       this.renderer.setSize(this.width, this.height);
       this.renderer.setClearColor(0xeeeeee, 1);
 
