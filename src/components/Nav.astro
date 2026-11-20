@@ -1,5 +1,5 @@
 ---
-// Site navbar: logo left, page links centred in small capitals, a glass "Rejoins la liste" pill on the right
+// Site navbar: logo left, page links centred in small capitals, a glass "Réserve ta place" pill on the right
 // (turns burgundy with the chrome heart on hover, opens the waitlist). On mobile: logo + "Menu", which opens a
 // full-screen dark menu over the blurred page with big Freight links and the glass waitlist button.
 // Text is white over dark heroes and dark over light pages; once you scroll, the bar gets a frosted white backing.
@@ -26,19 +26,19 @@ const HEART = "/images/ode-heart-s.webp";
     ))}
   </nav>
   <div class="onav-right">
-    <button type="button" class="onav-cta" data-modal-trigger="waitlist">Rejoins la liste<img class="onav-heart" src={HEART} alt="" aria-hidden="true" /></button>
+    <button type="button" class="onav-cta" data-modal-trigger="waitlist">Réserve ta place<img class="onav-heart" src={HEART} alt="" aria-hidden="true" /></button>
     <button type="button" class="onav-menu" aria-expanded="false" aria-controls="onav-sheet"><span class="o">Menu</span><span class="c">Fermer ×</span></button>
   </div>
 </header>
 <div class="onav-sheet" id="onav-sheet" hidden>
-  <p class="onav-st"><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /><span>Ouverture en 2027<br />Liste d’attente ouverte</span></p>
+  <p class="onav-st"><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /><span>Ouverture en 2027<br />100 places fondatrices</span></p>
   <ul>
     {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><img class="onav-ic" src={l.icon} alt="" aria-hidden="true" loading="lazy" /><span class="w">{l.label}</span></a></li>)}
   </ul>
   <div class="onav-foot">
     <div class="onav-inf">
       <p class="h">Infos</p>
-      <dl><div><dt>Studio</dt><dd>Lille</dd></div><div><dt>Ouverture</dt><dd>2027</dd></div><div><dt>Instagram</dt><dd>@ode.studio</dd></div><div><dt>Liste d’attente</dt><dd><button type="button" class="onav-join" data-modal-trigger="waitlist">Rejoins la liste →</button></dd></div></dl>
+      <dl><div><dt>Studio</dt><dd>Lille</dd></div><div><dt>Ouverture</dt><dd>2027</dd></div><div><dt>Instagram</dt><dd>@ode.studio</dd></div><div><dt>Fondatrices</dt><dd><button type="button" class="onav-join" data-modal-trigger="waitlist">Réserve ta place →</button></dd></div></dl>
     </div>
     <p class="onav-tag">Pole dance, force &amp; expression. Depuis Lille, avec amour.</p>
   </div>
@@ -99,7 +99,7 @@ const HEART = "/images/ode-heart-s.webp";
     .onav-logo img { height: 1.375rem; }
   }
   /* desktop, after scrolling (like oharchitecture.com.au): the links in the middle slide away and a glass "Menu" button slides in next to
-     "Rejoins la liste"; scroll back up and it reverses. "Menu" opens the same full-screen menu as on phones. */
+     "Réserve ta place"; scroll back up and it reverses. "Menu" opens the same full-screen menu as on phones. */
   @media (min-width: 992px) {
     .onav-links { transition: opacity .45s ease, transform .7s cubic-bezier(.16, 1, .3, 1); }
     .onav.is-compact .onav-links, html.onav-open .onav-links { opacity: 0; transform: translate(-50%, -1rem); pointer-events: none; }

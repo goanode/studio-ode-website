@@ -3,20 +3,20 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
 // Waitlist window (design W6): a pearl-grey panel on the right over the blurred page (slides up from the bottom on phones).
 // Small Freight title with the chrome heart, one line of perks, first name / e-mail / phone (optional), consent, burgundy button.
 ---
-<dialog data-wf--modal--variant="side-panel" data-modal-target="waitlist" class="wl" aria-label="Rejoins la liste d’attente">
+<dialog data-wf--modal--variant="side-panel" data-modal-target="waitlist" class="wl" aria-label="Réserve ta place parmi les fondatrices">
   <div class="wl-bd" data-modal-close=""></div>
   <div class="wl-pan" data-lenis-prevent="">
-    <div class="wl-top"><p class="wl-lab">(Liste d’attente)</p><button type="button" class="wl-x" data-modal-close="">Fermer</button></div>
+    <div class="wl-top"><p class="wl-lab">(Fondatrices · sans engagement)</p><button type="button" class="wl-x" data-modal-close="">Fermer</button></div>
     <div class="wl-body">
       <div class="wl-intro">
-        <p class="wl-lead" tabindex="-1" autofocus>Ode ouvre à Lille en 2027. Inscris-toi pour être prévenue en premier et profiter des avantages fondatrice&nbsp;: une place réservée, un tarif préférentiel et ton premier cours offert.</p>
+        <p class="wl-lead" tabindex="-1" autofocus>Les 100 premières inscrites deviennent fondatrices&nbsp;: ton premier cours offert, un tarif fondatrice et une place réservée à l’ouverture du studio, à Lille en 2027.</p>
         <img class="wl-ph" src="/images/Hello-please-take-the-style-of-t-391374-HCn-p-300.webp" alt="" aria-hidden="true" loading="lazy" width="300" height="400" />
       </div>
       <div class="w-form">
-        <div class="wl-sec"><span>Tes coordonnées</span><span>(Lille · 2027)</span></div>
+        <div class="wl-sec"><span>Tes coordonnées</span><span>(100 places · gratuit)</span></div>
         <form id="waitlist-form" name="waitlist" method="POST" action="https://api.web3forms.com/submit" data-waitlist-form="" class="wl-form">
           <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY}>
-          <input type="hidden" name="subject" value="Nouvelle inscription — liste d'attente Ode">
+          <input type="hidden" name="subject" value="Nouvelle fondatrice — Ode">
           <input type="hidden" name="from_name" value="Ode website">
           <input type="checkbox" name="botcheck" class="u-display-none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <label class="wl-f"><span>Prénom <i aria-hidden="true">*</i></span><input name="name" type="text" required autocomplete="given-name" placeholder="Ton prénom" /></label>
@@ -24,10 +24,10 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
           <label class="wl-f"><span>Téléphone <em>(facultatif)</em></span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78" /></label>
           <div class="wl-end">
             <label class="wl-c"><input type="checkbox" name="terms" required /><span>J’accepte les conditions.</span></label>
-            <button type="submit" class="wl-btn">Rejoindre →<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
+            <button type="submit" class="wl-btn">Réserver ma place →<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
           </div>
         </form>
-        <div class="w-form-done wl-msg"><p class="wl-lead">Merci&nbsp;! Ton inscription est bien enregistrée. On te prévient dès l’ouverture du studio.</p></div>
+        <div class="w-form-done wl-msg"><p class="wl-lead">Bienvenue parmi les fondatrices&nbsp;! Ta place est réservée. On te prévient dès l’ouverture du studio.</p></div>
         <div class="w-form-fail wl-err">Oups, un problème est survenu. Réessaie dans un instant.</div>
       </div>
     </div>
