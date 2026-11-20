@@ -1,5 +1,5 @@
 // The pole tricks catalogue. One entry per trick; the catalogue page (and later each trick page) is generated from this list.
-// Photos are placeholders for now: the two steel-background studio shots, with varied crops.
+// Each figure has its own studio photo (named by the studio).
 
 export type Level = "Débutante" | "Intermédiaire" | "Avancée";
 export type Category = "Rotation" | "Montée" | "Assise" | "Inversion" | "Figure tenue" | "Sol";
@@ -15,96 +15,73 @@ export interface Trick {
   mirrored: boolean;
 }
 
-const STEEL = [
-  "/images/please-keep-the-background--the-233555-iP0",
-  "/images/please-look-at-the-first-pose----820406-SN7",
-];
-const POS = ["50% 35%", "35% 45%", "65% 30%", "50% 60%"];
-
 const RAW: [string, Level, Category, string?][] = [
-  ["Fireman spin", "Débutante", "Rotation", "Tour pompier"],
+  ["Air walk", "Débutante", "Rotation", "Fairy walk"],
+  ["Apprentice", "Débutante", "Figure tenue", "Jamilla"],
+  ["Baby angel", "Débutante", "Rotation", "Angel spin"],
+  ["Back support tuck", "Débutante", "Assise", "Teddy tuck"],
+  ["Boomerang", "Débutante", "Rotation", "Straddle spin"],
   ["Chair spin", "Débutante", "Rotation", "Tour chaise"],
-  ["Front hook spin", "Débutante", "Rotation"],
-  ["Back hook spin", "Débutante", "Rotation"],
-  ["Carousel spin", "Débutante", "Rotation", "Tour carrousel, Dolphin spin"],
-  ["Step around", "Débutante", "Rotation", "Pas autour, Around the world"],
-  ["Attitude spin", "Débutante", "Rotation"],
-  ["Pirouette", "Débutante", "Rotation"],
-  ["Climb de base", "Débutante", "Montée", "Basic climb"],
-  ["Pole sit", "Débutante", "Assise", "Assise de base"],
-  ["Pole hug", "Débutante", "Figure tenue", "Embrace"],
-  ["Body wave", "Débutante", "Sol", "Ondulation"],
-  ["Knee slide", "Débutante", "Sol", "Glissé genou"],
-  ["Hip roll", "Débutante", "Sol", "Roulé de hanches"],
-  ["Floor sweep", "Débutante", "Sol"],
+  ["Cross knee release", "Débutante", "Assise", "Figure 4 layback"],
+  ["Figurehead", "Débutante", "Figure tenue", "Anjo"],
+  ["Hood ornament", "Débutante", "Figure tenue", "Figure skater"],
   ["Martini sit", "Débutante", "Assise", "Tea party"],
-  ["Crucifix", "Intermédiaire", "Assise"],
-  ["Basic invert", "Intermédiaire", "Inversion", "Inversion de base, Chopper"],
-  ["Outside leg hang", "Intermédiaire", "Inversion", "Gemini"],
-  ["Inside leg hang", "Intermédiaire", "Inversion", "Scorpio"],
-  ["Butterfly", "Intermédiaire", "Figure tenue", "Papillon"],
-  ["Superman", "Intermédiaire", "Figure tenue"],
-  ["Brass monkey", "Intermédiaire", "Figure tenue"],
-  ["Gemini", "Intermédiaire", "Inversion", "Outside leg hang"],
-  ["Scorpio", "Intermédiaire", "Inversion", "Inside leg hang"],
-  ["Cupid", "Intermédiaire", "Figure tenue"],
-  ["Teddy", "Intermédiaire", "Figure tenue"],
-  ["Cradle spin", "Intermédiaire", "Rotation", "Baby cradle"],
-  ["Corkscrew", "Intermédiaire", "Rotation", "Tire-bouchon"],
-  ["Reverse grab spin", "Intermédiaire", "Rotation", "Flying squirrel"],
-  ["Layback", "Intermédiaire", "Assise", "Leanback"],
-  ["Russian layback", "Intermédiaire", "Assise"],
-  ["Tabletop", "Intermédiaire", "Figure tenue", "Layout, Plank"],
+  ["Remi sit", "Débutante", "Assise", "Lotus, Buddha"],
+  ["Stargazer", "Débutante", "Figure tenue"],
+  ["Aerial invert", "Intermédiaire", "Inversion"],
+  ["Anastasia", "Intermédiaire", "Figure tenue"],
+  ["Baby jade", "Intermédiaire", "Inversion"],
+  ["Ballerina", "Intermédiaire", "Figure tenue", "Twisted ballerina"],
   ["Bow and arrow", "Intermédiaire", "Figure tenue", "Arc et flèche, Archer"],
-  ["Back hook invert", "Intermédiaire", "Inversion"],
-  ["Fan kick", "Intermédiaire", "Rotation"],
+  ["Crescent moon", "Intermédiaire", "Assise", "Full moon, Layback bridge"],
+  ["Cross ankle release", "Intermédiaire", "Assise", "Full layback"],
+  ["Crucifix", "Intermédiaire", "Assise"],
+  ["Cupid", "Intermédiaire", "Figure tenue"],
+  ["Dragonfly", "Intermédiaire", "Figure tenue", "Dolphin, Thigh hold"],
+  ["Flatline", "Intermédiaire", "Inversion"],
   ["Genie", "Intermédiaire", "Figure tenue", "Wombat"],
+  ["Iguana", "Intermédiaire", "Inversion", "Inverted pencil"],
   ["Inverted crucifix", "Intermédiaire", "Inversion", "Crucifix inversé, Fallen angel"],
-  ["Hello boys", "Intermédiaire", "Inversion", "Wrist sit, Eye opener"],
-  ["Jade split", "Avancée", "Figure tenue", "Jade"],
+  ["Layback", "Intermédiaire", "Assise", "Leanback"],
+  ["Meathook", "Intermédiaire", "Inversion"],
+  ["Scorpio", "Intermédiaire", "Inversion", "Inside leg hang"],
+  ["Superman", "Intermédiaire", "Figure tenue"],
+  ["Aerial shoulder mount", "Avancée", "Montée"],
+  ["Allegra", "Avancée", "Figure tenue", "Closed allegra"],
+  ["Annabesque", "Avancée", "Figure tenue"],
   ["Ayesha", "Avancée", "Inversion", "Inverted V, Static V"],
-  ["Shoulder mount", "Avancée", "Montée"],
-  ["Iron X", "Avancée", "Figure tenue", "Flag"],
-  ["Handspring", "Avancée", "Inversion"],
-  ["Allegra", "Avancée", "Figure tenue"],
-  ["Phoenix spin", "Avancée", "Rotation"],
-  ["Yogini", "Avancée", "Figure tenue"],
-  ["Rainbow marchenko", "Avancée", "Figure tenue"],
-  ["Janeiro", "Avancée", "Figure tenue"],
-  ["Brass bridge", "Avancée", "Figure tenue"],
-  ["Dragon tail", "Avancée", "Inversion", "Dragontail"],
-  ["Iguana mount", "Avancée", "Montée"],
-  ["Deadlift", "Avancée", "Inversion"],
-  ["Flatline scorpio", "Avancée", "Inversion", "Flatline, Gemini plank"],
-  ["Marley", "Avancée", "Figure tenue", "Bird"],
-  ["Superman split", "Avancée", "Figure tenue"],
+  ["Batwing", "Avancée", "Inversion"],
+  ["Dragontail drop", "Avancée", "Inversion"],
   ["Extended butterfly", "Avancée", "Figure tenue"],
-  ["Twisted grip handspring", "Avancée", "Inversion"],
-  ["Chopsticks", "Avancée", "Figure tenue", "Chopstix"],
-  ["Pencil", "Avancée", "Figure tenue"],
+  ["Flatline scorpio", "Avancée", "Inversion", "Gemini plank"],
+  ["Inverted eagle", "Avancée", "Inversion", "Scorpio cocoon"],
+  ["Iron X", "Avancée", "Figure tenue", "Flag"],
+  ["Jade split", "Avancée", "Figure tenue", "Jade"],
+  ["Jallegra", "Avancée", "Inversion", "Doris"],
+  ["Janeiro", "Avancée", "Figure tenue"],
+  ["Machine gun", "Avancée", "Figure tenue"],
+  ["Pegasus", "Avancée", "Figure tenue"],
+  ["Russian split", "Avancée", "Figure tenue"],
+  ["Spatchy", "Avancée", "Figure tenue"],
+  ["Yogini", "Avancée", "Figure tenue"],
 ];
 
 const slugify = (s: string) =>
-  s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
+  s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
-export const tricks: Trick[] = RAW.map(([name, level, category, alias], i) => ({
-  slug: slugify(name),
-  name,
-  level,
-  category,
-  alias,
-  image: STEEL[i % 2],
-  imagePosition: POS[Math.floor(i / 2) % 4],
-  mirrored: i % 3 === 2,
-}));
+// one photo per figure, in public/images/figures/<slug>(-p-500|-p-800).webp
+export const tricks: Trick[] = RAW.map(([name, level, category, alias]) => {
+  const slug = slugify(name);
+  return { slug, name, level, category, alias, image: `/images/figures/${slug}`, imagePosition: "50% 40%", mirrored: false };
+});
 
 export const LEVELS: Level[] = ["Débutante", "Intermédiaire", "Avancée"];
-export const CATEGORIES: Category[] = ["Rotation", "Montée", "Assise", "Inversion", "Figure tenue", "Sol"];
+export const CATEGORIES: Category[] = (["Rotation", "Montée", "Assise", "Inversion", "Figure tenue", "Sol"] as Category[]).filter((c) => tricks.some((t) => t.category === c));
 
 /** "À la une": hand-picked each month. */
 export const FEATURED: { slug: string; tag: string }[] = [
   { slug: "ayesha", tag: "Figure du mois" },
-  { slug: "butterfly", tag: "Populaire" },
-  { slug: "fireman-spin", tag: "Pour commencer" },
+  { slug: "superman", tag: "Populaire" },
+  { slug: "chair-spin", tag: "Pour commencer" },
   { slug: "jade-split", tag: "Nouveau" },
 ];
