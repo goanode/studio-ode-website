@@ -61,8 +61,10 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
           ))}
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(1030, 1440)};--y:${pct(60, 900)};--w:${pct(260, 1440)};--h:${pct(400, 900)}`}></span>
-        <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
-        <p class="sub">Un studio de pole dance pensé comme un cocon, où chaque élève avance à son rythme.</p>
+        <div class="center">
+          <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
+          <p class="sub">Un studio de pole dance pensé comme un cocon, où chaque élève avance à son rythme.</p>
+        </div>
         <figure class="grow">
           <img src={I.big} alt="Élève au studio Ode" />
           <span class="dim" aria-hidden="true"></span>
@@ -231,11 +233,12 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .cf.faded img { opacity: .35; }
   .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
   .slot { visibility: hidden; pointer-events: none; }
-  .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: 9.375rem; line-height: 1; white-space: nowrap; color: var(--ink); }
+  .center { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+  .ttl { margin: 0; padding-bottom: .12em; font-size: 9.375rem; line-height: 1; white-space: nowrap; color: var(--ink); }
   .vt-title { view-transition-name: concept-title; }
   /* short line under the big title (2 lines max) */
-  .sub { position: absolute; left: 50%; top: calc(50% + 4.75rem); z-index: 2; transform: translateX(-50%); width: 30rem; max-width: calc(100vw - 3rem); margin: 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
-  @media (max-width: 767px) { .sub { top: calc(50% + 2.75rem); font-size: .9375rem; } }
+  .sub { width: 30rem; max-width: calc(100vw - 3rem); margin: 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
+  @media (max-width: 767px) { .center { top: 54.5%; gap: 1rem; } .sub { font-size: .9375rem; } }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
   .b-pil :global(.button_main_text) { white-space: nowrap; }
   .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }

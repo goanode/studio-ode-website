@@ -61,8 +61,10 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
           ))}
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(1120, 1440)};--y:${pct(60, 900)};--w:${pct(240, 1440)};--h:${pct(370, 900)}`}></span>
-        <h1 class="ttl"><span class="ode-th"><span id="communaute-title" class="vt-title">Communauté</span><img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
-        <p class="sub">Des cours en petit groupe où l’on s’encourage, on partage et on progresse ensemble.</p>
+        <div class="center">
+          <h1 class="ttl"><span class="ode-th"><span id="communaute-title" class="vt-title">Communauté</span><img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
+          <p class="sub">Des cours en petit groupe où l’on s’encourage, on partage et on progresse ensemble.</p>
+        </div>
         <figure class="grow">
           <img src={I.big} alt="La communauté du studio Ode" />
           <span class="dim" aria-hidden="true"></span>
@@ -232,11 +234,12 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
   .slot { visibility: hidden; pointer-events: none; }
   /* "Communauté" is longer than "Concept": a little smaller, centred, and the photo slot sits further right so they don't touch */
-  .ttl { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); font-size: 7rem; line-height: 1; white-space: nowrap; color: var(--ink); }
+  .center { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
+  .ttl { margin: 0; padding-bottom: .12em; font-size: 7rem; line-height: 1; white-space: nowrap; color: var(--ink); }
   .vt-title { view-transition-name: communaute-title; }
   /* short line under the big title (2 lines max) */
-  .sub { position: absolute; left: 50%; top: calc(50% + 4.75rem); z-index: 2; transform: translateX(-50%); width: 30rem; max-width: calc(100vw - 3rem); margin: 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
-  @media (max-width: 767px) { .sub { top: calc(50% + 2.75rem); font-size: .9375rem; } }
+  .sub { width: 30rem; max-width: calc(100vw - 3rem); margin: 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
+  @media (max-width: 767px) { .center { top: 54.5%; gap: 1rem; } .sub { font-size: .9375rem; } }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
   .b-pil :global(.button_main_text) { white-space: nowrap; }
   .b-pil { position: absolute; left: 50%; bottom: 1.25rem; transform: translateX(-50%); z-index: 2; white-space: nowrap; }
@@ -272,7 +275,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     .cf:nth-child(5) { --mx: -4%; --my: 66%; --mw: 22%; --mh: 14%; }
     .cf:nth-child(7) { --mx: 26%; --my: 68%; --mw: 38%; --mh: 20%; }
     .cf:nth-child(9) { --mx: 68%; --my: 81%; --mw: 24%; --mh: 13%; }
-    .ttl { left: 50%; font-size: 3.75rem; }
+    .ttl { font-size: 3.75rem; }
     .tick-wrap { left: 0; bottom: calc(50% - .25rem); }
     .tick { font-size: 3.75rem; gap: 5rem; }
     .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
