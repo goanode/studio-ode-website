@@ -1,7 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import WaitlistModal from "../components/WaitlistModal.astro";
-import { tricks, LEVELS, CATEGORIES } from "../data/tricks";
+import { tricks, LEVELS, CATEGORIES, figSrcset, coverFactor } from "../data/tricks";
 // Figures catalogue (design "FiguresOther", after the Other° studio site):
 // in the homepage style: eyebrows, frosted pills with the burgundy + chrome heart hover, a compact search,
 // level + type filters, and a grid that switches between 4 and 8 columns with the photos gliding into place (GSAP Flip).
@@ -91,7 +91,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     <div class="grid" id="fg-grid">
       {tricks.map((t) => (
         <a href={`/figures/${t.slug}`} class="card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category}>
-          <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 767px) 50vw, 25vw" alt={`${t.name}, figure de pole dance ${t.level.toLowerCase()}`} loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
+          <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={figSrcset(t)} sizes={`(max-width: 767px) ${Math.round(50 * coverFactor(t, 1))}vw, ${Math.round(25 * coverFactor(t, 1))}vw`} alt={`${t.name}, figure de pole dance ${t.level.toLowerCase()}`} loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
           <span class="tags"><span class="tg">{t.level}</span><span class="tg">{t.category}</span></span>
           <span class="nm">{t.name}</span>
         </a>

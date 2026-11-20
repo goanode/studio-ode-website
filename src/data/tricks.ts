@@ -13,7 +13,14 @@ export interface Trick {
   image: string;
   imagePosition: string;
   mirrored: boolean;
+  /** photo size (px) and widths of the -p-500 / -p-800 copies, for srcset */
+  w: number;
+  h: number;
+  w500: number;
+  w800: number;
 }
+
+import dims from "./figureDims.json";
 
 const RAW: [string, Level, Category, string?][] = [
   ["Air walk", "Débutante", "Rotation", "Fairy walk"],
@@ -72,7 +79,8 @@ const slugify = (s: string) =>
 // one photo per figure, in public/images/figures/<slug>(-p-500|-p-800).webp
 export const tricks: Trick[] = RAW.map(([name, level, category, alias]) => {
   const slug = slugify(name);
-  return { slug, name, level, category, alias, image: `/images/figures/${slug}`, imagePosition: "50% 40%", mirrored: false };
+  const d = (dims as Record<string, { w: number; h: number; w500: number; w800: number }>)[slug];
+  return { slug, name, level, category, alias, image: `/images/figures/${slug}`, imagePosition: "50% 40%", mirrored: false, ...d };
 });
 
 export const LEVELS: Level[] = ["Débutante", "Intermédiaire", "Avancée"];
@@ -85,3 +93,8 @@ export const FEATURED: { slug: string; tag: string }[] = [
   { slug: "chair-spin", tag: "Pour commencer" },
   { slug: "jade-split", tag: "Nouveau" },
 ];
+
+/** srcset with the real widths (the small copies are scaled by the short side, so landscape photos stay sharp when cropped) */
+export const figSrcset = (t: Trick) => `${t.image}-p-500.webp ${t.w500}w, ${t.image}-p-800.webp ${t.w800}w, ${t.image}.webp ${t.w}w`;
+/** a photo cropped with object-fit: cover into a box of ratio boxW/boxH needs (photo ratio / box ratio) × the box width */
+export const coverFactor = (t: Trick, boxRatio: number) => Math.max(1, t.w / t.h / boxRatio);
