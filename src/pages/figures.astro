@@ -38,7 +38,7 @@ const cset = (src: string) => {
 const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((c) => !c[2]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((c) => c[1]));
 ---
 
-<BaseLayout title="Figures — Studio Ode" viewTransition="fg-grid" description="Le catalogue des figures de pole dance du studio Ode, à Lille." wfPage="6a96e3c256f4431a13f9f238">
+<BaseLayout title="Figures de pole dance par niveau — Studio Ode Lille" viewTransition="fg-grid" description="Toutes les figures de pole dance enseignées au studio Ode à Lille : rotations, montées, assises et inversions, de débutante à avancée, avec les étapes pour les réussir." wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main fx u-theme-light">
     <section class="hero" aria-label="Figures">
       <div class="col">
@@ -49,8 +49,8 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         ))}
       </div>
       <div class="center">
-        <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart ode-icon-book" src="/images/ode-icon-book-s.webp" alt="" aria-hidden="true" /></span></h1>
-        <p class="intro">Toutes les figures enseignées au studio, de la première rotation aux inversions avancées, avec les étapes pour les réussir.</p>
+        <h1 class="ttl"><span class="ode-th"><span class="vt-title">Figures</span><img class="ode-title-heart ode-icon-book" src="/images/ode-icon-book-s.webp" alt="" aria-hidden="true" /></span><span class="u-sr-only"> de pole dance</span></h1>
+        <p class="intro">Toutes les figures de pole dance enseignées au studio Ode à Lille, de la première rotation débutante aux inversions avancées, avec les étapes pour les réussir.</p>
       </div>
     </section>
 
@@ -91,7 +91,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     <div class="grid" id="fg-grid">
       {tricks.map((t) => (
         <a href={`/figures/${t.slug}`} class="card" data-name={t.name} data-alias={t.alias ?? ""} data-level={t.level} data-cat={t.category}>
-          <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 767px) 50vw, 25vw" alt="" loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
+          <span class="ph"><img src={`${t.image}-p-500.webp`} srcset={srcset(t.image)} sizes="(max-width: 767px) 50vw, 25vw" alt={`${t.name}, figure de pole dance ${t.level.toLowerCase()}`} loading="lazy" style={`object-position: ${t.imagePosition}${t.mirrored ? "; transform: scaleX(-1)" : ""}`} /></span>
           <span class="tags"><span class="tg">{t.level}</span><span class="tg">{t.category}</span></span>
           <span class="nm">{t.name}</span>
         </a>

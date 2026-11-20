@@ -16,7 +16,13 @@ export function getStaticPaths() {
 const { trick, index, next, total } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, "0");
 const c = content[trick.slug];
-const intro = c?.intro ?? `${trick.category === "Inversion" ? "Une inversion" : trick.category === "Sol" ? "Un mouvement au sol" : trick.category === "Rotation" ? "Une rotation" : trick.category === "Montée" ? "Une montée" : trick.category === "Assise" ? "Une assise" : "Une figure tenue"} de niveau ${trick.level.toLowerCase()}, enseignée au studio Ode à Lille.`;
+const kind = trick.category === "Inversion" ? "une inversion" : trick.category === "Sol" ? "un mouvement au sol" : trick.category === "Rotation" ? "une rotation" : trick.category === "Montée" ? "une montée" : trick.category === "Assise" ? "une assise" : "une figure tenue";
+const lvl = trick.level.toLowerCase();
+// SEO: every page names the figure, its alias, "pole dance", its level and Lille
+const intro = c?.intro ?? `${trick.name}${trick.alias ? `, aussi appelée « ${trick.alias} »,` : ""} est ${kind} de pole dance de niveau ${lvl}, enseignée en cours au studio Ode à Lille.`;
+const description = c
+  ? `${trick.name}${trick.alias ? ` (${trick.alias})` : ""}, figure de pole dance ${lvl} au studio Ode à Lille. ${c.intro}`
+  : `${trick.name}${trick.alias ? ` (${trick.alias})` : ""} : ${kind} de pole dance de niveau ${lvl}. Étapes, conseils et cours au studio Ode à Lille.`;
 const srcset = (base: string) => `${base}-p-500.webp 500w, ${base}-p-800.webp 800w, ${base}.webp 1024w`;
 // the title heart hangs off the last word, wherever the name wraps
 const _w = trick.name.split(" ");
@@ -24,7 +30,7 @@ const last = _w.pop();
 const head = _w.length ? _w.join(" ") + " " : "";
 ---
 
-<BaseLayout title={`${trick.name} — Figures — Studio Ode`} viewTransition="trick-main" description={intro} wfPage="6a96e3c256f4431a13f9f238">
+<BaseLayout title={`${trick.name} : figure de pole dance ${lvl} — Ode Lille`} viewTransition="trick-main" description={description} wfPage="6a96e3c256f4431a13f9f238">
   <main id="main" class="page_main tp u-theme-light">
     <a class="back" href="/figures" data-back><span aria-hidden="true">←</span> Toutes les figures</a>
     <div class="cols">
@@ -41,7 +47,7 @@ const head = _w.length ? _w.join(" ") + " " : "";
       </div>
       <div class="right">
         <figure id="trick-main" class="photo" style={`background-image: url(${trick.image}-p-500.webp)`}>
-          <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name} à la barre`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
+          <img src={`${trick.image}.webp`} srcset={srcset(trick.image)} sizes="(max-width: 767px) 100vw, 36vw" alt={`${trick.name}, figure de pole dance ${lvl} au studio Ode à Lille`} style={`object-position: ${trick.imagePosition}${trick.mirrored ? "; transform: scaleX(-1)" : ""}`} fetchpriority="high" />
         </figure>
         <p class="intro">{intro}</p>
         {c?.tip && <p class="tip"><b>Conseil</b> : {c.tip}</p>}
@@ -55,7 +61,7 @@ const head = _w.length ? _w.join(" ") + " " : "";
             ))}
           </ol>
         ) : (
-          <p class="soon">Les étapes de cette figure arrivent bientôt. En attendant, viens la travailler en cours avec Justine.</p>
+          <p class="soon">Les étapes détaillées de cette figure arrivent bientôt. En attendant, viens l’apprendre en cours de pole dance avec Justine, au studio Ode à Lille.</p>
         )}
       </div>
     </div>
