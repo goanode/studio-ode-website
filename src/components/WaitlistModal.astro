@@ -13,12 +13,13 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
     </div>
     <div class="wl-body">
       <h2 class="wl-h">Réserve ta place</h2>
-      <p class="wl-lead" tabindex="-1" autofocus>Les 100 premières inscrites deviennent fondatrices&nbsp;: premier cours offert, tarif privilégié et place réservée à l’ouverture.</p>
+      <p class="wl-lead" tabindex="-1" autofocus>Les 50 premières inscrites deviennent fondatrices&nbsp;: premier cours offert, -15&nbsp;% sur ta formule et place réservée à l’ouverture.</p>
       <div class="w-form">
         <form id="waitlist-form" name="waitlist" method="POST" action="https://api.web3forms.com/submit" data-waitlist-form="" class="wl-form">
           <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY}>
           <input type="hidden" name="subject" value="Nouvelle fondatrice — Ode">
           <input type="hidden" name="from_name" value="Ode website">
+          <input type="hidden" name="formule" value="" data-wl-plan>
           <input type="checkbox" name="botcheck" class="u-display-none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <label class="wl-f"><span class="u-sr-only">Prénom</span><input name="name" type="text" required autocomplete="given-name" placeholder="Prénom" /></label>
           <label class="wl-f"><span class="u-sr-only">E-mail</span><input name="email" type="email" required inputmode="email" autocomplete="email" placeholder="E-mail" /></label>
@@ -91,6 +92,16 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
 </script>
   </div>
 </dialog>
+<script is:inline>
+  // which formule (and duration) opened the window: sent with the sign-up, e.g. "Signature (Annuel)"; empty from any other button
+  document.addEventListener("click", (e) => {
+    const t = e.target.closest && e.target.closest('[data-modal-trigger="waitlist"]');
+    const f = document.querySelector("[data-wl-plan]");
+    if (!t || !f) return;
+    const on = document.querySelector(".compare_toggle_option.is-active");
+    f.value = t.dataset.plan ? `${t.dataset.plan}${on ? ` (${on.textContent.trim()})` : ""}` : "";
+  }, true);
+</script>
 
 <style is:global>
   /* Waitlist window D2: centred split window, fluted photo left, burgundy form right. */

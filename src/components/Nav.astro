@@ -31,7 +31,7 @@ const HEART = "/images/ode-heart-s.webp";
   </div>
 </header>
 <div class="onav-sheet" id="onav-sheet" hidden>
-  <p class="onav-st"><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /><span>Ouverture en 2027<br />100 places fondatrices</span></p>
+  <p class="onav-st"><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /><span>Ouverture en 2027<br />50 places fondatrices</span></p>
   <ul>
     {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><img class="onav-ic" src={l.icon} alt="" aria-hidden="true" loading="lazy" /><span class="w">{l.label}</span></a></li>)}
   </ul>

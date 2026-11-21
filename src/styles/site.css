@@ -2817,3 +2817,9 @@ figure {
 /* homepage middle photo (scroll version of the class-card effect): the fluted photo zooms via --stack-z, the copies sit on top */
 [data-stack] > :not(.test-image-2-copy):not(.stack-ghost):not(.rv-cover) { transform: scale(var(--stack-z, 1)); }
 [data-stack] .stack-ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+
+/* Formules during the prelaunch: "Ouverture 2027" label, founder discount, note under the cards */
+.ode-soon { align-self: flex-start; margin: 0 0 .75rem; padding: .3rem .7rem; border: 1px solid currentColor; border-radius: 9999px; font-size: .6875rem; line-height: 1; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+.ode-founder { margin: .5rem 0 1rem; font-size: .875rem; opacity: .85; }
+.ode-founder b { font-weight: 500; opacity: 1; color: inherit; }
+.ode-formules-note { margin: 1.5rem auto 0; max-width: 38rem; font-size: .875rem; line-height: 1.5; text-align: center; opacity: .75; }
