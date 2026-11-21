@@ -30,16 +30,17 @@ const HEART = "/images/ode-heart-s.webp";
   </div>
 </header>
 <div class="onav-sheet" id="onav-sheet" hidden>
-  <p class="onav-st"><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /><span>Ouverture en 2027<br />50 places fondatrices</span></p>
-  <ul>
-    {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><img class="onav-ic" src={l.icon} alt="" aria-hidden="true" loading="lazy" /><span class="w">{l.label}</span></a></li>)}
-  </ul>
+  <div class="onav-mid">
+    <ul>
+      {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><span class="onav-icw" aria-hidden="true"><img class="onav-ic" src={l.icon} alt="" loading="lazy" /></span><span class="w">{l.label}</span></a></li>)}
+    </ul>
+    <p class="onav-blurb">Ode, le nouveau studio de pole dance à Lille. Ouverture en 2027, 50 places fondatrices, gratuites et sans engagement.</p>
+    <span class="onav-num" aria-hidden="true"></span>
+  </div>
   <div class="onav-foot">
-    <div class="onav-inf">
-      <p class="h">Infos</p>
-      <dl><div><dt>Studio</dt><dd>Lille</dd></div><div><dt>Ouverture</dt><dd>2027</dd></div><div><dt>Instagram</dt><dd>@ode.studio</dd></div><div><dt>Fondatrices</dt><dd><button type="button" class="onav-join" data-modal-trigger="waitlist">Réserve ta place →</button></dd></div></dl>
-    </div>
-    <p class="onav-tag">Pole dance, force &amp; expression. Depuis Lille, avec amour.</p>
+    <span>Studio de pole dance · Lille</span>
+    <span class="onav-soc"><span>Instagram</span><span>TikTok</span></span>
+    <span class="onav-cr"><i class="onav-dot"></i>©2026</span>
   </div>
 </div>
 
@@ -52,7 +53,7 @@ const HEART = "/images/ode-heart-s.webp";
   /* the silver chrome logo as it is (a soft shadow keeps it readable on light sections) */
   .onav-logo img { display: block; height: 1.625rem; width: auto; filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 28%)); }
   .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.5rem; }
-  /* hover: the other links fade, and a mini chrome heart pops up on the hovered one (like the section titles) */
+  /* hover: the other links fade, and the hovered one shows its own chrome icon */
   .onav-links a { position: relative; display: block; font-size: .9375rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; transition: opacity .35s; }
   .onav-links .rl { display: flex; overflow: hidden; padding: .125rem 0; }
   .onav-links .ch { position: relative; display: block; white-space: pre; }
@@ -69,23 +70,46 @@ const HEART = "/images/ode-heart-s.webp";
   .onav-menu { display: none; padding: .5rem 0; border: 0; background: none; color: inherit; font: inherit; font-size: .9375rem; letter-spacing: .01em; cursor: pointer; }
   .onav-menu .c { display: none; }
 
-  /* full-screen menu (R4): pearl-grey sheet, big centred links (in Freight Big Pro, like the section titles), INFOS block + line at the bottom. The chrome icon of each link pops in before it. */
-  .onav-sheet { position: fixed; z-index: 999; inset: 0; display: grid; grid-template-rows: 1fr auto; padding: calc(var(--nav--height-total) + 1rem) var(--site--margin, 1.25rem) 1.75rem; background: #efeded; color: #1f1d1e; opacity: 0; transition: opacity .35s; }
+  /* full-screen menu (F3): white sheet that slides down like a curtain. Big Freight links on the left; the hovered one (or the
+     current page) turns burgundy with its chrome icon sliding in before it, the others fade. A big faint number in the corner
+     follows the hovered link. The navbar (logo, Réserve ta place, Fermer) stays on top. */
+  .onav-sheet { position: fixed; z-index: 999; inset: 0; display: grid; grid-template-rows: 1fr auto; padding: calc(var(--nav--height-total) + .5rem) var(--site--margin, 1.25rem) 1.5rem; background: #fff; color: #1f1d1e; transform: translateY(-100%); transition: transform .8s cubic-bezier(.76, 0, .24, 1); }
   .onav-sheet[hidden] { display: none; }
-  .onav-sheet.is-open { opacity: 1; }
-  .onav-st { display: none; }
-  .onav-sheet ul { list-style: none; margin: 0; padding: 0; align-self: center; justify-self: center; text-align: center; }
-  .onav-sheet li { opacity: 0; transform: translateY(1rem); transition: opacity .45s ease calc(.06s * var(--i) + .1s), transform .55s cubic-bezier(.2, .8, .2, 1) calc(.06s * var(--i) + .1s); }
-  .onav-sheet.is-open li { opacity: 1; transform: none; }
-  .onav-sheet li a { display: flex; align-items: center; justify-content: center; gap: .2em; padding: .05em 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.75rem; line-height: 1.12; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: inherit; text-decoration: none; transition: opacity .35s; }
-  .onav-sheet .w { display: block; transition: transform .5s cubic-bezier(.2, .8, .2, 1); }
-  .onav-foot { display: grid; gap: 1.75rem; }
-  .onav-inf .h { margin: 0 0 .875rem; font-size: .875rem; font-weight: 500; letter-spacing: .02em; text-transform: uppercase; }
-  .onav-inf dl { margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
-  .onav-inf dt { font-size: .8125rem; opacity: .5; margin-bottom: .25rem; }
-  .onav-inf dd { margin: 0; font-size: .9375rem; }
-  .onav-join { padding: 0; border: 0; border-bottom: 1px solid currentColor; background: none; font: inherit; color: #401f28; cursor: pointer; }
-  .onav-tag { margin: 0; font-size: .75rem; opacity: .5; text-align: center; }
+  .onav-sheet.is-open { transform: none; }
+  .onav-mid { position: relative; display: flex; align-items: center; min-height: 0; }
+  .onav-sheet ul { list-style: none; margin: 0; padding: 0; }
+  .onav-sheet li { opacity: 0; transform: translateY(2rem); transition: opacity .5s ease, transform .7s cubic-bezier(.16, 1, .3, 1); }
+  .onav-sheet.is-open li { opacity: 1; transform: none; transition-delay: calc(.45s + .08s * var(--i)); }
+  .onav-sheet li a { display: flex; align-items: center; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.75rem; line-height: 1.02; letter-spacing: -.03em; white-space: nowrap; color: inherit; text-decoration: none; transition: color .35s, opacity .35s; }
+  .onav-icw { display: inline-block; width: 0; margin-right: 0; opacity: 0; transform: scale(.4) rotate(-25deg); transition: width .45s cubic-bezier(.65, 0, .35, 1), margin .45s cubic-bezier(.65, 0, .35, 1), opacity .25s, transform .55s cubic-bezier(.3, 1.6, .5, 1); }
+  .onav-ic { display: block; width: 100%; height: auto; filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 22%)); }
+  /* active = hovered, or (nothing hovered) the current page, or (no current page) the first link */
+  .onav-sheet li a:is(:hover, :focus-visible), .onav-sheet ul:not(:hover) a.on, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child a { color: #401f28; }
+  .onav-sheet li a:is(:hover, :focus-visible) .onav-icw, .onav-sheet ul:not(:hover) a.on .onav-icw, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child .onav-icw { width: .66em; margin-right: .19em; opacity: 1; transform: none; }
+  .onav-sheet ul:hover a:not(:hover) { opacity: .3; }
+  .onav-blurb { display: none; }
+  .onav-num { position: absolute; right: -.04em; bottom: -.06em; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 8.75rem; line-height: .8; letter-spacing: -.04em; color: #401f28; opacity: 0; transition: opacity .6s ease .6s; pointer-events: none; }
+  .onav-sheet.is-open .onav-num { opacity: .2; }
+  .onav-num::after { content: "01"; }
+  .onav-sheet:has(ul:not(:hover) li:nth-child(2) a.on) .onav-num::after { content: "02"; }
+  .onav-sheet:has(ul:not(:hover) li:nth-child(3) a.on) .onav-num::after { content: "03"; }
+  .onav-sheet:has(li:nth-child(1) a:is(:hover, :focus-visible)) .onav-num::after { content: "01"; }
+  .onav-sheet:has(li:nth-child(2) a:is(:hover, :focus-visible)) .onav-num::after { content: "02"; }
+  .onav-sheet:has(li:nth-child(3) a:is(:hover, :focus-visible)) .onav-num::after { content: "03"; }
+  .onav-foot { display: grid; grid-template-columns: 1fr auto; row-gap: .625rem; align-items: center; font-size: .625rem; letter-spacing: .08em; text-transform: uppercase; opacity: 0; transition: opacity .5s ease; }
+  .onav-sheet.is-open .onav-foot { opacity: 1; transition-delay: .7s; }
+  .onav-soc { grid-column: 1 / -1; order: -1; display: flex; gap: 1.25rem; }
+  .onav-cr { justify-self: end; display: flex; align-items: center; gap: .625rem; }
+  .onav-dot { width: .5rem; height: .5rem; border-radius: 50%; background: #401f28; }
+  @media (min-width: 992px) {
+    .onav-sheet { padding: var(--nav--height-total) var(--site--margin, 2.5rem) 1.625rem; }
+    .onav-sheet li a { font-size: min(9.375rem, 10.4vw, 16.5vh); }
+    .onav-blurb { display: block; position: absolute; right: 0; top: 1.25rem; max-width: 15.5rem; margin: 0; font-size: .6875rem; line-height: 1.45; letter-spacing: .06em; text-transform: uppercase; }
+    .onav-num { font-size: min(20rem, 34vh); }
+    .onav-foot { grid-template-columns: 1fr auto 1fr; font-size: .6875rem; }
+    .onav-soc { grid-column: auto; order: 0; gap: 1.75rem; }
+  }
+  @media (prefers-reduced-motion: reduce) { .onav-sheet, .onav-sheet li, .onav-icw, .onav-num, .onav-foot { transition: none; } }
   html.onav-open .onav { --fg: #1f1d1e; }
   html.onav-open .onav-menu .o { display: none; }
   html.onav-open .onav-menu .c { display: inline; }
@@ -104,33 +128,7 @@ const HEART = "/images/ode-heart-s.webp";
     .onav-menu { display: inline-flex; align-items: center; height: 2.625rem; max-width: 0; margin-left: -1rem; padding: 0; overflow: hidden; white-space: nowrap; border: 1px solid transparent; border-radius: 9999px; opacity: 0; pointer-events: none; transform: translateY(-.5rem); transition: max-width .7s cubic-bezier(.16, 1, .3, 1), margin .7s cubic-bezier(.16, 1, .3, 1), padding .7s cubic-bezier(.16, 1, .3, 1), opacity .45s ease, transform .7s cubic-bezier(.16, 1, .3, 1), background-color .35s, border-color .35s, color .35s; }
     .onav.is-compact .onav-menu, html.onav-open .onav-menu { max-width: 8rem; margin-left: 0; padding: 0 1.25rem; opacity: 1; pointer-events: auto; transform: none; border-color: color-mix(in srgb, var(--fg) 45%, transparent); background: color-mix(in srgb, var(--fg) 12%, transparent); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
     .onav.is-compact .onav-menu:hover { background: #401f28; border-color: #401f28; color: #fff; }
-    /* the full-screen menu, roomier on large screens */
-    .onav-sheet { grid-template-rows: auto 1fr auto; padding: 0 var(--site--margin, 2.5rem) 2.25rem; }
-    .onav-st { display: flex; align-items: center; gap: .75rem; justify-self: center; height: var(--nav--height-total); margin: 0; font-size: .875rem; line-height: 1.3; opacity: .55; }
-    .onav-st img { width: 1.75rem; height: auto; filter: drop-shadow(0 3px 6px rgb(0 0 0 / 25%)); }
-    .onav-sheet li a { font-size: min(8.25rem, 9.2vw, 14.5vh); line-height: 1.08; }
-    /* hover: the other links fade, this one slides left a little and its Freight letter tilts */
-    .onav-sheet ul:hover a { opacity: .35; }
-    .onav-sheet ul a:hover, .onav-sheet ul a:focus-visible { opacity: 1; }
-    .onav-foot { grid-template-columns: 1fr auto; align-items: end; }
-    .onav-inf { display: grid; grid-template-columns: 8.75rem 1fr; }
-    .onav-inf dl { grid-template-columns: repeat(4, auto); justify-content: start; gap: .75rem 2.5rem; }
-    .onav-tag { font-size: .875rem; }
   }
-  @media (prefers-reduced-motion: reduce) { .onav-sheet, .onav-sheet li, .onav-heart { transition: none; } }
-  /* menu A: each link carries its chrome icon (as on the section titles). Desktop: the icon pops in on hover (and stays on the
-     current page). Phones (no hover): the icons pop in one after another when the menu opens. */
-  /* the icon hangs to the left of the word, so the words themselves stay exactly centred */
-  .onav-sheet li a { position: relative; }
-  .onav-sheet .onav-ic { position: absolute; right: calc(100% + .15em); top: 50%; margin-top: -.25em; }
-  .onav-ic { width: .45em; height: auto; flex: none; filter: drop-shadow(0 .08em .14em rgb(0 0 0 / 35%)); opacity: 0; transform: translateY(.3em) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; }
-  .onav-sheet li a:hover .onav-ic, .onav-sheet li a:focus-visible .onav-ic, .onav-sheet li a.on .onav-ic { opacity: 1; transform: rotate(10deg); }
-  @media (hover: none) {
-    .onav-sheet .onav-ic { transition-delay: calc(.35s + .07s * var(--i, 0)); }
-    .onav-sheet.is-open .onav-ic { opacity: 1; transform: rotate(10deg); }
-    .onav-sheet li { --i: inherit; }
-  }
-  @media (prefers-reduced-motion: reduce) { .onav-ic { transition: none; } }
   /* on load the bar comes in: logo first, then the links' letters rise one link after another, then the button / Menu */
   @keyframes onav-in { from { opacity: 0; transform: translateY(-.75rem); } }
   @keyframes onav-ch { from { transform: translateY(115%); } }
@@ -196,7 +194,7 @@ const HEART = "/images/ode-heart-s.webp";
     tone();
     if (window.lenis) open ? lenis.stop() : lenis.start();
     if (open) { sheet.hidden = false; requestAnimationFrame(() => requestAnimationFrame(() => sheet.classList.add("is-open"))); }
-    else { sheet.classList.remove("is-open"); setTimeout(() => { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, 350); tone(); }
+    else { sheet.classList.remove("is-open"); setTimeout(() => { if (!sheet.classList.contains("is-open")) sheet.hidden = true; }, 850); tone(); }
   };
   btn.addEventListener("click", () => set(btn.getAttribute("aria-expanded") !== "true"));
   sheet.addEventListener("click", (e) => { if (e.target.closest("a, [data-modal-trigger]")) set(false); });
