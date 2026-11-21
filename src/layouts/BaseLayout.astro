@@ -211,14 +211,15 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
             }
           } else {
             // phones and tablets: the class-card effect plays on the card the slider moves to (arrow button or swipe),
-            // and the card stays that way (no undo); the first card is left as it is
+            // every time (sliding back too). The card is reset instantly first: before and after look the same, so nothing jumps.
             document.querySelectorAll(".card_classes_img.u-cover-absolute._1").forEach((i1) => gsap.set(i1, { scale: 1.3 }));
             addEventListener("ode-class-slide", (e) => {
               const card = e.detail;
-              if (!card || card.dataset.played) return;
+              if (!card) return;
               const [i1, i2, i3, i4] = [1, 2, 3, 4].map((n) => card.querySelector(`.card_classes_img.u-cover-absolute._${n}`));
               if (!i1) return;
-              card.dataset.played = "1";
+              gsap.set([i2, i3, i4].filter(Boolean), { scale: 1, overwrite: true });
+              gsap.set(i1, { scale: 1.3, overwrite: true });
               gsap.to([i4, i3, i2].filter(Boolean), { scale: 0, duration: 0.5, ease: "power1.inOut", stagger: 0.1, overwrite: true });
               gsap.to(i1, { scale: 1, duration: 0.5, ease: "power1.inOut", delay: 0.3, overwrite: true });
             });
