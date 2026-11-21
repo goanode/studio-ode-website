@@ -11,7 +11,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
       const key = (u) => { try { return new URL(u, location.href).pathname.replace(/\.html$/, "").replace(/\/$/, ""); } catch { return ""; } };
       const name = (u) => { const m = MAP[key(u)]; if (!m) return null; const el = document.querySelector(m[0]); if (el) el.style.viewTransitionName = m[1]; return el; };
       // leaving the homepage for one of the three pages
-      addEventListener("pageswap", (e) => { if (e.viewTransition && e.activation && e.activation.entry) name(e.activation.entry.url); });
+      addEventListener("pageswap", (e) => { if (!window.__odeNavVT && e.viewTransition && e.activation && e.activation.entry) name(e.activation.entry.url); });
       // coming back to the homepage from one of them
       addEventListener("pagereveal", (e) => {
         const from = window.navigation && navigation.activation && navigation.activation.from;
@@ -235,7 +235,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
             <div class="u-layout-column-1 w-variant-d69d5003-e9bc-b347-4e02-eb46976beb1c  ">
               <div data-wf--content-wrapper--variant="left" style="" class="u-content-wrapper w-variant-e85a4315-14bc-e5ef-0d3e-2c8c9ed7d2f1">
                 <div class="u-display-contents">
-                  <div data-number="15" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext">
+                  <div data-number="15" data-wf--typography-paragraph--variant="h5" class="u-text w-variant-5c484503-e2a0-ac99-680d-56013d859efa u-rich-text w-richtext ode-2l">
                     <p>Les 50 premières inscrites deviennent fondatrices, gratuitement et sans engagement</p>
                   </div>
                 </div>
@@ -684,7 +684,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                         <div class="card_primary_content">
                           <div class="card_primary_visual"><img src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" loading="lazy" alt="" class="card_primary_image"></div>
                           <div class="card_primary_header">
-                            <p class="ode-soon">Ouverture 2027</p>
                             <h3 class="card_primary_plan u-text-style-main u-color-faded">Essentiel</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">100 €</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">200 €</h3>
@@ -743,7 +742,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                         <div class="card_primary_content">
                           <div class="card_primary_visual"><img src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" loading="lazy" alt="" class="card_primary_image"></div>
                           <div class="card_primary_header">
-                            <p class="ode-soon">Ouverture 2027</p>
                             <h3 class="card_primary_plan u-text-style-main u-color-faded">Signature</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">140 €</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">200 €</h3>
@@ -811,7 +809,6 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                         <div class="card_primary_content">
                           <div class="card_primary_visual"><img src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" loading="lazy" alt="" class="card_primary_image"></div>
                           <div class="card_primary_header">
-                            <p class="ode-soon">Ouverture 2027</p>
                             <h3 class="card_primary_plan u-text-style-main u-color-faded">Excellence</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">180 €</h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">200 €</h3>

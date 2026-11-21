@@ -7,9 +7,8 @@ const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/index$/, "").r
 const lightText = path === "/" || path === "/menu";
 const links = [
   { label: "Concept", href: "/concept", on: path === "/concept", icon: "/images/ode-icon-sparkle-s.webp" },
-  { label: "Cours", href: "/#cours", on: false, icon: "/images/ode-heart-s.webp" },
+  { label: "Communauté", href: "/communaute", on: path === "/communaute", icon: "/images/ode-heart-s.webp" },
   { label: "Figures", href: "/figures", on: path === "/figures" || path.startsWith("/figures/"), icon: "/images/ode-icon-book-s.webp" },
-  { label: "Formules", href: "/#formules", on: false, icon: "/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" },
 ];
 const HEART = "/images/ode-heart-s.webp";
 ---
@@ -142,6 +141,23 @@ const HEART = "/images/ode-heart-s.webp";
 </style>
 
 <script is:inline>
+// clicking Concept, Communauté or Figures in the navbar (or the menu): the clicked word glides and grows into the
+// page title, like the "Découvrir" links on the homepage (the homepage's own handler steps aside when this is set)
+(() => {
+  const VT = { "/concept": "concept-title", "/communaute": "communaute-title", "/figures": "figures-title" };
+  const key = (u) => { try { return new URL(u, location.href).pathname.replace(/\.html$/, "").replace(/\/$/, ""); } catch { return ""; } };
+  document.addEventListener("click", (e) => {
+    const a = e.target.closest && e.target.closest(".onav-links a, .onav-sheet a");
+    window.__odeNavVT = a && VT[key(a.href)] && !a.classList.contains("on") ? a.querySelector(".rl, .w") : null;
+  }, true);
+  addEventListener("pageswap", (e) => {
+    const el = window.__odeNavVT;
+    if (!el || !e.viewTransition || !e.activation || !e.activation.entry) return;
+    const n = VT[key(e.activation.entry.url)];
+    if (n) el.style.viewTransitionName = n;
+  });
+  addEventListener("pageshow", () => { if (window.__odeNavVT) window.__odeNavVT.style.viewTransitionName = ""; window.__odeNavVT = null; });
+})();
 (() => {
   const bar = document.querySelector("[data-onav]");
   const sheet = document.getElementById("onav-sheet");
