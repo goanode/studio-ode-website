@@ -607,6 +607,8 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     },
     slideActiveClass: "is-active",
     slideDuplicateActiveClass: "is-active",
+    // tells the class cards which one the slider just moved to (phones play the card effect on it)
+    on: { slideChange: (sw) => dispatchEvent(new CustomEvent("ode-class-slide", { detail: sw.slides[sw.activeIndex] })) },
   });
   const load = () => {
     if (window.Swiper) return init();
