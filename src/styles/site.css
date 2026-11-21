@@ -2826,3 +2826,4 @@ figure {
 /* homepage line "Les 50 premières inscrites…": two lines at most */
 .u-text.ode-2l { max-width: 30rem; text-wrap: balance; }
 @media (max-width: 379px) { .u-text.ode-2l { font-size: 1rem; } }
+@media (max-width: 767px) { .ode-formules-note { margin-top: 1rem; max-width: 20rem; font-size: .6875rem; line-height: 1.45; } }
