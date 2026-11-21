@@ -18,17 +18,18 @@
   .fo-ic:hover, .fo-ic:focus-visible { background: #401f28; }
   .fo-ic:hover svg path, .fo-ic:focus-visible svg path { fill: #fff; }
   .fo-ic:focus-visible { outline: 2px solid #401f28; outline-offset: 3px; }
-  /* site map (desktop): a card with engraved heading and links on the left, the two cards on the right; phones show the cards only */
+  /* site map (desktop): plain heading and links on the left, the two cards on the right; phones show the cards only */
   .fo-map { display: none; }
   @media (min-width: 768px) {
     .fo-mid { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 3rem; padding: 4.5rem var(--site--margin, 2.5rem) 3.5rem; text-align: left; }
-    /* the site map sits in a card like Contact / Réseaux, with the same engraved lettering */
-    .fo-map { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; min-width: 18.75rem; padding: 1.75rem 2.5rem 1.625rem; border-radius: 1.25rem; background: rgb(255 255 255 / 20%); text-align: center; }
-    .fo-map ul { display: grid; gap: .5rem; margin: 1.25rem 0 0; padding: 0; list-style: none; }
-    .fo-map a { font-size: .75rem; letter-spacing: .28em; text-decoration: none; transition: color .3s; }
-    .fo-map a:hover, .fo-map a:focus-visible { color: #401f28; }
+    .fo-map { display: block; }
+    /* plain white text, like the rest of the site */
+    .fo-map-t { margin: 0 0 1.25rem; font-size: 2rem; font-weight: 400; line-height: 1.2; color: #fff; }
+    .fo-map ul { display: grid; gap: .625rem; margin: 0; padding: 0; list-style: none; }
+    .fo-map a { font-size: .9375rem; color: #fff; text-decoration: none; transition: opacity .3s; }
+    .fo-map ul:hover a { opacity: .6; }
+    .fo-map ul a:hover, .fo-map a:focus-visible { opacity: 1; }
     .fo-cards { margin-top: 0; }
-    .fo-map, .fo-card { min-height: 16.75rem; } /* the three cards share one height */
     }
   .fo-bar { display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; margin: 0 var(--site--margin, 2.5rem); padding: 1.125rem 0 1.75rem; border-top: 1px solid rgb(255 255 255 / 45%); box-shadow: 0 -1px 0 rgb(0 0 0 / 12%); }
   .fo-bar .fo-eng { font-size: .625rem; letter-spacing: .24em; text-decoration: none; }
@@ -55,13 +56,13 @@
   <!-- under the chrome letters: site map (desktop) and the two cards with engraved titles -->
   <div class="fo-mid">
     <nav class="fo-map" aria-labelledby="fo-map-t">
-      <h3 class="fo-eng fo-ct" id="fo-map-t">Plan du site</h3>
+      <h3 class="fo-map-t" id="fo-map-t">Plan du site</h3>
       <ul role="list">
-        <li><a class="fo-eng" href="/">Accueil</a></li>
-        <li><a class="fo-eng" href="/concept">Concept</a></li>
-        <li><a class="fo-eng" href="/communaute">Communauté</a></li>
-        <li><a class="fo-eng" href="/figures">Figures</a></li>
-        <li><a class="fo-eng" href="/#formules">Formules</a></li>
+        <li><a href="/">Accueil</a></li>
+        <li><a href="/concept">Concept</a></li>
+        <li><a href="/communaute">Communauté</a></li>
+        <li><a href="/figures">Figures</a></li>
+        <li><a href="/#formules">Formules</a></li>
       </ul>
     </nav>
     <div class="fo-cards">
