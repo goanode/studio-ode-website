@@ -20,7 +20,20 @@
   .fo-rule { display: block; width: 7.5rem; height: 2px; margin: 2.125rem auto 1.75rem; background: linear-gradient(#fff 0 50%, rgb(0 0 0 / 22%) 50% 100%); opacity: .85; }
   .fo-join { padding: .25rem 0; border: 0; background: none; font-size: .9375rem; letter-spacing: .42em; color: #401f28; text-shadow: 0 1px 0 rgb(255 255 255 / 50%); cursor: pointer; transition: letter-spacing .5s cubic-bezier(.2, .8, .2, 1); }
   .fo-join:hover { letter-spacing: .48em; }
-  .fo-orn { display: block; width: 18.75rem; height: auto; margin-top: 2.25rem; }
+  /* site map (desktop): engraved heading and links on the left, the two cards on the right; phones keep the centred cards + call to action */
+  .fo-map { display: none; }
+  .fo-cta { display: flex; flex-direction: column; align-items: center; }
+  @media (min-width: 768px) {
+    .fo-mid { flex-direction: row; justify-content: space-between; align-items: flex-end; gap: 3rem; padding: 4.5rem var(--site--margin, 2.5rem) 3.5rem; text-align: left; }
+    .fo-map { display: block; }
+    .fo-map .fo-ct::after { margin-left: 0; }
+    .fo-map ul { display: grid; gap: .875rem; margin: 1.75rem 0 2rem; padding: 0; list-style: none; }
+    .fo-map a { font-size: .9375rem; letter-spacing: .28em; text-decoration: none; transition: color .3s; }
+    .fo-map a:hover, .fo-map a:focus-visible { color: #401f28; }
+    .fo-map .fo-join { padding-top: 1.25rem; border-top: 0; }
+    .fo-cards { margin-top: 0; }
+    .fo-cta { display: none; }
+  }
   .fo-bar { display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; margin: 0 var(--site--margin, 2.5rem); padding: 1.125rem 0 1.75rem; border-top: 1px solid rgb(255 255 255 / 45%); box-shadow: 0 -1px 0 rgb(0 0 0 / 12%); }
   .fo-bar .fo-eng { font-size: .625rem; letter-spacing: .24em; text-decoration: none; }
   .fo-bar-r { display: flex; gap: 1.625rem; }
@@ -34,7 +47,6 @@
     .fo-ic svg { width: .875rem; height: .875rem; }
     .fo-vis { width: 4.75rem; height: 4.75rem; }
     .fo-join { font-size: .75rem; letter-spacing: .3em; }
-    .fo-orn { width: 13.75rem; margin-top: 1.75rem; }
     .fo-bar { flex-direction: column; gap: .75rem; margin: 0 1.125rem; text-align: center; }
     .fo-bar-r { flex-wrap: wrap; justify-content: center; gap: .625rem 1.125rem; }
   }
@@ -47,6 +59,17 @@
   <h2 class="footer_title u-sr-only">Pied de page</h2>
   <!-- under the chrome letters, in the spirit of the silver invitation: two cards with engraved titles, the call to action, the ornament -->
   <div class="fo-mid">
+    <nav class="fo-map" aria-labelledby="fo-map-t">
+      <h3 class="fo-eng fo-ct" id="fo-map-t">Plan du site</h3>
+      <ul role="list">
+        <li><a class="fo-eng" href="/">Accueil</a></li>
+        <li><a class="fo-eng" href="/concept">Concept</a></li>
+        <li><a class="fo-eng" href="/communaute">Communauté</a></li>
+        <li><a class="fo-eng" href="/figures">Figures</a></li>
+        <li><a class="fo-eng" href="/#formules">Formules</a></li>
+      </ul>
+      <button type="button" class="fo-eng fo-join" data-modal-trigger="waitlist">Réserve ta place</button>
+    </nav>
     <div class="fo-cards">
       <section class="fo-card" aria-labelledby="fo-con">
         <h3 class="fo-eng fo-ct" id="fo-con">Contact</h3>
@@ -59,9 +82,7 @@
         <ul class="fo-icons" role="list"><li><a class="fo-ic" aria-label="Facebook" href="#" target="_blank" rel="noopener"><svg width="64" height="64" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M24.9244 62V36H16V24H24.9244V15.62C24.9244 6.49153 30.7033 2 38.8465 2C42.7472 2 46.0996 2.29041 47.0766 2.42022V11.96L41.4289 11.9625C37.0001 11.9625 36 14.067 36 17.1551V24H48L44 36H36V62H24.9244Z" fill="black"></path> </svg></a></li><li><a class="fo-ic" aria-label="Instagram" href="#" target="_blank" rel="noopener"><svg width="56" height="56" viewbox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M55.84 16.46C55.79 14.13 55.35 11.83 54.54 9.66C53.08 5.9 50.11 2.92 46.34 1.47C44.17 0.66 41.87 0.22 39.54 0.17C36.56 0.03 35.6 0 28 0C20.4 0 19.45 0.03 16.46 0.17C14.14 0.21 11.84 0.65 9.66 1.47C5.9 2.92 2.93 5.9 1.47 9.66C0.66 11.84 0.22 14.14 0.17 16.46C0.04 19.44 0 20.4 0 28C0 35.6 0.04 36.56 0.17 39.54C0.22 41.87 0.66 44.17 1.47 46.34C2.93 50.1 5.9 53.08 9.66 54.53C11.84 55.35 14.14 55.79 16.46 55.83C19.45 55.97 20.4 56 28 56C35.6 56 36.56 55.97 39.55 55.83C41.87 55.79 44.17 55.35 46.35 54.53C50.11 53.08 53.08 50.1 54.54 46.34C55.35 44.17 55.79 41.87 55.84 39.54C55.97 36.56 56 35.6 56 28C56 20.4 55.97 19.44 55.84 16.46ZM28 42.38C20.06 42.38 13.63 35.94 13.63 28C13.63 20.06 20.06 13.62 28 13.62C31.97 13.62 35.56 15.23 38.17 17.83C40.77 20.44 42.38 24.03 42.38 28C42.38 35.94 35.94 42.38 28 42.38ZM42.95 16.41C41.09 16.41 39.59 14.91 39.59 13.05C39.59 11.19 41.09 9.69 42.95 9.69C44.81 9.69 46.31 11.2 46.31 13.05C46.31 14.9 44.81 16.41 42.95 16.41Z" fill="black"></path> <path d="M37.3399 28.0019C37.3399 33.1519 33.1599 37.3319 28.0099 37.3319H27.9999C22.8499 37.3319 18.6699 33.1519 18.6699 28.0019C18.6699 22.8519 22.8499 18.6719 27.9999 18.6719C33.1499 18.6719 37.3399 22.8519 37.3399 28.0019Z" fill="black"></path> </svg></a></li><li><a class="fo-ic" aria-label="LinkedIn" href="#" target="_blank" rel="noopener"><svg width="46" height="46" viewbox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M11 5.5C11 8.6 8.6 11 5.5 11C2.4 11 0 8.5 0 5.5C0 2.5 2.5 0 5.5 0C8.5 0 11 2.5 11 5.5Z" fill="black"></path> <path d="M10.2998 15.1953H0.799805V45.6953H10.2998V15.1953Z" fill="black"></path> <path d="M45.8002 29V45.7H36.3002V30.9C36.3002 27.4 36.2002 22.8 31.4002 22.8C26.6002 22.8 25.7002 26.7 25.7002 30.6V45.7H16.2002V15.2H25.3002V19.4H25.4002C26.7002 17 29.8002 14.5 34.4002 14.5C44.0002 14.5 45.8002 20.8 45.8002 29Z" fill="black"></path> </svg></a></li></ul>
       </section>
     </div>
-    <span class="fo-rule" aria-hidden="true"></span>
-    <button type="button" class="fo-eng fo-join" data-modal-trigger="waitlist">Réserve ta place</button>
-    <img class="fo-orn" src="/images/ode-ornament.webp" alt="" aria-hidden="true" loading="lazy" width="326" height="150" />
+    <div class="fo-cta"><span class="fo-rule" aria-hidden="true"></span><button type="button" class="fo-eng fo-join" data-modal-trigger="waitlist">Réserve ta place</button></div>
   </div>
   <div class="fo-bar">
     <span class="fo-eng">© <span data-dynamic-year>2026</span> Ode Studio · Lille</span>
