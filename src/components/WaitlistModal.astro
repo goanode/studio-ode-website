@@ -8,7 +8,7 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
   <div class="wl-bd" data-modal-close=""></div>
   <div class="wl-pan" data-lenis-prevent="">
     <div class="wl-ph">
-      <img src="/images/ode-fluted-modal.webp" srcset="/images/ode-fluted-modal-s.webp 524w, /images/ode-fluted-modal.webp 1048w" sizes="(max-width: 767px) 100vw, 29rem" alt="" aria-hidden="true" loading="lazy" width="1048" height="1311" />
+      <img src="/images/ode-invitation-cercle-2x.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 100vw, 29rem" alt="" aria-hidden="true" loading="lazy" width="1086" height="1448" />
       <button type="button" class="wl-x" data-modal-close="" aria-label="Fermer">×</button>
     </div>
     <div class="wl-body">
@@ -111,7 +111,7 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
   dialog.wl::backdrop { background: transparent; }
   .wl-bd { position: absolute; inset: 0; background: rgb(20 18 19 / 50%); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
   .wl-pan { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: min(58rem, calc(100% - 3rem)); height: min(36.25rem, calc(100% - 3rem)); border-radius: 1.375rem; overflow: hidden; background: #401f28; box-shadow: 0 1.875rem 5rem rgb(0 0 0 / 35%); }
-  .wl-ph { position: relative; min-height: 0; background: #555; }
+  .wl-ph { position: relative; min-height: 0; background: #9a9a9a; }
   .wl-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
   .wl-x { position: absolute; left: 1rem; top: 1rem; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; padding: 0 0 .125rem; border: 0; border-radius: 50%; background: rgb(0 0 0 / 22%); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff; font: inherit; font-size: 1.375rem; line-height: 1; cursor: pointer; transition: background-color .3s; }
   .wl-x:hover { background: #401f28; }
@@ -137,7 +137,8 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
   .wl .wl-msg .wl-lead { margin-bottom: 0; color: rgb(255 255 255 / 85%); }
   .wl .wl-err { margin-top: 1rem; padding: 0; background: none; font-size: .8125rem; color: #ffc9d2; }
   @media (max-width: 767px) {
-    .wl-pan { grid-template-columns: 1fr; grid-template-rows: 30% 1fr; width: calc(100% - 1.5rem); height: calc(100% - 2.5rem); height: calc(100dvh - 2.5rem); border-radius: 1.125rem; }
+    .wl-pan { grid-template-columns: 1fr; grid-template-rows: 34% 1fr; width: calc(100% - 1.5rem); height: calc(100% - 2.5rem); height: calc(100dvh - 2.5rem); border-radius: 1.125rem; }
+    .wl-ph img { object-position: 50% 38%; } /* phones: the strip frames the card from ODE STUDIO to « Une invitation exclusive » */
     .wl-body { justify-content: flex-start; padding: 1.75rem 1.375rem 1.5rem; }
     .wl-body > :first-child { margin-top: auto; }
     .wl-body > :last-child { margin-bottom: auto; }
