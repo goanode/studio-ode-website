@@ -33,7 +33,7 @@ const PICS = tricks.map((t) => ({ s: t.slug, n: t.name, u: `${t.image}-p-500.web
     const CELL = 400;       // grid cell size in the space (px)
     const DZ = 520;         // distance between depth layers
     const LAYERS = 5;       // layers drawn ahead of the camera
-    const FILL = 0.3;       // share of cells that hold a photo
+    const FILL = 0.225;      // share of cells that hold a photo
     const hash = (a, b, c, k = 0) => { let h = (a * 374761393 + b * 668265263 + c * 2147483647 + k * 1274126177) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
 
     const cam = { x: 0, y: 0, z: 0 }, vel = { x: 0, y: 0, z: 0 }, par = { x: 0, y: 0, tx: 0, ty: 0 };
@@ -129,7 +129,7 @@ const PICS = tricks.map((t) => ({ s: t.slug, n: t.name, u: `${t.image}-p-500.web
   .ic-ui { position: absolute; left: 50%; top: 50%; z-index: 2; display: flex; flex-direction: column; align-items: center; width: min(30rem, calc(100% - 3rem)); transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
   .ic-glow { position: absolute; left: 50%; top: 50%; z-index: -1; width: 160%; aspect-ratio: 1.4; transform: translate(-50%, -50%); background: radial-gradient(closest-side, #fff 40%, rgb(255 255 255 / 85%) 62%, rgb(255 255 255 / 0%)); }
   .ic-h { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: clamp(7rem, 16vw, 12.5rem); line-height: .9; letter-spacing: -.03em; color: #1f1d1e; }
-  .ic-p { margin: 1.25rem 0 1.75rem; max-width: 22rem; font-size: 1rem; line-height: 1.5; color: rgb(31 29 30 / 75%); }
+  .ic-p { margin: 2.25rem 0 1.75rem; max-width: 22rem; font-size: 1rem; line-height: 1.5; color: rgb(31 29 30 / 75%); }
   .ic-btn { pointer-events: auto; display: inline-flex; align-items: center; height: 2.875rem; padding: 0 1.5rem; border-radius: 9999px; background: #401f28; color: #fff; font-size: .9375rem; text-decoration: none; transition: background-color .3s; }
   .ic-btn:hover { background: #5a2e3a; }
   .ic-hint { position: absolute; left: 50%; bottom: 1.5rem; z-index: 2; margin: 0; padding: .5rem .9rem; border-radius: 9999px; background: rgb(255 255 255 / 85%); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transform: translateX(-50%); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: rgb(31 29 30 / 50%); white-space: nowrap; pointer-events: none; }
