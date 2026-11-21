@@ -2813,3 +2813,7 @@ figure {
   .footer_layout .u-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .footer_layout .u-column-start-3-0-mobile { grid-column-start: auto; }
 }
+
+/* homepage middle photo (scroll version of the class-card effect): the fluted photo zooms via --stack-z, the copies sit on top */
+[data-stack] > :not(.test-image-2-copy):not(.stack-ghost):not(.rv-cover) { transform: scale(var(--stack-z, 1)); }
+[data-stack] .stack-ghost { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }

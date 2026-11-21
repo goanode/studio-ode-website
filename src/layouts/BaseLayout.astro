@@ -141,7 +141,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
               if (para) para.querySelectorAll("p").length ? para.querySelectorAll("p").forEach((pp) => lineRise(pp, 0.15)) : lineRise(para, 0.15);
             });
             document.querySelectorAll("main .keypoints_visual_wrap, main .section_media_visual_wrap").forEach((ph) => {
-              if (ph.closest("section[slide-down]")) return;
+              if (ph.closest("section[slide-down]") || ph.hasAttribute("data-stack")) return;
               const cover = document.createElement("div");
               cover.className = "rv-cover"; ph.append(cover);
               const media = [...ph.children].flatMap((c) => (c === cover ? [] : c.tagName === "PICTURE" ? [...c.querySelectorAll("img")] : [c]));
@@ -150,6 +150,25 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
                 gsap.to(media, { scale: 1, duration: 1.2, ease: EASE, clearProps: "transform" });
                 gsap.to(cover, { autoAlpha: 0, duration: 0.6, onComplete: () => cover.remove() });
               } });
+            });
+            // homepage middle photo: the class-card hover effect, played when it scrolls into view.
+            // Two full-size copies of the sharp photo fold away into the centre one by one, the last one shrinks to its
+            // usual spot in the middle, and the fluted photo behind settles from a zoom (scrolling back up reverses it).
+            document.querySelectorAll("main [data-stack]").forEach((wrap) => {
+              const mid = wrap.querySelector(".test-image-2-copy");
+              if (!mid) return;
+              const ghosts = [1, 2].map((k) => {
+                const g = mid.cloneNode(); g.className = "stack-ghost"; g.style.zIndex = 2 + k; wrap.append(g); return g;
+              });
+              const spot = () => ({ left: "30%", top: "25%", width: "40%", height: ((0.4 * wrap.offsetWidth * 1.5) / wrap.offsetHeight) * 100 + "%" }); // the photo is 2:3
+              gsap.set(mid, { ...spot(), objectFit: "cover" });
+              gsap.set(wrap, { "--stack-z": 1.3 });
+              const tl = gsap.timeline({ paused: true })
+                .fromTo(ghosts.slice().reverse(), { scale: 1 }, { scale: 0, duration: 0.5, ease: "power1.inOut", stagger: 0.1 })
+                .fromTo(mid, { left: "0%", top: "0%", width: "100%", height: "100%" }, { ...spot(), duration: 0.6, ease: "power1.inOut" }, 0.2)
+                .to(wrap, { "--stack-z": 1, duration: 0.9, ease: "power1.inOut" }, 0.3);
+              tl.progress(0);
+              ScrollTrigger.create({ trigger: wrap, start: "top 65%", onEnter: () => tl.timeScale(1).play(), onLeaveBack: () => tl.timeScale(1.4).reverse() });
             });
             // sections marked [slide-down] drift down a little as you scroll past them
             document.querySelectorAll("[slide-down]").forEach((el) => gsap.fromTo(el, { yPercent: 0 }, { yPercent: 25, ease: "none", scrollTrigger: scrub(el) }));
@@ -190,6 +209,26 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
                 zone.addEventListener("mouseleave", () => gsap.to(bubble, { opacity: 0, duration: 0.5, ease: "expo.out" }));
               }
             }
+          } else {
+            // phones and tablets: the same class-card effect plays when a card is fully in view
+            // (scrolling down to the section or swiping the slider), and undoes itself when the card leaves
+            const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+              const [i1, i2, i3, i4] = [1, 2, 3, 4].map((n) => e.target.querySelector(`.card_classes_img.u-cover-absolute._${n}`));
+              if (!i1) return;
+              if (e.intersectionRatio >= 0.85) {
+                gsap.to([i4, i3, i2].filter(Boolean), { scale: 0, duration: 0.5, ease: "power1.inOut", stagger: 0.1, overwrite: true });
+                gsap.to(i1, { scale: 1, duration: 0.5, ease: "power1.inOut", delay: 0.3, overwrite: true });
+              } else if (e.intersectionRatio < 0.4) {
+                gsap.to(i1, { scale: 1.3, duration: 0.8, ease: "power1.inOut", overwrite: true });
+                gsap.to([i2, i3, i4].filter(Boolean), { scale: 1, duration: 0.4, ease: "power1.inOut", stagger: 0.08, delay: 0.1, overwrite: true });
+              }
+            }), { threshold: [0, 0.4, 0.85, 1] });
+            document.querySelectorAll(".card_classes_group").forEach((card) => {
+              const i1 = card.querySelector(".card_classes_img.u-cover-absolute._1");
+              if (!i1) return;
+              gsap.set(i1, { scale: 1.3 });
+              io.observe(card);
+            });
           }
         } finally { done(); }
       });
