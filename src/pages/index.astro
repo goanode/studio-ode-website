@@ -24,7 +24,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   <script is:inline>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("has-pl");</script>
   <style is:inline>
     .pl { display: none; }
-    html.has-pl .pl { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; background: #fff; color: #1f1d1e; animation: pl-up .75s cubic-bezier(.76, 0, .24, 1) 1.8s forwards; pointer-events: none; }
+    html.has-pl .pl { position: fixed; inset: 0; z-index: 2000; display: grid; place-items: center; background: #401f28; color: #fff; animation: pl-up .75s cubic-bezier(.76, 0, .24, 1) 1.8s forwards; pointer-events: none; }
     @keyframes pl-up { to { transform: translateY(-100%); visibility: hidden; } }
     .pl-wrap { position: relative; display: flex; flex-direction: column; align-items: center; }
     .pl-word { display: block; overflow: hidden; padding: 0 .04em .06em; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 7.5rem; line-height: 1.05; letter-spacing: -.03em; }
@@ -35,12 +35,12 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     @keyframes pl-swap { 0% { opacity: 0; transform: scale(.6) rotate(-15deg); } 40%, 70% { opacity: 1; transform: scale(1) rotate(8deg); } 100% { opacity: 0; transform: scale(.85) rotate(20deg); } }
     .pl-slot img.last { animation: pl-land .5s cubic-bezier(.3, 1.6, .5, 1) 1.5s both; }
     @keyframes pl-land { from { opacity: 0; transform: scale(.4) rotate(-30deg); } to { opacity: 1; transform: scale(1) rotate(10deg); } }
-    .pl-cnt { position: absolute; bottom: 1.5rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(31 29 30 / 55%); opacity: 0; animation: pl-fade .6s ease .2s forwards; }
-    .pl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgb(64 31 40 / 12%); }
-    .pl-cnt { right: var(--site--margin, 2.5rem); bottom: 1.25rem; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 2.75rem; line-height: 1; letter-spacing: -.02em; text-transform: none; font-variant-numeric: tabular-nums; color: #1f1d1e; }
+    .pl-cnt { position: absolute; bottom: 1.5rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(255 255 255 / 75%); opacity: 0; animation: pl-fade .6s ease .2s forwards; }
+    .pl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: rgb(255 255 255 / 18%); }
+    .pl-cnt { right: var(--site--margin, 2.5rem); bottom: 1.25rem; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 2.75rem; line-height: 1; letter-spacing: -.02em; text-transform: none; font-variant-numeric: tabular-nums; color: #fff; }
     .pl-cnt b { font-weight: 400; }
     @keyframes pl-fade { to { opacity: 1; } }
-    .pl-line { position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; background: #401f28; transform: scaleX(0); transform-origin: left; animation: pl-line 1.5s cubic-bezier(.65, 0, .35, 1) .2s forwards; }
+    .pl-line { position: absolute; left: 0; bottom: 0; width: 100%; height: 4px; background: #fff; transform: scaleX(0); transform-origin: left; animation: pl-line 1.5s cubic-bezier(.65, 0, .35, 1) .2s forwards; }
     @keyframes pl-line { to { transform: none; } }
     @media (max-width: 767px) { .pl-cnt { font-size: 2rem; } .pl-word { font-size: 5rem; } .pl-slot { right: -2.25rem; top: -.375rem; width: 2.25rem; height: 2.25rem; } }
     /* the homepage intro (hero letters, text, navbar) starts as the curtain lifts */
