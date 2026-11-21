@@ -156,7 +156,7 @@ const HEART = "/images/ode-heart-s.webp";
     // title leaves with the rest of the page instead of lingering on top of the new one
     if (to && to !== key(location.href)) document.querySelectorAll(".vt-title").forEach((t) => { t.style.viewTransitionName = "none"; });
     const el = window.__odeNavVT;
-    if (el && VT[to]) el.style.viewTransitionName = VT[to];
+    if (el && VT[to]) { el.style.viewTransitionName = VT[to]; try { sessionStorage.setItem("odeNavVT", "1"); } catch {} }
   });
   addEventListener("pageshow", () => {
     if (window.__odeNavVT) window.__odeNavVT.style.viewTransitionName = ""; window.__odeNavVT = null;

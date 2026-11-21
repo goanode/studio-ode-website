@@ -32,6 +32,10 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         {/* page transition opt-in first thing in the head, so it is in place before the first render; and don't show the page until its main content is parsed */}
         <style is:inline>@media (prefers-reduced-motion: no-preference) { @view-transition { navigation: auto; } }</style>
         <link rel="expect" href={`#${viewTransition}`} blocking="render" />
+        <script is:inline>
+          // arriving from a navbar word: tell the transition, so the small word hands over to the big title right away (see the CSS)
+          addEventListener("pagereveal", (e) => { let n = null; try { n = sessionStorage.getItem("odeNavVT"); sessionStorage.removeItem("odeNavVT"); } catch {} if (n && e.viewTransition && e.viewTransition.types) e.viewTransition.types.add("from-nav"); });
+        </script>
       </>
     )}
     <title>{title}</title>
@@ -354,6 +358,10 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       ::view-transition-group(figures-title) { animation-duration: 1.1s; animation-delay: .15s; animation-timing-function: cubic-bezier(.76, 0, .24, 1); }
       ::view-transition-old(figures-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-out; }
       ::view-transition-new(figures-title) { height: 100%; width: auto; animation: 1.1s linear .15s both vt-word-in; }
+      /* from a navbar word: the tiny word would look blurry blown up, so it fades out at once and the big title (sharp,
+         starting at the word's size) grows in its place */
+      html:active-view-transition-type(from-nav)::view-transition-old(concept-title), html:active-view-transition-type(from-nav)::view-transition-old(communaute-title), html:active-view-transition-type(from-nav)::view-transition-old(figures-title) { animation: .2s ease .15s both vt-out; }
+      html:active-view-transition-type(from-nav)::view-transition-new(concept-title), html:active-view-transition-type(from-nav)::view-transition-new(communaute-title), html:active-view-transition-type(from-nav)::view-transition-new(figures-title) { animation: .3s ease .15s both vt-in; }
       .hero-dim { position: absolute; inset: 0; z-index: 5; background: #000; opacity: 0; pointer-events: none; will-change: opacity; }
     </style>
     <slot name="scripts" />
