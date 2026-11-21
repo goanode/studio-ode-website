@@ -1,5 +1,5 @@
 ---
-// Site navbar: logo left, page links centred in small capitals, a glass "Réserve ta place" pill on the right
+// Site navbar (hovering a link shows its own chrome icon: sparkle, heart, book): logo left, page links centred in small capitals, a glass "Réserve ta place" pill on the right
 // (turns burgundy with the chrome heart on hover, opens the waitlist). On mobile: logo + "Menu", which opens a
 // full-screen dark menu over the blurred page with big Freight links and the glass waitlist button.
 // Text is white over dark heroes and dark over light pages; once you scroll, the bar gets a frosted white backing.
@@ -20,7 +20,7 @@ const HEART = "/images/ode-heart-s.webp";
   <nav class="onav-links" aria-label="Navigation principale">
     {links.map((l, li) => (
       <a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined} aria-label={l.label} style={`--li:${li}`}>
-        <span class="rl" aria-hidden="true">{[...l.label].map((ch, i) => <span class="ch" style={`--d:${i}`} data-c={ch}>{ch}</span>)}</span><img class="onav-lh" src={HEART} alt="" aria-hidden="true" />
+        <span class="rl" aria-hidden="true">{[...l.label].map((ch, i) => <span class="ch" style={`--d:${i}`} data-c={ch}>{ch}</span>)}</span><img class="onav-lh" src={l.icon} alt="" aria-hidden="true" />
       </a>
     ))}
   </nav>
