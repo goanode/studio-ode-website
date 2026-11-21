@@ -1,7 +1,8 @@
 <style is:global>
   /* the chrome letters carry width/height (no layout shift while they load); they still share the row equally */
   .footer_bottom_letter { min-width: 0; flex: 1 1 0; height: auto; }
-  .footer_wrap { min-height: 0; }
+  .footer_wrap { min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; }
+  .fo-mid { flex: 1 0 auto; }
   /* engraved: spaced capitals pressed into the silver, like the invitation card */
   .fo-eng { font-family: "Cinzel", Georgia, serif; font-weight: 400; text-transform: uppercase; letter-spacing: .32em; color: #4b4b4b; text-shadow: 0 1px 0 rgb(255 255 255 / 60%), 0 -1px 0 rgb(0 0 0 / 18%); }
   .fo-mid { display: flex; flex-direction: column; align-items: center; padding: 2.5rem var(--site--margin, 2.5rem) 3rem; text-align: center; }
@@ -10,9 +11,9 @@
   .fo-ct { margin: 0; font-size: .875rem; }
   .fo-ct::after { content: ""; display: block; width: 2.5rem; height: 2px; margin: .75rem auto 0; background: linear-gradient(#fff 0 50%, rgb(0 0 0 / 22%) 50% 100%); }
   .fo-vis { width: 6rem; height: 6rem; object-fit: contain; margin: .5rem 0; }
-  .fo-icons { display: flex; gap: .75rem; margin: 0; padding: 0; list-style: none; }
-  .fo-ic { display: flex; align-items: center; justify-content: center; width: 2.625rem; height: 2.625rem; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgb(0 0 0 / 12%), inset 0 -1px 0 rgb(0 0 0 / 6%); transition: background-color .4s, box-shadow .4s; }
-  .fo-ic svg { width: 1.0625rem; height: 1.0625rem; }
+  .fo-icons { display: flex; gap: .5rem; margin: 0; padding: 0; list-style: none; }
+  .fo-ic { display: flex; align-items: center; justify-content: center; width: 2.125rem; height: 2.125rem; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgb(0 0 0 / 12%), inset 0 -1px 0 rgb(0 0 0 / 6%); transition: background-color .4s, box-shadow .4s; }
+  .fo-ic svg { width: .875rem; height: .875rem; }
   .fo-ic svg path { fill: #3b3b3b; transition: fill .4s; }
   .fo-ic:hover, .fo-ic:focus-visible { background: #401f28; box-shadow: 0 2px 6px rgb(64 31 40 / 35%); }
   .fo-ic:hover svg path, .fo-ic:focus-visible svg path { fill: #fff; }
@@ -28,6 +29,9 @@
     .fo-map { display: block; }
     .fo-map .fo-ct::after { margin-left: 0; }
     .fo-map ul { display: grid; gap: .875rem; margin: 1.75rem 0 2rem; padding: 0; list-style: none; }
+    /* white on the silver for contrast, with a soft shadow */
+    .fo-map .fo-ct, .fo-map a { color: #fff; text-shadow: 0 1px 2px rgb(0 0 0 / 22%); }
+    .fo-map .fo-ct::after { background: rgb(255 255 255 / 85%); }
     .fo-map a { font-size: .9375rem; letter-spacing: .28em; text-decoration: none; transition: color .3s; }
     .fo-map a:hover, .fo-map a:focus-visible { color: #401f28; }
     .fo-map .fo-join { padding-top: 1.25rem; border-top: 0; }
@@ -38,13 +42,13 @@
   .fo-bar .fo-eng { font-size: .625rem; letter-spacing: .24em; text-decoration: none; }
   .fo-bar-r { display: flex; gap: 1.625rem; }
   @media (max-width: 767px) {
-    .fo-mid { padding: 1.5rem 1.125rem 2.25rem; }
+    .fo-mid { justify-content: center; padding: 1.5rem 1.125rem 2.25rem; }
     .fo-cards { gap: .75rem; margin-top: 1.75rem; }
     .fo-card { padding: 1.375rem .625rem 1.25rem; }
     .fo-ct { font-size: .75rem; letter-spacing: .24em; }
     .fo-icons { gap: .375rem; }
-    .fo-ic { width: 2.125rem; height: 2.125rem; }
-    .fo-ic svg { width: .875rem; height: .875rem; }
+    .fo-ic { width: 1.875rem; height: 1.875rem; }
+    .fo-ic svg { width: .75rem; height: .75rem; }
     .fo-vis { width: 4.75rem; height: 4.75rem; }
     .fo-join { font-size: .75rem; letter-spacing: .3em; }
     .fo-bar { flex-direction: column; gap: .75rem; margin: 0 1.125rem; text-align: center; }
