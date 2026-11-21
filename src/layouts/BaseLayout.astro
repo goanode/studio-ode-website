@@ -15,9 +15,11 @@ interface Props {
   flutedGlass?: boolean;
   /** opt in to the browser's page transition (figures catalogue <-> trick pages); value = id of an element that must be parsed before the page shows */
   viewTransition?: string;
+  /** leave the footer out (the 404 page is one full-screen space) */
+  footer?: boolean;
 }
 
-const { title, description, wfPage, flutedGlass = false, viewTransition } = Astro.props;
+const { title, description, wfPage, flutedGlass = false, viewTransition, footer = true } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 ---
 
@@ -80,7 +82,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
     <div class="page_wrap">
       <Nav />
       <slot />
-      <Footer />
+      {footer && <Footer />}
       <slot name="after-footer" />
     </div>
 

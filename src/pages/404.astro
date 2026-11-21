@@ -1,21 +1,139 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { tricks } from "../data/tricks";
+import WaitlistModal from "../components/WaitlistModal.astro";
+// 404: an endless white space full of the figure photos (after Codrops' "Infinite Canvas").
+// Photos sit on layers at different depths, laid out by a fixed hash per grid cell, so the space repeats seamlessly
+// and every place looks the same when you come back to it. Drag to move around, scroll or pinch to fly forward
+// and back; far photos fade into the white. Each photo opens its figure page.
+const PICS = tricks.map((t) => ({ s: t.slug, n: t.name, u: `${t.image}-p-500.webp`, r: +(t.w / t.h).toFixed(3) }));
 ---
 
-<BaseLayout title="Page introuvable — Studio Ode" wfPage="6a96e3c256f4431a13f9f23b">
+<BaseLayout title="Page introuvable — Studio Ode" wfPage="6a96e3c256f4431a13f9f23b" footer={false}>
   <main id="main" class="page_main">
-    <section class="hero_utility-page_wrap">
-      <div class="hero_utility-page_contain u-container">
-        <div class="hero_utility-page_content">
-          <div><svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 47 59" width="3rem">
-              <path fill-rule="evenodd" d="M0 0H30.5L47 16.5V59H0V0ZM21 19H26V34H21V19ZM21 39H26V44H21V39Z" fill="currentColor"></path>
-            </svg></div>
-          <div class="hero_utility-page_header">
-            <h1 class="hero_utility-page_title u-text-style-h2">Page introuvable</h1>
-            <div class="hero_utility-page_text u-text-style-main">La page que tu cherches n’existe pas ou a été déplacée.</div>
-          </div>
-        </div>
+    <section class="ic" aria-labelledby="ic-title" data-lenis-prevent>
+      <div class="ic-world" aria-hidden="true"></div>
+      <div class="ic-ui">
+        <div class="ic-glow" aria-hidden="true"></div>
+        <h1 id="ic-title" class="ic-h"><span class="ode-th">404<img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
+        <p class="ic-p">Cette page s’est perdue en chemin. Explore les figures autour de toi, ou reviens à l’accueil.</p>
+        <a class="ic-btn" href="/">Retour à l’accueil</a>
       </div>
+      <p class="ic-hint" aria-hidden="true"><span class="ic-d">Fais glisser pour explorer · fais défiler pour avancer</span><span class="ic-m">Glisse pour explorer · pince pour avancer</span></p>
     </section>
   </main>
+  <WaitlistModal slot="after-footer" />
 </BaseLayout>
+
+<script is:inline define:vars={{ PICS }}>
+  (() => {
+    const stage = document.querySelector(".ic"), world = stage.querySelector(".ic-world");
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const F = 700;          // focal length: screen scale = F / depth
+    const CELL = 400;       // grid cell size in the space (px)
+    const DZ = 520;         // distance between depth layers
+    const LAYERS = 5;       // layers drawn ahead of the camera
+    const FILL = 0.3;       // share of cells that hold a photo
+    const hash = (a, b, c, k = 0) => { let h = (a * 374761393 + b * 668265263 + c * 2147483647 + k * 1274126177) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
+
+    const cam = { x: 0, y: 0, z: 0 }, vel = { x: 0, y: 0, z: 0 }, par = { x: 0, y: 0, tx: 0, ty: 0 };
+    const live = new Map();
+    let W = 0, H = 0;
+    const size = () => { W = stage.clientWidth; H = stage.clientHeight; };
+    size(); addEventListener("resize", size);
+
+    const make = (i, j, k) => {
+      const p = PICS[Math.floor(hash(i, j, k, 3) * PICS.length)];
+      const a = document.createElement("a");
+      a.className = "ic-it"; a.href = `/figures/${p.s}`; a.draggable = false; a.tabIndex = -1;
+      const w = 170 + hash(i, j, k, 4) * 110, h = w / p.r;
+      a.style.width = w + "px"; a.style.height = h + "px";
+      a.innerHTML = `<img src="${p.u}" alt="${p.n}" draggable="false" decoding="async">`;
+      a.dataset.x = (i + 0.15 + hash(i, j, k, 1) * 0.7) * CELL; a.dataset.y = (j + 0.15 + hash(i, j, k, 2) * 0.7) * CELL;
+      world.appendChild(a); return a;
+    };
+
+    const frame = () => {
+      // ease: momentum from dragging/scrolling, a slow forward drift when idle, a little mouse parallax
+      if (!reduce) cam.z += 0.35;
+      cam.x += vel.x; cam.y += vel.y; cam.z += vel.z;
+      vel.x *= 0.92; vel.y *= 0.92; vel.z *= 0.9;
+      par.x += (par.tx - par.x) * 0.06; par.y += (par.ty - par.y) * 0.06;
+      const seen = new Set();
+      const k0 = Math.floor(cam.z / DZ) + 1;
+      for (let k = k0; k < k0 + LAYERS; k++) {
+        const d = k * DZ - cam.z; if (d < 40) continue;
+        const s = F / d, ox = hash(0, 0, k, 7) * CELL, oy = hash(0, 0, k, 8) * CELL; // each layer shifted so they don't line up
+        const lx = cam.x + par.x * (1 - d / (DZ * LAYERS)) * 60, ly = cam.y + par.y * (1 - d / (DZ * LAYERS)) * 60;
+        const hw = W / 2 / s + CELL, hh = H / 2 / s + CELL;
+        const fade = Math.min(1, (d - 40) / 260) * Math.min(1, (DZ * LAYERS - d) / (DZ * 1.6));
+        for (let i = Math.floor((lx - ox - hw) / CELL); i <= Math.floor((lx - ox + hw) / CELL); i++)
+          for (let j = Math.floor((ly - oy - hh) / CELL); j <= Math.floor((ly - oy + hh) / CELL); j++) {
+            if (hash(i, j, k) > FILL) continue;
+            const key = i + "," + j + "," + k; seen.add(key);
+            let el = live.get(key); if (!el) { el = make(i, j, k); live.set(key, el); }
+            const sx = (+el.dataset.x + ox - lx) * s, sy = (+el.dataset.y + oy - ly) * s;
+            el.style.transform = `translate3d(${sx.toFixed(1)}px,${sy.toFixed(1)}px,0) translate(-50%,-50%) scale(${s.toFixed(4)})`;
+            el.style.opacity = Math.max(0, fade).toFixed(3);
+            el.style.zIndex = String(10000 - Math.round(d));
+          }
+      }
+      live.forEach((el, key) => { if (!seen.has(key)) { el.remove(); live.delete(key); } });
+      requestAnimationFrame(frame);
+    };
+    requestAnimationFrame(frame);
+
+    // drag to move around (with a throw), click still opens a photo when the pointer barely moved
+    let drag = null, moved = 0;
+    stage.addEventListener("pointerdown", (e) => {
+      if (e.target.closest(".ic-btn")) return;
+      drag = { x: e.clientX, y: e.clientY, id: e.pointerId }; moved = 0; stage.classList.add("is-drag");
+    });
+    addEventListener("pointermove", (e) => {
+      par.tx = (e.clientX / innerWidth - 0.5) * 2; par.ty = (e.clientY / innerHeight - 0.5) * 2;
+      if (!drag || e.pointerId !== drag.id || pinch) return;
+      const dx = e.clientX - drag.x, dy = e.clientY - drag.y; drag.x = e.clientX; drag.y = e.clientY;
+      moved += Math.abs(dx) + Math.abs(dy);
+      if (moved > 6) stage.setPointerCapture?.(e.pointerId);
+      const k = 1.6; vel.x = -dx * k; vel.y = -dy * k;
+    });
+    const end = () => { drag = null; stage.classList.remove("is-drag"); };
+    addEventListener("pointerup", end); addEventListener("pointercancel", end);
+    stage.addEventListener("click", (e) => { if (moved > 6 && e.target.closest(".ic-it")) e.preventDefault(); }, true);
+
+    // scroll (or trackpad pinch) flies forward and back
+    stage.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      if (e.ctrlKey) vel.z += e.deltaY * -1.2; else { vel.z += e.deltaY * 0.12; vel.x += e.deltaX * 0.08; }
+    }, { passive: false });
+
+    // two-finger pinch on phones
+    let pinch = null; const pts = new Map();
+    stage.addEventListener("pointerdown", (e) => { pts.set(e.pointerId, e); if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); } });
+    stage.addEventListener("pointermove", (e) => {
+      if (!pts.has(e.pointerId)) return; pts.set(e.pointerId, e);
+      if (pinch && pts.size === 2) { const [a, b] = [...pts.values()]; const dd = Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY); vel.z += (dd - pinch) * 1.5; pinch = dd; }
+    });
+    const up = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; };
+    stage.addEventListener("pointerup", up); stage.addEventListener("pointercancel", up);
+  })();
+</script>
+
+<style is:global>
+  .ic { position: relative; height: 100vh; height: 100svh; overflow: hidden; background: #fff; touch-action: none; cursor: grab; user-select: none; -webkit-user-select: none; }
+  .ic.is-drag { cursor: grabbing; }
+  .ic-world { position: absolute; left: 50%; top: 50%; z-index: 0; width: 0; height: 0; isolation: isolate; } /* photos stack among themselves, under the navbar */
+  .ic-it { position: absolute; left: 0; top: 0; display: block; overflow: hidden; border-radius: 6px; background: #f2f1f1; will-change: transform, opacity; }
+  .ic-it img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; transition: transform .6s cubic-bezier(.2, .8, .2, 1); }
+  .ic-it:hover img { transform: scale(1.06); }
+  .ic-ui { position: absolute; left: 50%; top: 50%; z-index: 2; display: flex; flex-direction: column; align-items: center; width: min(30rem, calc(100% - 3rem)); transform: translate(-50%, -50%); text-align: center; pointer-events: none; }
+  .ic-glow { position: absolute; left: 50%; top: 50%; z-index: -1; width: 160%; aspect-ratio: 1.4; transform: translate(-50%, -50%); background: radial-gradient(closest-side, #fff 40%, rgb(255 255 255 / 85%) 62%, rgb(255 255 255 / 0%)); }
+  .ic-h { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: clamp(7rem, 16vw, 12.5rem); line-height: .9; letter-spacing: -.03em; color: #1f1d1e; }
+  .ic-p { margin: 1.25rem 0 1.75rem; max-width: 22rem; font-size: 1rem; line-height: 1.5; color: rgb(31 29 30 / 75%); }
+  .ic-btn { pointer-events: auto; display: inline-flex; align-items: center; height: 2.875rem; padding: 0 1.5rem; border-radius: 9999px; background: #401f28; color: #fff; font-size: .9375rem; text-decoration: none; transition: background-color .3s; }
+  .ic-btn:hover { background: #5a2e3a; }
+  .ic-hint { position: absolute; left: 50%; bottom: 1.5rem; z-index: 2; margin: 0; padding: .5rem .9rem; border-radius: 9999px; background: rgb(255 255 255 / 85%); -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); transform: translateX(-50%); font-size: .75rem; letter-spacing: .12em; text-transform: uppercase; color: rgb(31 29 30 / 50%); white-space: nowrap; pointer-events: none; }
+    .ic-m { display: none; }
+  @media (hover: none) { .ic-d { display: none; } .ic-m { display: inline; } }
+  @media (max-width: 767px) { .ic-hint { font-size: .625rem; } .ic-h .ode-title-heart { right: -.625em; top: -.15em; } }
+</style>
