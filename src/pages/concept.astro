@@ -85,12 +85,12 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
       </div>
     </section>
     <!-- under the animated hero: "Réserve ta place" call to action. The section is pinned while you scroll; the sentence
-         "✦ Réserve ta plaaaaaace ✦" comes in from the top-right corner, bends along a curve and settles across the middle. -->
+         "✦ Réserve ta plaaaa…ace ✦" comes in from the top-right corner, bends along a curve and settles across the middle. -->
     <section class="rtp" aria-labelledby="rtp-title">
       <div class="rtp-pin">
         <p class="rtp-s rtp-t"><b>Ode ouvre à Lille en 2027</b><br />Les 50 premières inscrites deviennent fondatrices</p>
         <h2 class="u-sr-only" id="rtp-title">Réserve ta place</h2>
-        <div class="rtp-line" aria-hidden="true" data-text="✦|Réserve|ta|plaaaaaace|✦"></div>
+        <div class="rtp-line" aria-hidden="true" data-text="✦|Réserve|ta|plaaaaaaaaaaaaaaaaaaaace|✦"></div>
         <div class="rtp-s rtp-b">
           <p>Premier cours offert, -15&nbsp;% sur ta formule.<br />Gratuit et sans engagement.</p>
           <button type="button" class="rtp-btn" data-modal-trigger="waitlist">Réserve ta place<img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
@@ -129,7 +129,9 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         const y = H * 0.5, cx = Math.max(W * 0.62, target + T + gap * 0.5); x0 = -W;
         path.setAttribute("d", `M ${x0} ${y} L ${cx} ${y} C ${cx + W * 0.24} ${y} ${Math.max(W * 0.95, cx + W * 0.2)} ${y - H * 0.1} ${Math.max(W * 1.14, cx + W * 0.4)} ${-H * 0.28}`);
         L = path.getTotalLength();
-        start = L + gap; // the whole sentence still beyond the top-right corner
+        // start with the first letter just about to come in at the top-right edge of the screen
+        let dv = L; for (let d = L; d > 0; d -= 8) { const q = path.getPointAtLength(d); if (q.y > -size * 0.15 && q.x < W + size * 0.15) { dv = d; break; } }
+        start = dv + size * 0.2;
         end = target - x0;
         if (cur === null) cur = reduce ? end : start;
       };
@@ -146,7 +148,8 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
       };
       const progress = () => {
         const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight;
-        return Math.min(1, Math.max(0, -r.top / (span * 0.8))); // settles a little before the pin ends
+        const lead = innerHeight * 0.5; // starts moving while the section is still coming up the screen
+        return Math.min(1, Math.max(0, (lead - r.top) / (lead + span * 0.8))); // settles a little before the pin ends
       };
       const tick = () => {
         const goal = start + (end - start) * progress();
@@ -315,7 +318,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
 </style>
 <style is:global>
   /* "Réserve ta place" section (pinned, scroll-driven sentence on a curve) */
-  .rtp { position: relative; height: 260vh; background: #fff; color: #1f1d1e; }
+  .rtp { position: relative; height: 340vh; background: #fff; color: #1f1d1e; }
   .rtp-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
   .rtp-s { position: absolute; left: 0; right: 0; z-index: 2; margin: 0; text-align: center; font-size: .8125rem; line-height: 1.45; }
   .rtp-s b { font-weight: 500; }
@@ -331,5 +334,5 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .rtp-l { position: absolute; left: 0; top: 0; white-space: pre; transform-origin: 50% 78%; will-change: transform; visibility: hidden; }
   .rtp-star { width: .5em; }
   .rtp-star img { display: block; width: 100%; height: auto; filter: drop-shadow(0 .05em .08em rgb(0 0 0 / 25%)); }
-  @media (max-width: 767px) { .rtp { height: 300vh; } .rtp-line { font-size: 4rem; } .rtp-b { bottom: 2.25rem; } .rtp-s { font-size: .75rem; } }
+  @media (max-width: 767px) { .rtp { height: 380vh; } .rtp-line { font-size: 4rem; } .rtp-b { bottom: 2.25rem; } .rtp-s { font-size: .75rem; } }
 </style>
