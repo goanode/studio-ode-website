@@ -33,7 +33,7 @@ const PICS = tricks.map((t) => ({ s: t.slug, n: t.name, u: `${t.image}-p-500.web
     const CELL = 400;       // grid cell size in the space (px)
     const DZ = 520;         // distance between depth layers
     const LAYERS = 5;       // layers drawn ahead of the camera
-    const FILL = 0.225;      // share of cells that hold a photo
+    const FILL = 0.18;       // share of cells that hold a photo
     const hash = (a, b, c, k = 0) => { let h = (a * 374761393 + b * 668265263 + c * 2147483647 + k * 1274126177) | 0; h = Math.imul(h ^ (h >>> 13), 1274126177); return ((h ^ (h >>> 16)) >>> 0) / 4294967296; };
 
     const cam = { x: 0, y: 0, z: 0 }, vel = { x: 0, y: 0, z: 0 }, par = { x: 0, y: 0, tx: 0, ty: 0 };
