@@ -84,85 +84,19 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         </div>
       </div>
     </section>
-    <!-- under the animated hero: "Réserve ta place" call to action. The section is pinned while you scroll; the sentence
-         "✦ Réserve ta plaaaa…ace ✦" comes in from the top-right corner, bends along a curve and settles across the middle. -->
-    <section class="rtp" aria-labelledby="rtp-title">
-      <div class="rtp-pin">
-        <p class="rtp-s rtp-t"><b>Ode ouvre à Lille en 2027</b><br />Les 50 premières inscrites deviennent fondatrices</p>
-        <h2 class="u-sr-only" id="rtp-title">Réserve ta place</h2>
-        <div class="rtp-line" aria-hidden="true" data-text="✦|Réserve|ta|plaaaaaaaaaaaaaaaaaaaace|✦"></div>
-        <div class="rtp-s rtp-b">
-          <p>Premier cours offert, -15&nbsp;% sur ta formule.<br />Gratuit et sans engagement.</p>
-          <button type="button" class="rtp-btn" data-modal-trigger="waitlist">Réserve ta place<img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
-        </div>
+    <!-- under the animated hero: "Réserve ta place" — three silver invitations (Le Cercle des fondatrices) fanned like a hand of cards; the front one opens the waitlist -->
+    <section class="join" aria-labelledby="join-title">
+      <h2 class="j-big" id="join-title">Réserve ta place.</h2>
+      <p class="j-perks">Ton premier cours offert, un tarif fondatrice et une place réservée à l’ouverture du studio, à Lille en 2027.</p>
+      <div class="fan">
+        <span class="fc c1" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <span class="fc c3" aria-hidden="true"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /></span>
+        <button type="button" class="fc c2 inv" data-modal-trigger="waitlist" aria-label="Ouvrir l’invitation : deviens membre fondatrice"><img src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="(max-width: 767px) 60vw, 22rem" alt="" width="620" height="827" loading="lazy" /><span class="j-tab" aria-hidden="true">Ouvrir l’invitation <i>→</i></span></button>
       </div>
     </section>
 
   </main>
   <WaitlistModal slot="after-footer" />
-  <script is:inline>
-    (() => {
-      // "Réserve ta plaaaaaace": the letters follow a path (a line across the middle that bends up to the top-right corner).
-      // Scrolling through the pinned section moves the sentence along it; it ends centred (or, when it is wider than
-      // the screen, with its end in view). The position eases towards the scroll so it glides.
-      const sec = document.querySelector(".rtp"), line = sec && sec.querySelector(".rtp-line");
-      if (!line) return;
-      const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-      const NS = "http://www.w3.org/2000/svg";
-      const svg = document.createElementNS(NS, "svg"), path = document.createElementNS(NS, "path");
-      svg.setAttribute("class", "rtp-svg"); svg.append(path); line.append(svg);
-      const items = [];
-      line.dataset.text.split("|").forEach((w, wi, all) => {
-        if (w === "✦") { const s = document.createElement("span"); s.className = "rtp-l rtp-star"; s.innerHTML = '<img src="/images/ode-icon-sparkle-s.webp" alt="">'; line.append(s); items.push(s); }
-        else [...w].forEach((ch) => { const s = document.createElement("span"); s.className = "rtp-l"; s.textContent = ch; line.append(s); items.push(s); });
-        if (wi < all.length - 1) items.push(null); // word gap
-      });
-      let W = 0, H = 0, L = 0, T = 0, gap = 0, x0 = 0, offs = [], wids = [], start = 0, end = 0, cur = null;
-      const layout = () => {
-        W = line.clientWidth; H = line.clientHeight;
-        const size = parseFloat(getComputedStyle(line).fontSize); gap = size * 0.28;
-        offs = []; wids = []; let x = 0;
-        items.forEach((el) => { if (!el) { x += gap; offs.push(null); wids.push(0); return; } const w = el.offsetWidth; offs.push(x); wids.push(w); x += w; });
-        T = x;
-        const target = T < W * 0.92 ? (W - T) / 2 : W * 0.94 - T; // where its first letter ends up on the line
-        // the bend starts just after where the sentence comes to rest, so it rests perfectly straight
-        const y = H * 0.5, cx = Math.max(W * 0.62, target + T + gap * 0.5); x0 = -W;
-        path.setAttribute("d", `M ${x0} ${y} L ${cx} ${y} C ${cx + W * 0.24} ${y} ${Math.max(W * 0.95, cx + W * 0.2)} ${y - H * 0.1} ${Math.max(W * 1.14, cx + W * 0.4)} ${-H * 0.28}`);
-        L = path.getTotalLength();
-        // start with the first letter just about to come in at the top-right edge of the screen
-        let dv = L; for (let d = L; d > 0; d -= 8) { const q = path.getPointAtLength(d); if (q.y > -size * 0.15 && q.x < W + size * 0.15) { dv = d; break; } }
-        start = dv + size * 0.2;
-        end = target - x0;
-        if (cur === null) cur = reduce ? end : start;
-      };
-      const place = (head) => {
-        items.forEach((el, i) => {
-          if (!el) return;
-          const d = head + offs[i] + wids[i] / 2;
-          if (d < 0 || d > L) { el.style.visibility = "hidden"; return; }
-          const p = path.getPointAtLength(d), a = path.getPointAtLength(Math.max(0, d - 2)), b = path.getPointAtLength(Math.min(L, d + 2));
-          const ang = Math.atan2(b.y - a.y, b.x - a.x) * 180 / Math.PI;
-          el.style.visibility = "visible";
-          el.style.transform = `translate(${(p.x - wids[i] / 2).toFixed(1)}px, ${p.y.toFixed(1)}px) translateY(-78%) rotate(${ang.toFixed(2)}deg)`;
-        });
-      };
-      const progress = () => {
-        const r = sec.getBoundingClientRect(), span = sec.offsetHeight - innerHeight;
-        const lead = innerHeight * 0.5; // starts moving while the section is still coming up the screen
-        return Math.min(1, Math.max(0, (lead - r.top) / (lead + span * 0.8))); // settles a little before the pin ends
-      };
-      const tick = () => {
-        const goal = start + (end - start) * progress();
-        cur += (goal - cur) * (reduce ? 1 : 0.1);
-        place(cur);
-        requestAnimationFrame(tick);
-      };
-      // start right away, and measure the letters again once the web font has arrived
-      layout(); requestAnimationFrame(tick);
-      if (document.fonts) document.fonts.ready.then(() => { const was = cur; layout(); cur = Math.min(Math.max(was, end), start); });
-      addEventListener("resize", () => { const was = cur; cur = null; layout(); cur = was === null ? cur : Math.min(Math.max(was, end), start); });
-    })();
-  </script>
   <Fragment slot="head">
     <script is:inline>
       // arriving with the page transition: the heart pops in after the title has landed
@@ -250,6 +184,37 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
 </BaseLayout>
 
 <style>
+  /* 3 · join section under the hero: big call to action, three invitations fanned out (spread on hover), perks line */
+  .join { position: relative; display: flex; flex-direction: column; align-items: center; gap: 2.25rem; padding: var(--_spacing---section-space--main) var(--site--margin); background: #fff; overflow: hidden; }
+  .j-perks { max-width: 30rem; margin: -.5rem auto 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
+  .j-big { margin: 0; text-align: center; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: calc(var(--_typography---font-size--h1) * 1.125); line-height: .9; letter-spacing: var(--_typography---letter-spacing--tight, -.03em); color: var(--ink); }
+  .fan { position: relative; width: 38.75rem; height: 28rem; margin-top: 1.25rem; }
+  .fc { position: absolute; left: 11.25rem; top: 1.25rem; display: block; width: 16.25rem; aspect-ratio: 620 / 827; padding: 0; border: 0; border-radius: 1rem; background: #8a8888; box-shadow: 0 22px 48px rgb(31 29 30 / 24%); transform-origin: 50% 120%; transition: transform .5s cubic-bezier(.3, 1.3, .5, 1), box-shadow .35s; }
+  .fc img { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: 1rem; }
+  .c1 { transform: rotate(-14deg) translateX(-1.875rem); }
+  .c3 { transform: rotate(14deg) translateX(1.875rem); }
+  .c2 { z-index: 2; cursor: pointer; }
+  .fan:hover .c1 { transform: rotate(-20deg) translateX(-5.625rem); }
+  .fan:hover .c3 { transform: rotate(20deg) translateX(5.625rem); }
+  .c2:hover { transform: translateY(-6px); box-shadow: 0 28px 56px rgb(31 29 30 / 30%); }
+  .c2:focus-visible { outline: 2px solid var(--red); outline-offset: 4px; }
+  /* burgundy tab on the bottom edge of the front card: makes it clear the card opens something */
+  .j-tab { position: absolute; z-index: 3; left: 50%; bottom: -1.25rem; display: inline-flex; align-items: center; gap: .5rem; height: 2.5rem; padding: 0 1.125rem; border-radius: 9999px; background: var(--red); color: #fff; font-size: .875rem; white-space: nowrap; box-shadow: 0 8px 18px rgb(64 31 40 / 30%); transform: translateX(-50%); animation: j-peek 3s ease-in-out infinite; }
+  .j-tab i { font-style: normal; transition: transform .3s; }
+  .c2:hover .j-tab i { transform: translateX(4px); }
+  @keyframes j-peek { 0%, 100% { transform: translateX(-50%) translateY(0); } 50% { transform: translateX(-50%) translateY(4px); } }
+  /* the founder perks: one quiet line of small capitals joined by chrome sparkles */
+  @media (prefers-reduced-motion: reduce) { .j-tab { animation: none; } .fc { transition: none; } }
+  @media (max-width: 767px) {
+    .join { gap: 1.75rem; }
+    .fan { width: 21.25rem; height: 25rem; margin-top: 0; }
+    .fc { left: 3.75rem; width: 13.75rem; }
+    .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
+    .c3 { transform: rotate(10deg) translateX(1.625rem); }
+    .fan:hover .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
+    .fan:hover .c3 { transform: rotate(10deg) translateX(1.625rem); }
+    .j-tab { height: 2.25rem; padding: 0 1rem; font-size: .8125rem; bottom: -1.125rem; }
+  }
   .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }
   .cv p, .cv h1, .cv ul { margin: 0; padding: 0; }
   .cv p::before, .cv p::after, .cv h1::before, .cv h1::after { content: none; }
@@ -315,24 +280,4 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     .tick { font-size: 3.75rem; gap: 5rem; }
     .para { width: calc(100% - 2.5rem); top: calc(50% + 2rem); }
   }
-</style>
-<style is:global>
-  /* "Réserve ta place" section (pinned, scroll-driven sentence on a curve) */
-  .rtp { position: relative; height: 340vh; background: #fff; color: #1f1d1e; }
-  .rtp-pin { position: sticky; top: 0; height: 100vh; height: 100svh; overflow: hidden; }
-  .rtp-s { position: absolute; left: 0; right: 0; z-index: 2; margin: 0; text-align: center; font-size: .8125rem; line-height: 1.45; }
-  .rtp-s b { font-weight: 500; }
-  .rtp-t { top: calc(var(--nav--height-total, 6rem) + 1.5rem); }
-  .rtp-b { bottom: 3rem; display: flex; flex-direction: column; align-items: center; gap: 1.25rem; }
-  .rtp-b p { margin: 0; color: rgb(31 29 30 / 75%); }
-  .rtp-btn { display: inline-flex; align-items: center; gap: .625rem; height: 3.25rem; padding: 0 1.75rem; border: 0; border-radius: 9999px; background: #401f28; color: #fff; font: inherit; font-size: 1rem; cursor: pointer; transition: background-color .3s; }
-  .rtp-btn:hover { background: #5a2e3a; }
-  .rtp-btn img { width: 1.25rem; height: auto; filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)); transition: transform .5s cubic-bezier(.3, 1.6, .5, 1); }
-  .rtp-btn:hover img { transform: rotate(25deg) scale(1.15); }
-  .rtp-line { position: absolute; inset: 0; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: clamp(4.5rem, 10.5vw, 10rem); line-height: 1; letter-spacing: -.02em; }
-  .rtp-svg { position: absolute; width: 0; height: 0; overflow: visible; }
-  .rtp-l { position: absolute; left: 0; top: 0; white-space: pre; transform-origin: 50% 78%; will-change: transform; visibility: hidden; }
-  .rtp-star { width: .5em; }
-  .rtp-star img { display: block; width: 100%; height: auto; filter: drop-shadow(0 .05em .08em rgb(0 0 0 / 25%)); }
-  @media (max-width: 767px) { .rtp { height: 380vh; } .rtp-line { font-size: 4rem; } .rtp-b { bottom: 2.25rem; } .rtp-s { font-size: .75rem; } }
 </style>
