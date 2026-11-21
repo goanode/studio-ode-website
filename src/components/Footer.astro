@@ -1,14 +1,43 @@
 <style is:global>
-  /* social icons: on hover the square simply turns burgundy with a white icon */
-  /* the big chrome letters carry width/height (no layout shift while they load); they still share the row equally */
+  /* the chrome letters carry width/height (no layout shift while they load); they still share the row equally */
   .footer_bottom_letter { min-width: 0; flex: 1 1 0; height: auto; }
-  .footer_social_link { overflow: hidden; transition: background-color .4s cubic-bezier(.2, .8, .2, 1), color .4s; }
-  .fs-roll { display: block; width: 100%; height: 100%; overflow: hidden; }
-  .fs-roll > .u-icon { display: flex; align-items: center; justify-content: center; width: 100%; height: 100%; }
-  .footer_social_link:hover, .footer_social_link:focus-visible { background-color: #401f28 !important; color: #fff !important; }
-  .footer_social_link svg path { transition: fill .4s; }
-  .footer_social_link:hover svg path, .footer_social_link:focus-visible svg path { fill: #fff !important; }
-  .fs-roll > .u-icon + .u-icon { display: none; } /* hover is only the burgundy colour change, the icon stays put */
+  .footer_wrap { min-height: 0; }
+  /* engraved: spaced capitals pressed into the silver, like the invitation card */
+  .fo-eng { font-family: "Cinzel", Georgia, serif; font-weight: 400; text-transform: uppercase; letter-spacing: .32em; color: #4b4b4b; text-shadow: 0 1px 0 rgb(255 255 255 / 60%), 0 -1px 0 rgb(0 0 0 / 18%); }
+  .fo-mid { display: flex; flex-direction: column; align-items: center; padding: 2.5rem var(--site--margin, 2.5rem) 3rem; text-align: center; }
+  .fo-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; width: min(38.75rem, 100%); margin-top: 2.125rem; }
+  .fo-card { display: flex; flex-direction: column; align-items: center; justify-content: space-between; gap: .5rem; padding: 1.75rem 1.5rem 1.625rem; border-radius: 1.25rem; background: rgb(255 255 255 / 20%); }
+  .fo-ct { margin: 0; font-size: .875rem; }
+  .fo-ct::after { content: ""; display: block; width: 2.5rem; height: 2px; margin: .75rem auto 0; background: linear-gradient(#fff 0 50%, rgb(0 0 0 / 22%) 50% 100%); }
+  .fo-vis { width: 6rem; height: 6rem; object-fit: contain; margin: .5rem 0; }
+  .fo-icons { display: flex; gap: .75rem; margin: 0; padding: 0; list-style: none; }
+  .fo-ic { display: flex; align-items: center; justify-content: center; width: 2.625rem; height: 2.625rem; border-radius: 50%; background: #fff; box-shadow: 0 2px 6px rgb(0 0 0 / 12%), inset 0 -1px 0 rgb(0 0 0 / 6%); transition: background-color .4s, box-shadow .4s; }
+  .fo-ic svg { width: 1.0625rem; height: 1.0625rem; }
+  .fo-ic svg path { fill: #3b3b3b; transition: fill .4s; }
+  .fo-ic:hover, .fo-ic:focus-visible { background: #401f28; box-shadow: 0 2px 6px rgb(64 31 40 / 35%); }
+  .fo-ic:hover svg path, .fo-ic:focus-visible svg path { fill: #fff; }
+  .fo-ic:focus-visible, .fo-join:focus-visible { outline: 2px solid #401f28; outline-offset: 3px; }
+  .fo-rule { display: block; width: 7.5rem; height: 2px; margin: 2.125rem auto 1.75rem; background: linear-gradient(#fff 0 50%, rgb(0 0 0 / 22%) 50% 100%); opacity: .85; }
+  .fo-join { padding: .25rem 0; border: 0; background: none; font-size: .9375rem; letter-spacing: .42em; color: #401f28; text-shadow: 0 1px 0 rgb(255 255 255 / 50%); cursor: pointer; transition: letter-spacing .5s cubic-bezier(.2, .8, .2, 1); }
+  .fo-join:hover { letter-spacing: .48em; }
+  .fo-orn { display: block; width: 18.75rem; height: auto; margin-top: 2.25rem; }
+  .fo-bar { display: flex; justify-content: space-between; align-items: center; gap: 1.25rem; margin: 0 var(--site--margin, 2.5rem); padding: 1.125rem 0 1.75rem; border-top: 1px solid rgb(255 255 255 / 45%); box-shadow: 0 -1px 0 rgb(0 0 0 / 12%); }
+  .fo-bar .fo-eng { font-size: .625rem; letter-spacing: .24em; text-decoration: none; }
+  .fo-bar-r { display: flex; gap: 1.625rem; }
+  @media (max-width: 767px) {
+    .fo-mid { padding: 1.5rem 1.125rem 2.25rem; }
+    .fo-cards { gap: .75rem; margin-top: 1.75rem; }
+    .fo-card { padding: 1.375rem .625rem 1.25rem; }
+    .fo-ct { font-size: .75rem; letter-spacing: .24em; }
+    .fo-icons { gap: .375rem; }
+    .fo-ic { width: 2.125rem; height: 2.125rem; }
+    .fo-ic svg { width: .875rem; height: .875rem; }
+    .fo-vis { width: 4.75rem; height: 4.75rem; }
+    .fo-join { font-size: .75rem; letter-spacing: .3em; }
+    .fo-orn { width: 13.75rem; margin-top: 1.75rem; }
+    .fo-bar { flex-direction: column; gap: .75rem; margin: 0 1.125rem; text-align: center; }
+    .fo-bar-r { flex-wrap: wrap; justify-content: center; gap: .625rem 1.125rem; }
+  }
 </style>
 <footer id="contact" data-wf-component-id="29394d2f-cd0c-8059-7e15-66f93814999f" data-wf-variant-state="base" class="footer_wrap">
   <div class="footer_bottom_logo">
@@ -16,150 +45,27 @@
     <div class="footer_bottom_logo_2"><img width="600" height="838" src="/images/S.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/S-p-300.webp 300w, /images/S-p-500.webp 500w, /images/S.webp 600w" alt="" class="footer_bottom_letter"><img width="750" height="838" src="/images/T.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/T-p-300.webp 300w, /images/T-p-500.webp 500w, /images/T.webp 750w" alt="" class="footer_bottom_letter letter_t"><img width="858" height="838" src="/images/U.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/U-p-300.webp 300w, /images/U-p-500.webp 500w, /images/U-p-800.webp 800w, /images/U.webp 858w" alt="" class="footer_bottom_letter letter_u"><img width="880" height="838" src="/images/D.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/D-p-300.webp 300w, /images/D-p-500.webp 500w, /images/D-p-800.webp 800w, /images/D.webp 880w" alt="" class="footer_bottom_letter letter_d"><img width="524" height="838" src="/images/I.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/I-p-300.webp 300w, /images/I-p-500.webp 500w, /images/I.webp 524w" alt="" class="footer_bottom_letter letter_i"><img width="818" height="838" src="/images/O.webp" loading="lazy" sizes="(max-width: 767px) 35vw, 12vw" srcset="/images/O-p-300.webp 300w, /images/O-p-500.webp 500w, /images/O-p-800.webp 800w, /images/O.webp 818w" alt="" class="footer_bottom_letter letter_o"></div>
   </div>
   <h2 class="footer_title u-sr-only">Pied de page</h2>
-  <div class="footer_contain u-container">
-    <div data-medium-columns="1" class="footer_layout">
-      <div class="footer_content">
-        <section data-trigger="group" class="footer_group_wrap">
-          <h3 class="footer_group_title u-margin-bottom-text u-text-style-h4">Plan du site</h3>
-          <div role="list" class="footer_group_list">
-            <div data-trigger="hover-other focus-other" role="listitem" class="footer_group_item">
-              <a href="#" class="footer_link_wrap w-inline-block">
-                <div class="footer_link_text u-text-style-small">Accueil</div>
-              </a>
-            </div>
-            <div data-trigger="hover-other focus-other" role="listitem" class="footer_group_item">
-              <a href="#" class="footer_link_wrap w-inline-block">
-                <div class="footer_link_text u-text-style-small">À propos</div>
-              </a>
-            </div>
-            <div data-trigger="hover-other focus-other" role="listitem" class="footer_group_item">
-              <a href="#" class="footer_link_wrap w-inline-block">
-                <div class="footer_link_text u-text-style-small">Nos cours</div>
-              </a>
-            </div>
-            <div data-trigger="hover-other focus-other" role="listitem" class="footer_group_item">
-              <a href="#" class="footer_link_wrap w-inline-block">
-                <div class="footer_link_text u-text-style-small">Contact</div>
-              </a>
-            </div>
-          </div>
-        </section>
-      </div>
-      <div data-wf--grid--variant="default" data-number="12" class="u-grid-wrapper u-gap-row-7">
-        <div data-large-columns="4" data-medium-columns="4" data-small-columns="2" data-xsmall-columns="2" class="u-grid">
-          <div data-wf--card-socials--card-type="social" class="card_primary_wrap u-column-start-3-0-mobile">
-            <div data-trigger="hover-if-clickable focus" class="card_primary_group">
-              <div class="card_primary_element w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                <div class="card_primary_visual"><img src="/images/Glanzende-chromen-envelop-met-hartzegel.webp" loading="lazy" alt="" sizes="8rem" srcset="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp 300w, /images/Glanzende-chromen-envelop-met-hartzegel-p-500.webp 500w, /images/Glanzende-chromen-envelop-met-hartzegel-p-800.webp 800w, /images/Glanzende-chromen-envelop-met-hartzegel-p-1080.webp 1080w, /images/Glanzende-chromen-envelop-met-hartzegel.webp 1536w" class="card_primary_image"></div>
-                <div class="card_primary_content w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                  <div class="card_primary_header w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                    <h3 class="card_primary_title u-text-style-h6 w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">Contact</h3><img src="/images/Glanzende-chromen-envelop-met-hartzegel.webp" loading="lazy" alt="" sizes="8rem" srcset="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp 300w, /images/Glanzende-chromen-envelop-met-hartzegel-p-500.webp 500w, /images/Glanzende-chromen-envelop-met-hartzegel-p-800.webp 800w, /images/Glanzende-chromen-envelop-met-hartzegel-p-1080.webp 1080w, /images/Glanzende-chromen-envelop-met-hartzegel.webp 1536w" class="card_socials_image w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                    <div class="card_primary_text w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-richtext">
-                      <p>Une question, une envie ? Écris-nous, on te répond avec plaisir.</p>
-                    </div>
-                    <div class="footer_social_wrap w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                      <div role="list" class="footer_social_list w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="WhatsApp" href="#" target="_blank" rel="noopener" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="64" height="64" viewbox="0.00 -0.00 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" fill="black"></path></svg></div></span>
-                          </a>
-                        </div>
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="E-mail" href="#" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="64" height="64" viewbox="0 -8 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00 0.00 L5.63 0.13 L4.32 0.53 L3.11 1.18 L2.05 2.05 L1.18 3.11 L0.53 4.32 L0.13 5.63 L0.00 7.00 L0.00 41.00 L0.13 42.37 L0.53 43.68 L1.18 44.89 L2.05 45.95 L3.11 46.82 L4.32 47.47 L5.63 47.87 L7.00 48.00 L57.00 48.00 L58.37 47.87 L59.68 47.47 L60.89 46.82 L61.95 45.95 L62.82 44.89 L63.47 43.68 L63.87 42.37 L64.00 41.00 L64.00 7.00 L63.87 5.63 L63.47 4.32 L62.82 3.11 L61.95 2.05 L60.89 1.18 L59.68 0.53 L58.37 0.13 L57.00 0.00ZM30.82 28.99 L25.74 24.95 L6.34 44.34 L5.95 44.65 L5.49 44.84 L5.00 44.90 L4.51 44.84 L4.05 44.65 L3.66 44.34 L3.35 43.95 L3.16 43.49 L3.10 43.00 L3.16 42.51 L3.35 42.05 L3.66 41.66 L22.75 22.56 L3.82 7.49 L3.47 7.13 L3.23 6.70 L3.11 6.21 L3.12 5.72 L3.26 5.24 L3.51 4.82 L3.87 4.47 L4.30 4.23 L4.79 4.11 L5.28 4.12 L5.76 4.26 L6.18 4.51 L32.00 25.07 L57.82 4.51 L58.24 4.26 L58.72 4.12 L59.21 4.11 L59.70 4.23 L60.13 4.47 L60.49 4.82 L60.74 5.24 L60.88 5.72 L60.89 6.21 L60.77 6.70 L60.53 7.13 L60.18 7.49 L41.25 22.56 L60.34 41.66 L60.65 42.05 L60.84 42.51 L60.90 43.00 L60.84 43.49 L60.65 43.95 L60.34 44.34 L59.95 44.65 L59.49 44.84 L59.00 44.90 L58.51 44.84 L58.05 44.65 L57.66 44.34 L38.26 24.95 L33.18 28.99 L32.75 29.25 L32.25 29.38 L31.75 29.38 L31.25 29.25Z" fill="black"></path></svg></div></span>
-                          </a>
-                        </div>
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="Téléphone" href="#" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="64" height="64" viewbox="32.00 24.00 200.00 200.00" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M231.88,175.08A56.26,56.26,0,0,1,176,224C96.6,224,32,159.4,32,80A56.26,56.26,0,0,1,80.92,24.12a16,16,0,0,1,16.62,9.52l21.12,47.15,0,.12A16,16,0,0,1,117.39,96c-.18.27-.37.52-.57.77L96,121.45c7.49,15.22,23.41,31,38.83,38.51l24.34-20.71a8.12,8.12,0,0,1,.75-.56,16,16,0,0,1,15.17-1.4l.13.06,47.11,21.11A16,16,0,0,1,231.88,175.08Z" fill="black"></path></svg></div></span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div data-wf--card-socials--card-type="social" class="card_primary_wrap">
-            <div data-trigger="hover-if-clickable focus" class="card_primary_group">
-              <div class="card_primary_element w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                <div class="card_primary_visual"><img src="/images/Glanzend-chromen-hart-op-transparante-achtergrond.webp" loading="lazy" alt="" sizes="8rem" srcset="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp 300w, /images/ode-heart-s.webp 200w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp 500w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-800.webp 800w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-1080.webp 1080w, /images/Glanzend-chromen-hart-op-transparante-achtergrond.webp 1555w" class="card_primary_image"></div>
-                <div class="card_primary_content w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                  <div class="card_primary_header w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                    <h3 class="card_primary_title u-text-style-h6 w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">Réseaux</h3><img src="/images/Glanzend-chromen-hart-op-transparante-achtergrond.webp" loading="lazy" alt="" sizes="8rem" srcset="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp 300w, /images/ode-heart-s.webp 200w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-500.webp 500w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-800.webp 800w, /images/Glanzend-chromen-hart-op-transparante-achtergrond-p-1080.webp 1080w, /images/Glanzend-chromen-hart-op-transparante-achtergrond.webp 1555w" class="card_socials_image w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                    <div class="card_primary_text w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-richtext">
-                      <p>Suis les coulisses de l’ouverture du studio sur nos réseaux.</p>
-                    </div>
-                    <div class="footer_social_wrap w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                      <div role="list" class="footer_social_list w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872">
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="Facebook" href="#" target="_blank" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="64" height="64" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M24.9244 62V36H16V24H24.9244V15.62C24.9244 6.49153 30.7033 2 38.8465 2C42.7472 2 46.0996 2.29041 47.0766 2.42022V11.96L41.4289 11.9625C37.0001 11.9625 36 14.067 36 17.1551V24H48L44 36H36V62H24.9244Z" fill="black"></path>
-                              </svg></div><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="64" height="64" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M24.9244 62V36H16V24H24.9244V15.62C24.9244 6.49153 30.7033 2 38.8465 2C42.7472 2 46.0996 2.29041 47.0766 2.42022V11.96L41.4289 11.9625C37.0001 11.9625 36 14.067 36 17.1551V24H48L44 36H36V62H24.9244Z" fill="black"></path>
-                              </svg></div></span>
-                          </a>
-                        </div>
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="Instagram" href="#" target="_blank" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="56" height="56" viewbox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M55.84 16.46C55.79 14.13 55.35 11.83 54.54 9.66C53.08 5.9 50.11 2.92 46.34 1.47C44.17 0.66 41.87 0.22 39.54 0.17C36.56 0.03 35.6 0 28 0C20.4 0 19.45 0.03 16.46 0.17C14.14 0.21 11.84 0.65 9.66 1.47C5.9 2.92 2.93 5.9 1.47 9.66C0.66 11.84 0.22 14.14 0.17 16.46C0.04 19.44 0 20.4 0 28C0 35.6 0.04 36.56 0.17 39.54C0.22 41.87 0.66 44.17 1.47 46.34C2.93 50.1 5.9 53.08 9.66 54.53C11.84 55.35 14.14 55.79 16.46 55.83C19.45 55.97 20.4 56 28 56C35.6 56 36.56 55.97 39.55 55.83C41.87 55.79 44.17 55.35 46.35 54.53C50.11 53.08 53.08 50.1 54.54 46.34C55.35 44.17 55.79 41.87 55.84 39.54C55.97 36.56 56 35.6 56 28C56 20.4 55.97 19.44 55.84 16.46ZM28 42.38C20.06 42.38 13.63 35.94 13.63 28C13.63 20.06 20.06 13.62 28 13.62C31.97 13.62 35.56 15.23 38.17 17.83C40.77 20.44 42.38 24.03 42.38 28C42.38 35.94 35.94 42.38 28 42.38ZM42.95 16.41C41.09 16.41 39.59 14.91 39.59 13.05C39.59 11.19 41.09 9.69 42.95 9.69C44.81 9.69 46.31 11.2 46.31 13.05C46.31 14.9 44.81 16.41 42.95 16.41Z" fill="black"></path>
-                                <path d="M37.3399 28.0019C37.3399 33.1519 33.1599 37.3319 28.0099 37.3319H27.9999C22.8499 37.3319 18.6699 33.1519 18.6699 28.0019C18.6699 22.8519 22.8499 18.6719 27.9999 18.6719C33.1499 18.6719 37.3399 22.8519 37.3399 28.0019Z" fill="black"></path>
-                              </svg></div><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="56" height="56" viewbox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M55.84 16.46C55.79 14.13 55.35 11.83 54.54 9.66C53.08 5.9 50.11 2.92 46.34 1.47C44.17 0.66 41.87 0.22 39.54 0.17C36.56 0.03 35.6 0 28 0C20.4 0 19.45 0.03 16.46 0.17C14.14 0.21 11.84 0.65 9.66 1.47C5.9 2.92 2.93 5.9 1.47 9.66C0.66 11.84 0.22 14.14 0.17 16.46C0.04 19.44 0 20.4 0 28C0 35.6 0.04 36.56 0.17 39.54C0.22 41.87 0.66 44.17 1.47 46.34C2.93 50.1 5.9 53.08 9.66 54.53C11.84 55.35 14.14 55.79 16.46 55.83C19.45 55.97 20.4 56 28 56C35.6 56 36.56 55.97 39.55 55.83C41.87 55.79 44.17 55.35 46.35 54.53C50.11 53.08 53.08 50.1 54.54 46.34C55.35 44.17 55.79 41.87 55.84 39.54C55.97 36.56 56 35.6 56 28C56 20.4 55.97 19.44 55.84 16.46ZM28 42.38C20.06 42.38 13.63 35.94 13.63 28C13.63 20.06 20.06 13.62 28 13.62C31.97 13.62 35.56 15.23 38.17 17.83C40.77 20.44 42.38 24.03 42.38 28C42.38 35.94 35.94 42.38 28 42.38ZM42.95 16.41C41.09 16.41 39.59 14.91 39.59 13.05C39.59 11.19 41.09 9.69 42.95 9.69C44.81 9.69 46.31 11.2 46.31 13.05C46.31 14.9 44.81 16.41 42.95 16.41Z" fill="black"></path>
-                                <path d="M37.3399 28.0019C37.3399 33.1519 33.1599 37.3319 28.0099 37.3319H27.9999C22.8499 37.3319 18.6699 33.1519 18.6699 28.0019C18.6699 22.8519 22.8499 18.6719 27.9999 18.6719C33.1499 18.6719 37.3399 22.8519 37.3399 28.0019Z" fill="black"></path>
-                              </svg></div></span>
-                          </a>
-                        </div>
-                        <div role="listitem" class="footer_social_item">
-                          <a aria-label="LinkedIn" href="#" target="_blank" class="footer_social_link w-variant-a6cda5b8-71f0-4c38-2a2f-402569c46872 w-inline-block">
-                            <span class="fs-roll" aria-hidden="true"><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="46" height="46" viewbox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 5.5C11 8.6 8.6 11 5.5 11C2.4 11 0 8.5 0 5.5C0 2.5 2.5 0 5.5 0C8.5 0 11 2.5 11 5.5Z" fill="black"></path>
-                                <path d="M10.2998 15.1953H0.799805V45.6953H10.2998V15.1953Z" fill="black"></path>
-                                <path d="M45.8002 29V45.7H36.3002V30.9C36.3002 27.4 36.2002 22.8 31.4002 22.8C26.6002 22.8 25.7002 26.7 25.7002 30.6V45.7H16.2002V15.2H25.3002V19.4H25.4002C26.7002 17 29.8002 14.5 34.4002 14.5C44.0002 14.5 45.8002 20.8 45.8002 29Z" fill="black"></path>
-                              </svg></div><div aria-hidden="true" data-wf--icon--variant="small" class="u-icon w-variant-8f27d1c8-d95a-e3b2-66d1-3a165d05aede w-embed"><svg width="46" height="46" viewbox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M11 5.5C11 8.6 8.6 11 5.5 11C2.4 11 0 8.5 0 5.5C0 2.5 2.5 0 5.5 0C8.5 0 11 2.5 11 5.5Z" fill="black"></path>
-                                <path d="M10.2998 15.1953H0.799805V45.6953H10.2998V15.1953Z" fill="black"></path>
-                                <path d="M45.8002 29V45.7H36.3002V30.9C36.3002 27.4 36.2002 22.8 31.4002 22.8C26.6002 22.8 25.7002 26.7 25.7002 30.6V45.7H16.2002V15.2H25.3002V19.4H25.4002C26.7002 17 29.8002 14.5 34.4002 14.5C44.0002 14.5 45.8002 20.8 45.8002 29Z" fill="black"></path>
-                              </svg></div></span>
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+  <!-- under the chrome letters, in the spirit of the silver invitation: two cards with engraved titles, the call to action, the ornament -->
+  <div class="fo-mid">
+    <div class="fo-cards">
+      <section class="fo-card" aria-labelledby="fo-con">
+        <h3 class="fo-eng fo-ct" id="fo-con">Contact</h3>
+        <img class="fo-vis" src="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" alt="" aria-hidden="true" loading="lazy" width="96" height="96" />
+        <ul class="fo-icons" role="list"><li><a class="fo-ic" aria-label="WhatsApp" href="#" target="_blank" rel="noopener"><svg width="64" height="64" viewbox="0.00 -0.00 24.00 24.00" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z" fill="black"></path></svg></a></li><li><a class="fo-ic" aria-label="E-mail" href="#"><svg width="64" height="64" viewbox="0 -8 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7.00 0.00 L5.63 0.13 L4.32 0.53 L3.11 1.18 L2.05 2.05 L1.18 3.11 L0.53 4.32 L0.13 5.63 L0.00 7.00 L0.00 41.00 L0.13 42.37 L0.53 43.68 L1.18 44.89 L2.05 45.95 L3.11 46.82 L4.32 47.47 L5.63 47.87 L7.00 48.00 L57.00 48.00 L58.37 47.87 L59.68 47.47 L60.89 46.82 L61.95 45.95 L62.82 44.89 L63.47 43.68 L63.87 42.37 L64.00 41.00 L64.00 7.00 L63.87 5.63 L63.47 4.32 L62.82 3.11 L61.95 2.05 L60.89 1.18 L59.68 0.53 L58.37 0.13 L57.00 0.00ZM30.82 28.99 L25.74 24.95 L6.34 44.34 L5.95 44.65 L5.49 44.84 L5.00 44.90 L4.51 44.84 L4.05 44.65 L3.66 44.34 L3.35 43.95 L3.16 43.49 L3.10 43.00 L3.16 42.51 L3.35 42.05 L3.66 41.66 L22.75 22.56 L3.82 7.49 L3.47 7.13 L3.23 6.70 L3.11 6.21 L3.12 5.72 L3.26 5.24 L3.51 4.82 L3.87 4.47 L4.30 4.23 L4.79 4.11 L5.28 4.12 L5.76 4.26 L6.18 4.51 L32.00 25.07 L57.82 4.51 L58.24 4.26 L58.72 4.12 L59.21 4.11 L59.70 4.23 L60.13 4.47 L60.49 4.82 L60.74 5.24 L60.88 5.72 L60.89 6.21 L60.77 6.70 L60.53 7.13 L60.18 7.49 L41.25 22.56 L60.34 41.66 L60.65 42.05 L60.84 42.51 L60.90 43.00 L60.84 43.49 L60.65 43.95 L60.34 44.34 L59.95 44.65 L59.49 44.84 L59.00 44.90 L58.51 44.84 L58.05 44.65 L57.66 44.34 L38.26 24.95 L33.18 28.99 L32.75 29.25 L32.25 29.38 L31.75 29.38 L31.25 29.25Z" fill="black"></path></svg></a></li><li><a class="fo-ic" aria-label="Téléphone" href="#"><svg width="64" height="64" viewbox="32.00 24.00 200.00 200.00" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M231.88,175.08A56.26,56.26,0,0,1,176,224C96.6,224,32,159.4,32,80A56.26,56.26,0,0,1,80.92,24.12a16,16,0,0,1,16.62,9.52l21.12,47.15,0,.12A16,16,0,0,1,117.39,96c-.18.27-.37.52-.57.77L96,121.45c7.49,15.22,23.41,31,38.83,38.51l24.34-20.71a8.12,8.12,0,0,1,.75-.56,16,16,0,0,1,15.17-1.4l.13.06,47.11,21.11A16,16,0,0,1,231.88,175.08Z" fill="black"></path></svg></a></li></ul>
+      </section>
+      <section class="fo-card" aria-labelledby="fo-rés">
+        <h3 class="fo-eng fo-ct" id="fo-rés">Réseaux</h3>
+        <img class="fo-vis" src="/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp" alt="" aria-hidden="true" loading="lazy" width="96" height="96" />
+        <ul class="fo-icons" role="list"><li><a class="fo-ic" aria-label="Facebook" href="#" target="_blank" rel="noopener"><svg width="64" height="64" viewbox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M24.9244 62V36H16V24H24.9244V15.62C24.9244 6.49153 30.7033 2 38.8465 2C42.7472 2 46.0996 2.29041 47.0766 2.42022V11.96L41.4289 11.9625C37.0001 11.9625 36 14.067 36 17.1551V24H48L44 36H36V62H24.9244Z" fill="black"></path> </svg></a></li><li><a class="fo-ic" aria-label="Instagram" href="#" target="_blank" rel="noopener"><svg width="56" height="56" viewbox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M55.84 16.46C55.79 14.13 55.35 11.83 54.54 9.66C53.08 5.9 50.11 2.92 46.34 1.47C44.17 0.66 41.87 0.22 39.54 0.17C36.56 0.03 35.6 0 28 0C20.4 0 19.45 0.03 16.46 0.17C14.14 0.21 11.84 0.65 9.66 1.47C5.9 2.92 2.93 5.9 1.47 9.66C0.66 11.84 0.22 14.14 0.17 16.46C0.04 19.44 0 20.4 0 28C0 35.6 0.04 36.56 0.17 39.54C0.22 41.87 0.66 44.17 1.47 46.34C2.93 50.1 5.9 53.08 9.66 54.53C11.84 55.35 14.14 55.79 16.46 55.83C19.45 55.97 20.4 56 28 56C35.6 56 36.56 55.97 39.55 55.83C41.87 55.79 44.17 55.35 46.35 54.53C50.11 53.08 53.08 50.1 54.54 46.34C55.35 44.17 55.79 41.87 55.84 39.54C55.97 36.56 56 35.6 56 28C56 20.4 55.97 19.44 55.84 16.46ZM28 42.38C20.06 42.38 13.63 35.94 13.63 28C13.63 20.06 20.06 13.62 28 13.62C31.97 13.62 35.56 15.23 38.17 17.83C40.77 20.44 42.38 24.03 42.38 28C42.38 35.94 35.94 42.38 28 42.38ZM42.95 16.41C41.09 16.41 39.59 14.91 39.59 13.05C39.59 11.19 41.09 9.69 42.95 9.69C44.81 9.69 46.31 11.2 46.31 13.05C46.31 14.9 44.81 16.41 42.95 16.41Z" fill="black"></path> <path d="M37.3399 28.0019C37.3399 33.1519 33.1599 37.3319 28.0099 37.3319H27.9999C22.8499 37.3319 18.6699 33.1519 18.6699 28.0019C18.6699 22.8519 22.8499 18.6719 27.9999 18.6719C33.1499 18.6719 37.3399 22.8519 37.3399 28.0019Z" fill="black"></path> </svg></a></li><li><a class="fo-ic" aria-label="LinkedIn" href="#" target="_blank" rel="noopener"><svg width="46" height="46" viewbox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M11 5.5C11 8.6 8.6 11 5.5 11C2.4 11 0 8.5 0 5.5C0 2.5 2.5 0 5.5 0C8.5 0 11 2.5 11 5.5Z" fill="black"></path> <path d="M10.2998 15.1953H0.799805V45.6953H10.2998V15.1953Z" fill="black"></path> <path d="M45.8002 29V45.7H36.3002V30.9C36.3002 27.4 36.2002 22.8 31.4002 22.8C26.6002 22.8 25.7002 26.7 25.7002 30.6V45.7H16.2002V15.2H25.3002V19.4H25.4002C26.7002 17 29.8002 14.5 34.4002 14.5C44.0002 14.5 45.8002 20.8 45.8002 29Z" fill="black"></path> </svg></a></li></ul>
+      </section>
     </div>
+    <span class="fo-rule" aria-hidden="true"></span>
+    <button type="button" class="fo-eng fo-join" data-modal-trigger="waitlist">Réserve ta place</button>
+    <img class="fo-orn" src="/images/ode-ornament.webp" alt="" aria-hidden="true" loading="lazy" width="326" height="150" />
   </div>
-  <div class="footer_bottom_wrap">
-    <div class="footer_bottom_contain u-container">
-      <div class="footer_bottom_layout">
-        <div class="footer_bottom_text u-text-style-small u-color-faded"><span>© </span><span data-dynamic-year=" ">&#123;&#123;year&#125;&#125;</span><span> Studio Ode. Tous droits réservés.</span></div>
-        <div data-trigger="group" role="list" class="footer_bottom_list u-color-faded">
-          <div data-trigger="hover-other focus-other" role="listitem" class="footer_bottom_item">
-            <a href="#" class="footer_bottom_link_wrap w-inline-block">
-              <div class="footer_bottom_link_text u-text-style-small">Politique de confidentialité</div>
-            </a>
-          </div>
-          <div data-trigger="hover-other focus-other" role="listitem" class="footer_bottom_item">
-            <a href="#" class="footer_bottom_link_wrap w-inline-block">
-              <div class="footer_bottom_link_text u-text-style-small">Conditions générales</div>
-            </a>
-          </div>
-          <div data-trigger="hover-other focus-other" role="listitem" class="footer_bottom_item">
-            <a href="#" class="footer_bottom_link_wrap w-inline-block">
-              <div class="footer_bottom_link_text u-text-style-small">Plan du site</div>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="fo-bar">
+    <span class="fo-eng">© <span data-dynamic-year>2026</span> Ode Studio · Lille</span>
+    <span class="fo-bar-r"><a class="fo-eng" href="#">Confidentialité</a><a class="fo-eng" href="#">Conditions</a></span>
   </div>
   <div class="u-embed-js w-embed w-script">
     <script is:inline>
