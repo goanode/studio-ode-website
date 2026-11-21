@@ -1,31 +1,30 @@
 ---
 import { WEB3FORMS_ACCESS_KEY } from "../config";
-// Waitlist window (design W6): a pearl-grey panel on the right over the blurred page (slides up from the bottom on phones).
-// Small Freight title with the chrome heart, one line of perks, first name / e-mail / phone (optional), consent, burgundy button.
+// Waitlist window (design D2): a centred split window over the blurred page. Left: a still of the fluted-glass photo
+// with a round close button. Right: burgundy panel with the silver logo, Freight title, one line of perks,
+// first name + e-mail in translucent pills, a white button and the consent line. On phones the photo is a strip on top.
 ---
-<dialog data-wf--modal--variant="side-panel" data-modal-target="waitlist" class="wl" aria-label="Réserve ta place parmi les fondatrices">
+<dialog data-wf--modal--variant="split" data-modal-target="waitlist" class="wl" aria-label="Réserve ta place parmi les fondatrices">
   <div class="wl-bd" data-modal-close=""></div>
   <div class="wl-pan" data-lenis-prevent="">
-    <div class="wl-top"><p class="wl-lab">(Fondatrices · sans engagement)</p><button type="button" class="wl-x" data-modal-close="">Fermer</button></div>
+    <div class="wl-ph">
+      <img src="/images/ode-fluted-modal.webp" srcset="/images/ode-fluted-modal-s.webp 524w, /images/ode-fluted-modal.webp 1048w" sizes="(max-width: 767px) 100vw, 29rem" alt="" aria-hidden="true" loading="lazy" width="1048" height="1311" />
+      <button type="button" class="wl-x" data-modal-close="" aria-label="Fermer">×</button>
+    </div>
     <div class="wl-body">
-      <div class="wl-intro">
-        <p class="wl-lead" tabindex="-1" autofocus>Les 100 premières inscrites deviennent fondatrices&nbsp;: ton premier cours offert, un tarif fondatrice et une place réservée à l’ouverture du studio, à Lille en 2027.</p>
-        <img class="wl-ph" src="/images/ode-invitation-cercle.webp" srcset="/images/ode-invitation-cercle.webp 620w, /images/ode-invitation-cercle-2x.webp 1086w" sizes="7.5rem" alt="" aria-hidden="true" loading="lazy" width="620" height="827" />
-      </div>
+      <img class="wl-logo" src="/images/ode-logo-300.webp" alt="Ode" width="300" height="80" loading="lazy" />
+      <h2 class="wl-h">Réserve ta place</h2>
+      <p class="wl-lead" tabindex="-1" autofocus>Les 100 premières inscrites deviennent fondatrices&nbsp;: premier cours offert, tarif privilégié et place réservée à l’ouverture.</p>
       <div class="w-form">
-        <div class="wl-sec"><span>Tes coordonnées</span><span>(100 places · gratuit)</span></div>
         <form id="waitlist-form" name="waitlist" method="POST" action="https://api.web3forms.com/submit" data-waitlist-form="" class="wl-form">
           <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY}>
           <input type="hidden" name="subject" value="Nouvelle fondatrice — Ode">
           <input type="hidden" name="from_name" value="Ode website">
           <input type="checkbox" name="botcheck" class="u-display-none" tabindex="-1" autocomplete="off" aria-hidden="true">
-          <label class="wl-f"><span>Prénom <i aria-hidden="true">*</i></span><input name="name" type="text" required autocomplete="given-name" placeholder="Ton prénom" /></label>
-          <label class="wl-f"><span>E-mail <i aria-hidden="true">*</i></span><input name="email" type="email" required inputmode="email" autocomplete="email" placeholder="ton@email.fr" /></label>
-          <label class="wl-f"><span>Téléphone <em>(facultatif)</em></span><input name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="06 12 34 56 78" /></label>
-          <div class="wl-end">
-            <label class="wl-c"><input type="checkbox" name="terms" required /><span>J’accepte les conditions.</span></label>
-            <button type="submit" class="wl-btn">Réserver ma place →<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
-          </div>
+          <label class="wl-f"><span class="u-sr-only">Prénom</span><input name="name" type="text" required autocomplete="given-name" placeholder="Prénom" /></label>
+          <label class="wl-f"><span class="u-sr-only">E-mail</span><input name="email" type="email" required inputmode="email" autocomplete="email" placeholder="E-mail" /></label>
+          <button type="submit" class="wl-btn">Réserver ma place<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
+          <p class="wl-fine">En t’inscrivant, tu acceptes de recevoir les nouvelles d’Ode (ouverture, avantages fondatrices). Désinscription en un clic.</p>
         </form>
         <div class="w-form-done wl-msg"><p class="wl-lead">Bienvenue parmi les fondatrices&nbsp;! Ta place est réservée. On te prévient dès l’ouverture du studio.</p></div>
         <div class="w-form-fail wl-err">Oups, un problème est survenu. Réessaie dans un instant.</div>
@@ -46,11 +45,10 @@ let lastFocusedElement;
 if (typeof gsap !== "undefined") {
   gsap.context(() => {
     let tl = gsap.timeline({ paused: true, onReverseComplete: resetModal });
-    if (variant === "side-panel") {
-      // panel slides in from the right (from the bottom on phones) over the blurred page
-      const phone = matchMedia("(max-width: 767px)").matches;
+    if (variant === "split") {
+      // window fades and rises a little over the blurred page
       tl.fromTo(".wl-bd", { opacity: 0 }, { opacity: 1, duration: 0.35, ease: "power1.out" });
-      tl.from(".wl-pan", phone ? { yPercent: 100, duration: 0.45, ease: "power3.out" } : { xPercent: 110, duration: 0.45, ease: "power3.out" }, "<");
+      tl.from(".wl-pan", { opacity: 0, y: "2.5rem", scale: 0.97, duration: 0.5, ease: "power3.out" }, "<0.05");
     } else if (variant === "full-screen") {
       tl.set(".modal_backdrop", { opacity: 0 });
       tl.from(".modal_content", { opacity: 0, duration: 0.2, ease: "power1.out" });
@@ -73,7 +71,7 @@ function openModal() {
   lastFocusedElement = document.activeElement;
   component.showModal();
   if (typeof gsap !== "undefined") component.tl.play();
-  component.querySelectorAll(".wl-pan").forEach((el) => (el.scrollTop = 0));
+  component.querySelectorAll(".wl-pan, .wl-body").forEach((el) => (el.scrollTop = 0));
   window.dispatchEvent(new CustomEvent("modal-open", { detail: { modal: component } }));
 }
 function closeModal() {
@@ -96,52 +94,47 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
 </dialog>
 
 <style is:global>
-  /* Waitlist window (after the oharchitecture.com.au enquiry form, in Ode's style): pearl-grey panel, a third of the screen wide,
-     small label + "Fermer" on top, intro sentence with a small photo, then "Tes coordonnées" with labelled grey fields. */
-  dialog.wl { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: hidden; color: #1f1d1e; }
+  /* Waitlist window D2: centred split window, fluted photo left, burgundy form right. */
+  dialog.wl { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; max-height: none; margin: 0; padding: 0; border: 0; background: transparent; overflow: hidden; color: #fff; }
   dialog.wl:not([open]) { display: none; }
+  dialog.wl[open] { display: grid; place-items: center; }
   dialog.wl::backdrop { background: transparent; }
-  .wl-bd { position: absolute; inset: 0; background: rgb(20 18 19 / 45%); -webkit-backdrop-filter: blur(18px); backdrop-filter: blur(18px); }
-  .wl-pan { position: absolute; right: .75rem; top: .75rem; bottom: .75rem; width: max(33vw, 30rem); display: flex; flex-direction: column; padding: 1.5rem 1.75rem 1.75rem; border-radius: 1rem; background: #efeded; overflow-y: auto; overscroll-behavior: contain; }
-  .wl-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-  .wl-lab, .wl-x, .wl-sec { margin: 0; font-size: .8125rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; }
-  .wl-x { position: relative; padding: 0; border: 0; background: none; color: inherit; font-family: inherit; cursor: pointer; transition: color .3s; }
-  .wl-x::before { content: ""; position: absolute; inset: -.75rem -.5rem; }
-  .wl-x:hover, .wl-x:focus-visible { color: #401f28; }
-  .wl-body { display: flex; flex-direction: column; flex: 1; gap: 3rem; }
-  .wl-intro { display: flex; justify-content: space-between; gap: 1.5rem; align-items: flex-start; }
-  .wl-lead { margin: 0; max-width: 24rem; font-size: 1.1875rem; line-height: 1.32; letter-spacing: -.01em; }
+  .wl-bd { position: absolute; inset: 0; background: rgb(20 18 19 / 50%); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); }
+  .wl-pan { position: relative; display: grid; grid-template-columns: 1fr 1fr; width: min(58rem, calc(100% - 3rem)); height: min(36.25rem, calc(100% - 3rem)); border-radius: 1.375rem; overflow: hidden; background: #401f28; box-shadow: 0 1.875rem 5rem rgb(0 0 0 / 35%); }
+  .wl-ph { position: relative; min-height: 0; background: #555; }
+  .wl-ph img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+  .wl-x { position: absolute; left: 1rem; top: 1rem; display: grid; place-items: center; width: 2.25rem; height: 2.25rem; padding: 0 0 .125rem; border: 0; border-radius: 50%; background: rgb(0 0 0 / 22%); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); color: #fff; font: inherit; font-size: 1.375rem; line-height: 1; cursor: pointer; transition: background-color .3s; }
+  .wl-x:hover { background: #401f28; }
+  .wl-body { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 0; padding: 2.5rem 3.25rem; text-align: center; overflow-y: auto; overscroll-behavior: contain; }
+  .wl-logo { width: auto; height: 1.875rem; margin-bottom: 1.625rem; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 40%)); }
+  .wl-h { margin: 0 0 .75rem; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.375rem; line-height: 1; letter-spacing: -.03em; color: #fff; }
+  .wl-lead { margin: 0 auto 1.75rem; max-width: 21.25rem; font-size: .9375rem; line-height: 1.5; color: rgb(255 255 255 / 75%); }
   .wl-lead:focus { outline: none; }
-  .wl-ph { flex: none; width: 7.5rem; height: auto; aspect-ratio: 3 / 4; object-fit: cover; border-radius: .375rem; }
-  .wl-body > .w-form { margin-top: auto; }
-  .wl-sec { display: flex; justify-content: space-between; padding-bottom: .75rem; margin-bottom: 1.25rem; border-bottom: 1px solid rgb(31 29 30 / 20%); }
-  .wl-f { display: block; margin-bottom: 1rem; }
-  .wl-f > span { display: block; margin-bottom: .5rem; font-size: .875rem; }
-  .wl-f i { font-style: normal; color: #8a2a3a; }
-  .wl-f em { font-style: normal; color: rgb(31 29 30 / 50%); }
-  .wl-f input { display: block; width: 100%; height: 3.25rem; padding: 0 .875rem; border: 1px solid transparent; border-radius: .375rem; background: rgb(31 29 30 / 6%); color: inherit; font: inherit; font-size: 1rem; outline: none; transition: border-color .25s, background-color .25s; }
-  .wl-f input::placeholder { color: rgb(31 29 30 / 38%); }
-  .wl-f input:focus { border-color: #401f28; background: #fff; }
-  .wl-end { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-top: 1.5rem; }
-  .wl-c { position: relative; display: flex; align-items: center; gap: .625rem; font-size: .8125rem; color: rgb(31 29 30 / 65%); cursor: pointer; }
-  .wl-c::before { content: ""; position: absolute; inset: -.6rem -.25rem; }
-  .wl-c input { appearance: none; -webkit-appearance: none; flex: none; width: 1rem; height: 1rem; margin: 0; border: 1px solid rgb(31 29 30 / 45%); border-radius: .25rem; background: transparent center/.625rem no-repeat; cursor: pointer; transition: background-color .2s, border-color .2s; }
-  .wl-c input:checked { background-color: #401f28; border-color: #401f28; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 11 8'%3E%3Cpath d='M1 4l3 3 6-6' fill='none' stroke='%23fff' stroke-width='1.6'/%3E%3C/svg%3E"); }
-  .wl-c input:focus-visible, .wl-btn:focus-visible, .wl-x:focus-visible { outline: 2px solid #401f28; outline-offset: 3px; }
-  .wl-btn { position: relative; flex: none; display: inline-flex; align-items: center; height: 3rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #401f28; color: #fff; font: inherit; font-size: .875rem; font-weight: 500; letter-spacing: .04em; text-transform: uppercase; cursor: pointer; transition: background-color .3s; }
-  .wl-btn:hover { background: #2b141b; }
-  .wl-btn img { position: absolute; right: -.5rem; top: -.875rem; width: 1.875rem; height: auto; opacity: 0; transform: translateY(.75rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 4px 6px rgb(0 0 0 / 30%)); pointer-events: none; }
+  .wl-body > .w-form { width: 100%; }
+  .wl-form { display: flex; flex-direction: column; gap: .75rem; }
+  .wl-f { display: block; }
+  .wl-f input { display: block; width: 100%; height: 3.125rem; padding: 0 1.25rem; border: 1px solid rgb(255 255 255 / 35%); border-radius: 9999px; background: rgb(255 255 255 / 8%); color: #fff; font: inherit; font-size: .9375rem; outline: none; transition: border-color .25s, background-color .25s; }
+  .wl-f input::placeholder { color: rgb(255 255 255 / 60%); }
+  .wl-f input:focus { border-color: #fff; background: rgb(255 255 255 / 14%); }
+  .wl-f input:-webkit-autofill { -webkit-text-fill-color: #fff; -webkit-box-shadow: 0 0 0 40px #5a3540 inset; caret-color: #fff; }
+  .wl-btn { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; height: 3.125rem; margin-top: .375rem; border: 0; border-radius: 9999px; background: #fff; color: #401f28; font: inherit; font-size: .875rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background-color .3s; }
+  .wl-btn:hover { background: #efeded; }
+  .wl-btn img { position: absolute; right: -.375rem; top: -.875rem; width: 1.875rem; height: auto; opacity: 0; transform: translateY(.75rem) rotate(-30deg) scale(.3); transition: transform .55s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 4px 6px rgb(0 0 0 / 30%)); pointer-events: none; }
   .wl-btn:hover img, .wl-btn:focus-visible img { opacity: 1; transform: translateY(-.25rem) rotate(12deg) scale(1); }
-  .wl-body.is-done .wl-intro, .wl-body.is-done .wl-sec { display: none; }
-  .wl .wl-msg { padding: 0; background: none; text-align: left; }
-  .wl .wl-err { margin-top: 1rem; padding: 0; background: none; font-size: .8125rem; color: #8a2a3a; }
+  .wl-btn:focus-visible, .wl-x:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
+  .wl-fine { margin: .5rem auto 0; max-width: 20rem; font-size: .6875rem; line-height: 1.45; color: rgb(255 255 255 / 55%); }
+  .wl-body.is-done .wl-h ~ .wl-lead { display: none; }
+  .wl .wl-msg { padding: 0; background: none; color: #fff; }
+  .wl .wl-msg .wl-lead { margin-bottom: 0; color: rgb(255 255 255 / 85%); }
+  .wl .wl-err { margin-top: 1rem; padding: 0; background: none; font-size: .8125rem; color: #ffc9d2; }
   @media (max-width: 767px) {
-    .wl-pan { inset: 0; width: auto; padding: 1.25rem 1.25rem 1.5rem; border-radius: 0; }
-    .wl-body { gap: 2rem; }
-    .wl-lead { font-size: 1.0625rem; }
-    .wl-ph { width: 5.5rem; }
-    .wl-end { flex-direction: column; align-items: stretch; gap: 1.25rem; }
-    .wl-btn { justify-content: center; height: 3.25rem; }
+    .wl-pan { grid-template-columns: 1fr; grid-template-rows: 30% 1fr; width: calc(100% - 1.5rem); height: calc(100% - 2.5rem); height: calc(100dvh - 2.5rem); border-radius: 1.125rem; }
+    .wl-body { justify-content: flex-start; padding: 1.75rem 1.375rem 1.5rem; }
+    .wl-body > :first-child { margin-top: auto; }
+    .wl-body > :last-child { margin-bottom: auto; }
+    .wl-h { font-size: 2.625rem; }
+    .wl-logo { height: 1.5rem; margin-bottom: 1rem; }
+    .wl-lead { margin-bottom: 1.25rem; font-size: .875rem; }
   }
 </style>
 

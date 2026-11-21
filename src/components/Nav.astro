@@ -53,11 +53,11 @@ const HEART = "/images/ode-heart-s.webp";
   /* the silver chrome logo as it is (a soft shadow keeps it readable on light sections) */
   .onav-logo img { display: block; height: 1.625rem; width: auto; filter: drop-shadow(0 1px 1.5px rgb(0 0 0 / 28%)); }
   .onav-links { position: absolute; left: 50%; transform: translateX(-50%); display: flex; gap: 2.5rem; }
-  /* hover: the other links fade and blur a little, and a mini chrome heart pops up on the hovered one (like the section titles) */
-  .onav-links a { position: relative; display: block; font-size: 1rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; transition: opacity .35s, filter .35s; }
+  /* hover: the other links fade, and a mini chrome heart pops up on the hovered one (like the section titles) */
+  .onav-links a { position: relative; display: block; font-size: 1rem; line-height: 1; letter-spacing: .01em; color: inherit; text-decoration: none; transition: opacity .35s; }
   .onav-links .rl { display: flex; overflow: hidden; padding: .125rem 0; }
   .onav-links .ch { position: relative; display: block; white-space: pre; }
-  .onav-links:hover a:not(:hover), .onav-links:focus-within a:not(:focus-visible):not(:hover) { opacity: .35; filter: blur(1.2px); }
+  .onav-links:hover a:not(:hover), .onav-links:focus-within a:not(:focus-visible):not(:hover) { opacity: .35; }
   .onav-lh { position: absolute; right: -.875rem; top: -.625rem; width: 1.125rem; height: auto; pointer-events: none; opacity: 0; transform: translateY(.375rem) rotate(-30deg) scale(.3); transition: transform .5s cubic-bezier(.3, 1.8, .5, 1), opacity .2s; filter: drop-shadow(0 2px 3px rgb(0 0 0 / 30%)); }
   .onav-links a:hover .onav-lh, .onav-links a:focus-visible .onav-lh { opacity: 1; transform: rotate(12deg); }
   @media (prefers-reduced-motion: reduce) { .onav-lh { transition: opacity .2s; transform: none; } }
