@@ -36,12 +36,9 @@ import WaitlistModal from "../components/WaitlistModal.astro";
     .pl-slot img.last { animation: pl-land .5s cubic-bezier(.3, 1.6, .5, 1) 1.5s both; }
     @keyframes pl-land { from { opacity: 0; transform: scale(.4) rotate(-30deg); } to { opacity: 1; transform: scale(1) rotate(10deg); } }
     .pl-cnt { position: absolute; bottom: 1.5rem; font-size: .75rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(31 29 30 / 55%); opacity: 0; animation: pl-fade .6s ease .2s forwards; }
-    .pl::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 8px; background: rgb(64 31 40 / 14%); }
-    .pl-cnt { right: var(--site--margin, 2.5rem); bottom: 1.75rem; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 2.75rem; line-height: 1; letter-spacing: -.02em; text-transform: none; font-variant-numeric: tabular-nums; color: #1f1d1e; }
+    .pl-cnt { right: var(--site--margin, 2.5rem); bottom: 1.25rem; font-family: var(--_typography---font--secondary-family), Georgia, serif; font-size: 2.75rem; line-height: 1; letter-spacing: -.02em; text-transform: none; font-variant-numeric: tabular-nums; color: #1f1d1e; }
     .pl-cnt b { font-weight: 400; }
     @keyframes pl-fade { to { opacity: 1; } }
-    .pl-line { position: absolute; left: 0; bottom: 0; width: 100%; height: 8px; background: #401f28; transform: scaleX(0); transform-origin: left; animation: pl-line 1.5s cubic-bezier(.65, 0, .35, 1) .2s forwards; }
-    @keyframes pl-line { to { transform: none; } }
     @media (max-width: 767px) { .pl-cnt { font-size: 2rem; } .pl-word { font-size: 5rem; } .pl-slot { right: -2.25rem; top: -.375rem; width: 2.25rem; height: 2.25rem; } }
     /* the homepage intro (hero letters, text, navbar) starts as the curtain lifts */
     html.has-pl .ode-hero-word .gsap_split_letter { animation-delay: calc(2.05s + var(--i) * .05s); }
@@ -74,11 +71,10 @@ import WaitlistModal from "../components/WaitlistModal.astro";
       <span class="pl-word"><span style="--i:0">O</span><span style="--i:1">D</span><span style="--i:2">E</span></span>
       <span class="pl-slot"><img src="/images/ode-icon-sparkle-s.webp" alt="" style="--k:0" /><img src="/images/ode-icon-book-s.webp" alt="" style="--k:1" /><img src="/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" alt="" style="--k:2" /><img class="last" src="/images/ode-heart-s.webp" alt="" /></span>
     </div>
-    <i class="pl-line"></i>
     <span class="pl-cnt" aria-hidden="true"><b>00</b>%</span>
   </div>
   <script is:inline>
-    // loading counter 00 → 100, in step with the burgundy line (0.2 s → 1.7 s)
+    // loading counter 00 → 100 (0.2 s → 1.7 s)
     (() => { const el = document.querySelector(".pl-cnt b"); if (!el || !document.documentElement.classList.contains("has-pl")) return; const t0 = performance.now() + 200, d = 1500;
       const ease = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
       const tick = (now) => { const x = Math.min(1, Math.max(0, (now - t0) / d)); el.textContent = String(Math.round(ease(x) * 100)).padStart(2, "0"); if (x < 1) requestAnimationFrame(tick); };
