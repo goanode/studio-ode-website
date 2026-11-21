@@ -35,7 +35,7 @@ const PILLARS = [
   ["Force", "Pas besoin d'être forte pour commencer. On construit des bases solides, cours après cours : dos, épaules, gainage. La force vient en chemin, sans forcer et sans se comparer."],
   ["Expression", "La barre devient un langage. On travaille la technique, puis on la laisse disparaître derrière le mouvement, pour que chaque élève trouve sa propre façon de danser."],
   ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui. Gagner en amplitude, en confiance, et en douceur."],
-  ["Communauté", "Huit élèves maximum, une professeure qui connaît chaque corps. On s'encourage, on progresse ensemble, dans un lieu calme et lumineux à Lille."],
+  ["Présence", "Une place essentielle pour la posture, l’attitude et la présence scénique. Prendre confiance, oser, t’affirmer : gagner en assurance dans ta façon de marcher, de bouger et d’occuper l’espace."],
 ];
 // collage photos: offer 300/500/800px versions so each screen takes the smallest that is sharp enough
 import { existsSync } from "node:fs";
@@ -70,7 +70,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         </figure>
         <div class="pil u-theme-dark" aria-label="Nos quatre piliers">
           <div class="tick-wrap"><ul class="tick" role="list">
-            {PILLARS.map(([name]) => <li class="w"><span class="ode-th">{name}<img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></li>)}
+            {PILLARS.map(([name]) => <li class="w"><span class="ode-th">{name}<img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></li>)}
           </ul></div>
           <div class="para">
             {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
