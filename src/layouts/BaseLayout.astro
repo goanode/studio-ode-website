@@ -237,31 +237,15 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       });
     </script>
     <script is:inline>
-      // temporary diagnostic, only with ?debug in the address: lists what reaches below the footer (for the iPhone white space)
-      if (location.search.includes("debug")) addEventListener("load", () => {
-        const box = document.createElement("pre");
-        box.style.cssText = "position:fixed;left:6px;right:6px;bottom:6px;z-index:99999;max-height:45vh;overflow:auto;margin:0;padding:8px;background:rgba(0,0,0,.85);color:#0f0;font:10px/1.35 monospace;white-space:pre-wrap;border-radius:8px";
-        document.body.append(box);
-        const run = () => {
-          const f = document.querySelector("footer"); if (!f) return;
-          const fb = f.getBoundingClientRect().bottom + scrollY;
-          const out = [];
-          for (const e of document.querySelectorAll("body *")) {
-            if (e === box) continue;
-            const r = e.getBoundingClientRect(); if (!r.height && !r.width) continue;
-            const b = r.bottom + scrollY;
-            if (b > fb + 2) out.push([Math.round(b - fb), e.tagName.toLowerCase() + "." + String(e.className).trim().split(/\s+/).slice(0, 3).join("."), Math.round(r.height) + "h", getComputedStyle(e).position]);
-          }
-          out.sort((a, b) => b[0] - a[0]);
-          const m = (u) => { const d = document.createElement("div"); d.style.cssText = `position:absolute;visibility:hidden;height:100${u}`; document.body.append(d); const h = d.offsetHeight; d.remove(); return h; };
-          const vv = window.visualViewport || {};
-          const ae = document.activeElement;
-          const extra = `\nscale ${vv.scale} | vvW ${Math.round(vv.width || 0)} | vvTop ${Math.round(vv.offsetTop || 0)} | innerW ${innerWidth} | clientH ${document.documentElement.clientHeight} | outerH ${outerHeight} | screen ${screen.width}x${screen.height}\nsvh ${m("svh")} lvh ${m("lvh")} dvh ${m("dvh")} vh ${m("vh")} | focus ${ae ? ae.tagName.toLowerCase() + "." + String(ae.className).split(" ")[0] : "-"} | html ${document.documentElement.className.slice(0, 60)}`;
-          box.textContent = `page ${document.documentElement.scrollHeight} | footer bottom ${Math.round(fb)} | body ${document.body.scrollHeight} | inner ${innerHeight} | vv ${Math.round(visualViewport ? visualViewport.height : 0)} | scrollY ${Math.round(scrollY)}\n` + (out.length ? out.slice(0, 14).map((o) => o.join("  ")).join("\n") : "nothing below the footer") + extra;
-        };
-        run(); addEventListener("scroll", run, { passive: true }); setInterval(run, 1500);
-      });
+      // phones (iPhone): when you scroll past the end, or behind the bottom toolbar, the browser shows the page's own
+      // background. Once the footer is on screen it takes the footer's silver (instead of white); elsewhere it stays white.
+      (() => {
+        const de = document.documentElement;
+        const upd = () => { const f = document.querySelector("footer"); de.classList.toggle("at-end", !!f && f.getBoundingClientRect().top < innerHeight); };
+        addEventListener("scroll", upd, { passive: true }); addEventListener("resize", upd); addEventListener("load", upd);
+      })();
     </script>
+    <style is:inline>html { background-color: #fff; } html.at-end { background-color: #9b9b9b; } body { background-color: #fff; }</style>
     <script is:inline src="/vendor/lenis.min.js" defer></script>
     <script is:inline src="/vendor/ukiyo.min.js" defer></script>
     <script is:inline defer>
