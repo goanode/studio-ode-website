@@ -245,7 +245,8 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
         addEventListener("scroll", upd, { passive: true }); addEventListener("resize", upd); addEventListener("load", upd);
       })();
     </script>
-    <style is:inline>html { background-color: #fff; } html.at-end { background-color: #9b9b9b; } body { background-color: #fff; }</style>
+    <!-- no rubber-band bounce past the top or bottom of the page (iPhone): the page stops at the footer -->
+    <style is:inline>html, body { overscroll-behavior-y: none; } html { background-color: #fff; } html.at-end { background-color: #9b9b9b; } body { background-color: #fff; }</style>
     <script is:inline src="/vendor/lenis.min.js" defer></script>
     <script is:inline src="/vendor/ukiyo.min.js" defer></script>
     <script is:inline defer>
