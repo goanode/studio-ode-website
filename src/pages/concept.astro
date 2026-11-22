@@ -32,10 +32,10 @@ const COL: [string, number, number, number, number, boolean, boolean, number][] 
 ];
 const pct = (x: number, total: number) => `${((x / total) * 100).toFixed(3)}%`;
 const PILLARS = [
-  ["Force", "Pas besoin d'être forte pour commencer. On construit des bases solides, cours après cours : dos, épaules, gainage. La force vient en chemin, sans forcer et sans se comparer."],
-  ["Expression", "La barre devient un langage. On travaille la technique, puis on la laisse disparaître derrière le mouvement, pour que chaque élève trouve sa propre façon de danser."],
-  ["Souplesse", "Des étirements guidés et progressifs, adaptés à ton corps d'aujourd'hui. Gagner en amplitude, en confiance, et en douceur."],
-  ["Présence", "Une place essentielle pour la posture, l’attitude et la présence scénique. Prendre confiance, oser, t’affirmer : gagner en assurance dans ta façon de marcher, de bouger et d’occuper l’espace."],
+  ["Incarner", "Une place essentielle pour la posture, l’attitude et la présence scénique. Prendre confiance, oser, t’affirmer : gagner en assurance dans ta façon de marcher, de bouger et d’occuper l’espace."],
+  ["Explorer", "Trouve ton propre style : expérimente, découvre de nouvelles gestuelles et construis pas à pas ton langage. Des workshops variés t’ouvrent d’autres univers : cabaret, tango et bien plus."],
+  ["Renforcer", "Pas besoin d’être forte pour commencer. Cours après cours, tu construis des bases solides en pole dance : dos, épaules, gainage. La force vient en chemin, sans te comparer."],
+  ["Assouplir", "Des étirements guidés et progressifs, adaptés à ton corps d’aujourd’hui. Tu gagnes en amplitude, en fluidité et en confiance, en douceur."],
 ];
 // collage photos: offer 300/500/800px versions so each screen takes the smallest that is sharp enough
 import { existsSync } from "node:fs";
@@ -49,7 +49,7 @@ const cset = (src: string) => {
 const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((c) => !c[2]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((c) => c[1]));
 ---
 
-<BaseLayout viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode, à Lille : force, expression, souplesse et présence." wfPage="6adb80ddd07ffba4e0c0cb69">
+<BaseLayout viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode à Lille : incarner, explorer, renforcer, assouplir. Posture, présence scénique, workshops cabaret et tango, en petit groupe." wfPage="6adb80ddd07ffba4e0c0cb69">
   <main id="main" class="page_main cv">
     <section class="intro u-theme-light" aria-label="Concept">
       <div class="stage">

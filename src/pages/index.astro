@@ -1039,10 +1039,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
       tl.invalidate();
       if (typeof ScrollTrigger !== "undefined") ScrollTrigger.refresh();
     };
-    const tl = gsap.timeline({ paused: true, defaults: { duration: 0.3, ease: "power1.inOut" }, onComplete: refresh, onReverseComplete: refresh });
+    // once open, the answer takes its natural height (so it never gets cut if the font or line breaks change afterwards)
+    const tl = gsap.timeline({ paused: true, defaults: { duration: 0.3, ease: "power1.inOut" }, onComplete: () => { if (card.classList.contains("is-active")) content.style.height = "auto"; refresh(); }, onReverseComplete: refresh });
     tl.set(content, { display: "block" });
     tl.fromTo(content, { height: 0 }, { height: "auto" });
-    const closeAccordion = () => card.classList.contains("is-active") && (card.classList.remove("is-active"), tl.reverse(), button.setAttribute("aria-expanded", "false"));
+    const closeAccordion = () => card.classList.contains("is-active") && (card.classList.remove("is-active"), tl.invalidate(), tl.progress(1), tl.reverse(), button.setAttribute("aria-expanded", "false"));
     closeFunctions[cardIndex] = closeAccordion;
     const openAccordion = (instant = false) => {
       if (true && previousIndex !== null && previousIndex !== cardIndex) closeFunctions[previousIndex]?.();
