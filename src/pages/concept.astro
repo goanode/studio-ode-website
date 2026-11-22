@@ -207,12 +207,13 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   @media (prefers-reduced-motion: reduce) { .j-tab { animation: none; } .fc { transition: none; } }
   @media (max-width: 767px) {
     .join { gap: 1.75rem; }
-    .fan { width: 21.25rem; height: 25rem; margin-top: 0; }
-    .fc { left: 3.75rem; width: 13.75rem; }
-    .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
-    .c3 { transform: rotate(10deg) translateX(1.625rem); }
-    .fan:hover .c1 { transform: rotate(-10deg) translateX(-1.625rem); }
-    .fan:hover .c3 { transform: rotate(10deg) translateX(1.625rem); }
+    /* phones: the fan stays inside the page margins */
+    .fan { width: 21.25rem; max-width: 100%; height: 22.5rem; margin-top: 0; }
+    .fc { left: calc(50% - 6rem); width: 12rem; }
+    .c1 { transform: rotate(-9deg) translateX(-1.25rem); }
+    .c3 { transform: rotate(9deg) translateX(1.25rem); }
+    .fan:hover .c1 { transform: rotate(-9deg) translateX(-1.25rem); }
+    .fan:hover .c3 { transform: rotate(9deg) translateX(1.25rem); }
     .j-tab { height: 2.25rem; padding: 0 1rem; font-size: .8125rem; bottom: -1.125rem; }
   }
   .cv { --red: #401f28; --ink: #1f1d1e; color: var(--ink); background: #fff; overflow-x: clip; font-family: var(--_typography---font--primary-family), sans-serif; }

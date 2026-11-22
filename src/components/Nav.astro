@@ -11,6 +11,8 @@ const links = [
   { label: "Figures", href: "/figures", on: path === "/figures" || path.startsWith("/figures/"), icon: "/images/ode-icon-book-s.webp" },
 ];
 const HEART = "/images/ode-heart-s.webp";
+// the full-screen menu also starts with Accueil (chrome envelope)
+const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === "/index", icon: "/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" }, ...links];
 ---
 <a href="#main" class="onav-skip">Aller au contenu</a>
 <header class:list={["onav", lightText ? "is-light" : "is-dark"]} data-onav data-base={lightText ? "light" : "dark"}>
@@ -32,7 +34,7 @@ const HEART = "/images/ode-heart-s.webp";
 <div class="onav-sheet" id="onav-sheet" hidden>
   <div class="onav-mid">
     <ul>
-      {links.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><span class="onav-icw" aria-hidden="true"><img class="onav-ic" src={l.icon} alt="" loading="lazy" /></span><span class="w"><span class="wi">{l.label}</span></span></a></li>)}
+      {sheetLinks.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><span class="onav-icw" aria-hidden="true"><img class="onav-ic" src={l.icon} alt="" loading="lazy" /></span><span class="w"><span class="wi">{l.label}</span></span></a></li>)}
     </ul>
     <p class="onav-blurb">Ode, le nouveau studio de pole dance à Lille. Ouverture en 2027, 50 places fondatrices, gratuites et sans engagement.</p>
     <span class="onav-num" aria-hidden="true"></span>
@@ -98,6 +100,8 @@ const HEART = "/images/ode-heart-s.webp";
   .onav-sheet:has(li:nth-child(1) a:is(:hover, :focus-visible)) .onav-num::after { content: "01"; }
   .onav-sheet:has(li:nth-child(2) a:is(:hover, :focus-visible)) .onav-num::after { content: "02"; }
   .onav-sheet:has(li:nth-child(3) a:is(:hover, :focus-visible)) .onav-num::after { content: "03"; }
+  .onav-sheet:has(ul:not(:hover) li:nth-child(4) a.on) .onav-num::after { content: "04"; }
+  .onav-sheet:has(li:nth-child(4) a:is(:hover, :focus-visible)) .onav-num::after { content: "04"; }
   .onav-foot { display: grid; grid-template-columns: 1fr auto; row-gap: .625rem; align-items: center; font-size: .625rem; letter-spacing: .08em; text-transform: uppercase; }
   .onav-soc { grid-column: 1 / -1; order: -1; display: flex; gap: 1.25rem; }
   .onav-cr { justify-self: end; display: flex; align-items: center; gap: .625rem; }
