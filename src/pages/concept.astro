@@ -53,6 +53,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   <main id="main" class="page_main cv">
     <section class="intro u-theme-light" aria-label="Concept">
       <div class="stage">
+        <p class="scroll-hint" aria-hidden="true">Fais défiler<i>↓</i></p>
         <div class="col">
           {COL.map(([src, x, y, w, h, faded, hm, depth], i) => (
             <figure class:list={["cf", { faded, hm }]} data-depth={depth} data-side={x + w / 2 < 720 ? -1 : 1} style={`--x:${pct(x, 1440)};--y:${pct(y, 900)};--w:${pct(w, 1440)};--h:${pct(h, 900)}`}>
@@ -128,6 +129,9 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
       gsap.registerPlugin(ScrollTrigger);
       // keep ScrollTrigger in step with the smooth scroll, so nothing lags or jumps
       if (window.lenis) window.lenis.on("scroll", ScrollTrigger.update);
+      // the scroll hint goes away once you start scrolling (and comes back at the very top)
+      const hint = root.querySelector(".scroll-hint");
+      if (hint) { const upd = () => hint.classList.toggle("is-gone", scrollY > 40); addEventListener("scroll", upd, { passive: true }); upd(); }
 
       // the growing photo: a full-screen photo seen through a window the size of the collage slot
       const box = () => {
@@ -225,7 +229,16 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
 
   /* 1 · collage + growing photo (pinned) */
   .intro { position: relative; height: 520svh; background: #fff; }
-  .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; }
+  /* the pinned stage follows the real screen height (iPhone toolbars grow and shrink), so no white strip under it */
+  .stage { position: sticky; top: 0; height: 100svh; height: 100dvh; overflow: hidden; }
+  /* phones: a small « Fais défiler ↓ » at the bottom of the hero, gone as soon as you start scrolling */
+  .scroll-hint { display: none; }
+  @media (max-width: 767px) {
+    .scroll-hint { position: absolute; z-index: 5; left: 50%; bottom: 1.75rem; display: flex; flex-direction: column; align-items: center; gap: .25rem; margin: 0; transform: translateX(-50%); font-size: .75rem; letter-spacing: .08em; color: rgb(31 29 30 / 60%); transition: opacity .4s; }
+    .scroll-hint i { font-style: normal; animation: hint-bob 1.6s ease-in-out infinite; }
+    .scroll-hint.is-gone { opacity: 0; }
+    @keyframes hint-bob { 50% { transform: translateY(5px); } }
+  }
   .col { position: absolute; inset: 0; z-index: 1; }
   .cf, .slot { position: absolute; left: var(--mx, var(--x)); top: var(--my, var(--y)); width: var(--mw, var(--w)); height: var(--mh, var(--h)); }
   .cf { margin: 0; overflow: hidden; }
@@ -260,7 +273,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   /* no motion: everything shown in place, pillars listed on the photo */
   .still .intro { height: auto; }
   .still .stage { position: relative; height: auto; overflow: visible; }
-  .still .col { position: relative; height: 100svh; }
+  .still .col { position: relative; height: 100svh; height: 100dvh; }
   .still .grow { position: relative; height: 100svh; clip-path: none; }
   .still .dim { opacity: 1; }
   .still .pil { visibility: visible; top: 100svh; height: 100svh; }
