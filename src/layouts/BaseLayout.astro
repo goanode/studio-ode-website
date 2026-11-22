@@ -253,7 +253,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
             if (b > fb + 2) out.push([Math.round(b - fb), e.tagName.toLowerCase() + "." + String(e.className).trim().split(/\s+/).slice(0, 3).join("."), Math.round(r.height) + "h", getComputedStyle(e).position]);
           }
           out.sort((a, b) => b[0] - a[0]);
-          box.textContent = `page ${document.documentElement.scrollHeight} | footer bottom ${Math.round(fb)} | body ${document.body.scrollHeight} | inner ${innerHeight} | vv ${Math.round(visualViewport ? visualViewport.height : 0)} | scrollY ${Math.round(scrollY)}\n` + (out.length ? out.slice(0, 14).map((o) => o.join("  ")).join("\n") : "nothing below the footer");
+          const m = (u) => { const d = document.createElement("div"); d.style.cssText = `position:absolute;visibility:hidden;height:100${u}`; document.body.append(d); const h = d.offsetHeight; d.remove(); return h; };
+          const vv = window.visualViewport || {};
+          const ae = document.activeElement;
+          const extra = `\nscale ${vv.scale} | vvW ${Math.round(vv.width || 0)} | vvTop ${Math.round(vv.offsetTop || 0)} | innerW ${innerWidth} | clientH ${document.documentElement.clientHeight} | outerH ${outerHeight} | screen ${screen.width}x${screen.height}\nsvh ${m("svh")} lvh ${m("lvh")} dvh ${m("dvh")} vh ${m("vh")} | focus ${ae ? ae.tagName.toLowerCase() + "." + String(ae.className).split(" ")[0] : "-"} | html ${document.documentElement.className.slice(0, 60)}`;
+          box.textContent = `page ${document.documentElement.scrollHeight} | footer bottom ${Math.round(fb)} | body ${document.body.scrollHeight} | inner ${innerHeight} | vv ${Math.round(visualViewport ? visualViewport.height : 0)} | scrollY ${Math.round(scrollY)}\n` + (out.length ? out.slice(0, 14).map((o) => o.join("  ")).join("\n") : "nothing below the footer") + extra;
         };
         run(); addEventListener("scroll", run, { passive: true }); setInterval(run, 1500);
       });
