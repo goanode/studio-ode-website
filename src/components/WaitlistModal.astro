@@ -26,7 +26,20 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
           <button type="submit" class="wl-btn">Réserver ma place<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
           <p class="wl-fine">En t’inscrivant, tu acceptes de recevoir les nouvelles d’Ode (ouverture, avantages fondatrices). Désinscription en un clic.</p>
         </form>
-        <div class="w-form-done wl-msg"><p class="wl-lead">Bienvenue parmi les fondatrices&nbsp;! Ta place est réservée. On te prévient dès l’ouverture du studio.</p></div>
+        <!-- after signing up: chrome heart, a clear "it's reserved", the three founder perks and a close button -->
+        <div class="w-form-done wl-msg" role="status">
+          <img class="wl-ok-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" />
+          <p class="wl-ok-eyebrow">Place réservée ✓</p>
+          <p class="wl-ok-h">Bienvenue<span data-wl-name></span>&nbsp;!</p>
+          <p class="wl-ok-p">Tu fais maintenant partie du Cercle des fondatrices d’Ode.</p>
+          <ul class="wl-ok-list" role="list">
+            <li><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" />Ton premier cours offert</li>
+            <li><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" />-15&nbsp;% sur ta formule</li>
+            <li><img src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" />Ta place réservée à l’ouverture</li>
+          </ul>
+          <p class="wl-ok-note">On t’écrit par e-mail avant l’ouverture du studio, à Lille en 2027.</p>
+          <button type="button" class="wl-btn wl-ok-close" data-modal-close="">Fermer</button>
+        </div>
         <div class="w-form-fail wl-err">Oups, un problème est survenu. Réessaie dans un instant.</div>
       </div>
     </div>
@@ -132,9 +145,25 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
   .wl-btn:hover img, .wl-btn:focus-visible img { opacity: 1; transform: translateY(-.25rem) rotate(12deg) scale(1); }
   .wl-btn:focus-visible, .wl-x:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .wl-fine { margin: .5rem auto 0; max-width: 20rem; font-size: .6875rem; line-height: 1.45; color: rgb(255 255 255 / 55%); }
-  .wl-body.is-done .wl-h ~ .wl-lead { display: none; }
+  .wl-body.is-done .wl-h, .wl-body.is-done .wl-h ~ .wl-lead { display: none; }
   .wl .wl-msg { padding: 0; background: none; color: #fff; }
-  .wl .wl-msg .wl-lead { margin-bottom: 0; color: rgb(255 255 255 / 85%); }
+  .wl .wl-msg { text-align: center; }
+  .wl-ok-heart { display: block; width: 4.5rem; height: auto; margin: 0 auto 1.25rem; filter: drop-shadow(0 .5rem 1rem rgb(0 0 0 / 35%)); }
+  .wl-body.is-done .wl-ok-heart { animation: wl-pop .8s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .wl-body.is-done .wl-ok-heart ~ * { animation: wl-rise .6s ease both; }
+  .wl-body.is-done .wl-ok-eyebrow { animation-delay: .25s; } .wl-body.is-done .wl-ok-h { animation-delay: .32s; } .wl-body.is-done .wl-ok-p { animation-delay: .39s; }
+  .wl-body.is-done .wl-ok-list { animation-delay: .46s; } .wl-body.is-done .wl-ok-note { animation-delay: .53s; } .wl-body.is-done .wl-ok-close { animation-delay: .6s; }
+  @keyframes wl-pop { from { opacity: 0; transform: scale(.3) rotate(-25deg); } }
+  @keyframes wl-rise { from { opacity: 0; transform: translateY(.75rem); } }
+  .wl-ok-eyebrow { display: inline-block; margin: 0 0 1rem; padding: .375rem .875rem; border: 1px solid rgb(255 255 255 / 35%); border-radius: 9999px; font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: #fff; }
+  .wl-ok-h { margin: 0 0 .75rem; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3rem; line-height: 1; letter-spacing: -.03em; color: #fff; }
+  .wl-ok-p { margin: 0 auto 1.5rem; max-width: 20rem; font-size: .9375rem; line-height: 1.5; color: rgb(255 255 255 / 80%); }
+  .wl-ok-list { display: grid; gap: .5rem; width: fit-content; margin: 0 auto 1.5rem; padding: 1rem 1.25rem; border-radius: 1rem; background: rgb(255 255 255 / 8%); list-style: none; text-align: left; }
+  .wl-ok-list li { display: flex; align-items: center; gap: .625rem; font-size: .875rem; color: #fff; }
+  .wl-ok-list img { width: 1rem; height: auto; flex: none; filter: drop-shadow(0 1px 2px rgb(0 0 0 / 40%)); }
+  .wl-ok-note { margin: 0 auto 1.25rem; max-width: 19rem; font-size: .75rem; line-height: 1.45; color: rgb(255 255 255 / 60%); }
+  .wl-ok-close { max-width: 14rem; margin: 0 auto; }
+  @media (prefers-reduced-motion: reduce) { .wl-body.is-done .wl-msg * { animation: none !important; } }
   .wl .wl-err { margin-top: 1rem; padding: 0; background: none; font-size: .8125rem; color: #ffc9d2; }
   @media (max-width: 767px) {
     .wl-pan { grid-template-columns: 1fr; grid-template-rows: 34% 1fr; width: calc(100% - 1.5rem); height: calc(100% - 2.5rem); height: calc(100dvh - 2.5rem); border-radius: 1.125rem; }
@@ -143,6 +172,8 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
     .wl-body > :first-child { margin-top: auto; }
     .wl-body > :last-child { margin-bottom: auto; }
     .wl-h { font-size: 2.625rem; }
+    .wl-ok-h { font-size: 2.375rem; }
+    .wl-ok-heart { width: 3.5rem; margin-bottom: .875rem; }
    
     .wl-lead { margin-bottom: 1.25rem; font-size: .875rem; }
   }
@@ -169,6 +200,8 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
         });
         const json = await res.json().catch(() => ({}));
         if (!res.ok || !json.success) throw new Error(json.message || String(res.status));
+        const nm = String(data.name || "").trim().split(/\s+/)[0];
+        wrap?.querySelectorAll<HTMLElement>("[data-wl-name]").forEach((el) => (el.textContent = nm ? `, ${nm}` : ""));
         form.style.display = "none";
         form.closest(".wl-body")?.classList.add("is-done");
         if (done) done.style.display = "block";
