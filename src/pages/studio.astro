@@ -167,10 +167,10 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
         map.addLayer({ id: "ode-area-line", type: "line", source: "ode-area", paint: { "line-color": C.wine, "line-opacity": 0.6, "line-width": 2, "line-dasharray": [2.5, 2.2] } });
       };
 
-      // the pin: shows once the map is near Lille
+      // the pin: appears as the flight nears Lille, then stays, however far you zoom out
       const pin = document.getElementById("st-pin");
       new gl.Marker({ element: pin, anchor: "bottom" }).setLngLat(LILLE).addTo(map);
-      const showPin = () => pin.classList.toggle("on", map.getZoom() > 8);
+      const showPin = () => { if (map.getZoom() > 8) pin.classList.add("on"); };
       map.on("zoom", showPin);
 
       // the globe turns slowly, then flies down to Lille; the intro words make way for the title and card
