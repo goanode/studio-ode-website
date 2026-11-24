@@ -4,7 +4,7 @@
 // full-screen dark menu over the blurred page with big Freight links and the glass waitlist button.
 // Text is white over dark heroes and dark over light pages; once you scroll, the bar gets a frosted white backing.
 const path = Astro.url.pathname.replace(/\.html$/, "").replace(/\/index$/, "").replace(/\/$/, "") || "/";
-const lightText = path === "/" || path === "/menu";
+const lightText = path === "/" || path === "/menu" || path === "/studio";
 const links = [
   { label: "Concept", href: "/concept", on: path === "/concept", icon: "/images/ode-icon-sparkle-s.webp" },
   { label: "Communauté", href: "/communaute", on: path === "/communaute", icon: "/images/ode-heart-s.webp" },

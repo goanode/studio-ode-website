@@ -1,0 +1,232 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WaitlistModal from "../components/WaitlistModal.astro";
+import { MAPBOX_TOKEN } from "../config";
+// Studio page (after tci.fm/campuses): a full-screen dark globe that flies down to Lille, where the studio will open.
+// The exact address isn't known yet, so the map shows a soft burgundy area around the centre of Lille with a
+// chrome-heart pin, and a card at the bottom: "Bientôt", opening 2027, "Réserve ta place" (opens the waitlist).
+// With a Mapbox token (src/config.ts) it uses Mapbox; without one, the free MapLibre + OpenFreeMap map.
+const LILLE = [3.0573, 50.6292];
+---
+
+<BaseLayout title="Le studio à Lille — Studio Ode" description="Ode ouvre son studio de pole dance à Lille en 2027. L’adresse sera dévoilée bientôt : réserve ta place parmi les 50 fondatrices pour être prévenue en premier." wfPage="6a96e3c256f4431a13f9f238" footer={false}>
+  <main id="main" class="page_main">
+    <section class="st" aria-labelledby="st-title">
+      <div class="st-map" id="st-map" role="region" aria-label="Carte : le studio Ode ouvrira à Lille"></div>
+      <div class="st-shade" aria-hidden="true"></div>
+      <div class="st-zoom" aria-label="Zoom">
+        <button type="button" data-zoom="1" aria-label="Zoomer">+</button>
+        <button type="button" data-zoom="-1" aria-label="Dézoomer">−</button>
+      </div>
+
+      <div class="st-ui">
+        <h1 id="st-title" class="st-h"><span class="ode-th">Le studio<img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
+        <article class="st-card">
+          <div class="st-card-body">
+            <p class="st-tag"><span class="st-dot" aria-hidden="true"></span>Bientôt</p>
+            <h2 class="st-name">Ode · Lille</h2>
+            <p class="st-addr">Adresse dévoilée bientôt · Ouverture en 2027</p>
+            <div class="st-btns">
+              <button type="button" class="st-btn st-btn-main" data-modal-trigger="waitlist">Réserve ta place<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></button>
+              <button type="button" class="st-btn st-btn-soft" data-fly>Voir sur la carte</button>
+            </div>
+            <p class="st-note">Les 50 fondatrices sont prévenues en premier quand l’adresse est dévoilée.</p>
+          </div>
+          <div class="st-card-img"><img src="/images/pole-flow-p-500.webp" alt="Danseuse à la barre, studio Ode" loading="lazy" /></div>
+        </article>
+      </div>
+    </section>
+  </main>
+  <WaitlistModal slot="after-footer" />
+</BaseLayout>
+
+<script is:inline define:vars={{ MAPBOX_TOKEN, LILLE }}>
+  (() => {
+    const el = document.getElementById("st-map");
+    const useMapbox = !!MAPBOX_TOKEN;
+    const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const small = matchMedia("(max-width: 767px)").matches;
+    const LIB = useMapbox
+      ? { js: "https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.js", css: "https://api.mapbox.com/mapbox-gl-js/v3.9.4/mapbox-gl.css" }
+      : { js: "https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.js", css: "https://unpkg.com/maplibre-gl@5/dist/maplibre-gl.css" };
+    const css = document.createElement("link"); css.rel = "stylesheet"; css.href = LIB.css; document.head.appendChild(css);
+    const s = document.createElement("script"); s.src = LIB.js; s.onload = start; document.head.appendChild(s);
+
+    // the studio view: Lille from above at an angle, the card leaves room at the bottom
+    const VIEW = { center: LILLE, zoom: small ? 13.6 : 14.6, pitch: 58, bearing: -18 };
+    const PAD = small ? { top: 0, bottom: 260, left: 0, right: 0 } : { top: 0, bottom: 220, left: 0, right: 0 };
+
+    // a soft circle around the centre of Lille: the address isn't final yet
+    const circle = (c, km, n = 96) => {
+      const [lng, lat] = c, pts = [];
+      for (let i = 0; i <= n; i++) {
+        const a = (i / n) * Math.PI * 2;
+        pts.push([lng + (km / (111.32 * Math.cos((lat * Math.PI) / 180))) * Math.cos(a), lat + (km / 110.574) * Math.sin(a)]);
+      }
+      return { type: "Feature", geometry: { type: "Polygon", coordinates: [pts] }, properties: {} };
+    };
+
+    function start() {
+      const gl = useMapbox ? window.mapboxgl : window.maplibregl;
+      if (useMapbox) gl.accessToken = MAPBOX_TOKEN;
+      const map = new gl.Map({
+        container: el,
+        style: useMapbox ? "mapbox://styles/mapbox/dark-v11" : "https://tiles.openfreemap.org/styles/dark",
+        center: [12, 38], zoom: small ? 0.9 : 1.5, pitch: 0, bearing: 0,
+        projection: useMapbox ? "globe" : undefined,
+        attributionControl: { compact: true },
+        cooperativeGestures: small,
+      });
+      window.__odeMap = map;
+
+      map.on("style.load", () => {
+        if (useMapbox) {
+          map.setFog({ color: "rgb(30, 16, 20)", "high-color": "rgb(64, 31, 40)", "horizon-blend": 0.08, "space-color": "rgb(9, 6, 7)", "star-intensity": 0.45 });
+        } else {
+          map.setProjection({ type: "globe" });
+          map.setSky({ "sky-color": "#2a1219", "horizon-color": "#401f28", "fog-color": "#1e1014", "sky-horizon-blend": 0.6, "horizon-fog-blend": 0.8, "fog-ground-blend": 0.6, "atmosphere-blend": ["interpolate", ["linear"], ["zoom"], 0, 1, 6, 0.6, 10, 0] });
+        }
+        tint();
+        buildings();
+        area();
+      });
+
+      // warm the dark map toward the brand: near-black with a hint of burgundy
+      const tint = () => {
+        for (const l of map.getStyle().layers) {
+          try {
+            if (l.type === "background") map.setPaintProperty(l.id, "background-color", "#141011");
+            else if (l.type === "fill" && /water/.test(l.id)) map.setPaintProperty(l.id, "fill-color", "#0c0a0b");
+            else if (l.type === "fill" && /land|park|wood|grass|landcover/.test(l.id)) map.setPaintProperty(l.id, "fill-color", "#1a1416");
+            else if (l.type === "symbol" && /poi/.test(l.id)) map.setLayoutProperty(l.id, "visibility", "none");
+          } catch (e) {}
+        }
+      };
+
+      // 3D buildings, dark with a faint burgundy edge light
+      const buildings = () => {
+        const layers = map.getStyle().layers;
+        const labels = layers.find((l) => l.type === "symbol" && l.layout && l.layout["text-field"]);
+        for (const l of layers) if (l.type === "fill-extrusion") map.removeLayer(l.id);
+        const src = useMapbox ? "composite" : "openmaptiles";
+        if (!map.getSource(src)) return;
+        map.addLayer({
+          id: "ode-3d", type: "fill-extrusion", source: src, "source-layer": "building", minzoom: 13,
+          ...(useMapbox ? { filter: ["==", "extrude", "true"] } : {}),
+          paint: {
+            "fill-extrusion-color": ["interpolate", ["linear"], ["get", useMapbox ? "height" : "render_height"], 0, "#221b1d", 40, "#2e2427", 120, "#3a2a2f"],
+            "fill-extrusion-height": ["interpolate", ["linear"], ["zoom"], 13, 0, 14.2, ["get", useMapbox ? "height" : "render_height"]],
+            "fill-extrusion-base": ["get", useMapbox ? "min_height" : "render_min_height"],
+            "fill-extrusion-opacity": 0.92,
+          },
+        }, labels && labels.id);
+      };
+
+      const area = () => {
+        map.addSource("ode-area", { type: "geojson", data: circle(LILLE, 1.1) });
+        map.addLayer({ id: "ode-area-fill", type: "fill", source: "ode-area", paint: { "fill-color": "#7a3446", "fill-opacity": 0.16 } });
+        map.addLayer({ id: "ode-area-line", type: "line", source: "ode-area", paint: { "line-color": "#c98a9a", "line-width": 1.2, "line-opacity": 0.7, "line-dasharray": [2, 2] } });
+      };
+
+      // the pin: chrome heart in a white bubble with a pulse, and a label
+      const pin = document.createElement("div");
+      pin.className = "st-pin";
+      pin.innerHTML = '<span class="st-pulse"></span><span class="st-bub"><img src="/images/ode-heart-s.webp" alt=""></span><span class="st-lbl">Ode · bientôt ici</span>';
+      new gl.Marker({ element: pin, anchor: "bottom" }).setLngLat(LILLE).addTo(map);
+
+      // the globe turns slowly until the flight starts; then it flies down to Lille
+      let spinning = !reduce, flown = false;
+      const spin = () => {
+        if (!spinning) return;
+        const c = map.getCenter(); c.lng -= 2.2;
+        map.easeTo({ center: c, duration: 1000, easing: (t) => t });
+      };
+      map.on("moveend", () => { if (spinning) spin(); });
+      const fly = (dur) => {
+        spinning = false; flown = true;
+        if (reduce) map.jumpTo(VIEW); else map.flyTo({ ...VIEW, padding: PAD, duration: dur, curve: 1.6, essential: true });
+      };
+      map.on("load", () => {
+        if (reduce) return fly(0);
+        spin();
+        setTimeout(() => !flown && fly(7000), 1800);
+      });
+      ["mousedown", "touchstart", "wheel"].forEach((ev) => el.addEventListener(ev, () => { spinning = false; }, { passive: true }));
+
+      document.querySelector("[data-fly]").addEventListener("click", () => fly(3200));
+      document.querySelectorAll("[data-zoom]").forEach((b) => b.addEventListener("click", () => map.easeTo({ zoom: map.getZoom() + +b.dataset.zoom, duration: 400 })));
+    }
+  })();
+</script>
+
+<style is:global>
+  /* the page is one dark screen: no scroll */
+  body:has(.st) { background: #0d0a0b; }
+  .st { position: relative; height: 100vh; height: 100dvh; min-height: 34rem; overflow: hidden; color: #fff; isolation: isolate;
+    background: radial-gradient(ellipse at 50% 38%, #2a1219 0%, #120b0d 45%, #080607 100%); }
+  .st-map { position: absolute; inset: 0; }
+  .st-map canvas { outline: none; }
+  /* the bottom fades into burgundy-black behind the card, like the reference's blue */
+  .st-shade { position: absolute; inset: auto 0 0 0; height: 58%; pointer-events: none; z-index: 1;
+    background: linear-gradient(to bottom, transparent, rgba(30, 14, 19, .55) 45%, rgba(26, 12, 17, .92)); }
+
+  .st-zoom { position: absolute; z-index: 3; right: 1.5rem; top: 6.5rem; display: flex; flex-direction: column; border-radius: .9rem; overflow: hidden;
+    background: rgba(255, 255, 255, .12); border: 1px solid rgba(255, 255, 255, .22); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+  .st-zoom button { width: 2.5rem; height: 2.5rem; border: 0; background: none; color: #fff; font: 400 1.25rem/1 var(--_typography---font--primary-family); cursor: pointer; transition: background .2s; }
+  .st-zoom button + button { border-top: 1px solid rgba(255, 255, 255, .18); }
+  .st-zoom button:hover { background: rgba(255, 255, 255, .16); }
+
+  .st-ui { position: absolute; z-index: 2; left: 0; right: 0; bottom: 0; padding: 0 clamp(1rem, 6vw, 7rem) clamp(1.25rem, 4vh, 2.75rem); pointer-events: none; }
+  .st-ui > * { pointer-events: auto; }
+  .st-h { margin: 0 0 1.1rem; font-family: var(--_typography---font--secondary-family); font-weight: 500; line-height: .95; letter-spacing: -.01em;
+    font-size: clamp(3rem, 7vw, 6rem); color: #fff; text-shadow: 0 2px 30px rgba(0, 0, 0, .35); }
+
+  .st-card { display: grid; grid-template-columns: 1fr 13.5rem; gap: 1rem; width: min(100%, 38rem); padding: .9rem; border-radius: 1.25rem;
+    background: #fff; color: var(--swatch--dark-900, #1f1d1e); box-shadow: 0 30px 80px -20px rgba(0, 0, 0, .55);
+    animation: st-up 1s cubic-bezier(.165, .84, .44, 1) .4s both; }
+  @keyframes st-up { from { opacity: 0; transform: translateY(2rem); } }
+  .st-card-body { display: flex; flex-direction: column; padding: .5rem .35rem .35rem .6rem; min-width: 0; }
+  .st-tag { display: inline-flex; align-items: center; gap: .45rem; align-self: flex-start; margin: 0 0 .7rem; padding: .3rem .7rem; border-radius: 99rem;
+    background: color-mix(in srgb, #401f28, white 88%); color: #401f28; font: 500 .75rem/1 var(--_typography---font--primary-family); letter-spacing: .08em; text-transform: uppercase; }
+  .st-dot { width: .45rem; height: .45rem; border-radius: 50%; background: #401f28; animation: st-blink 1.6s ease-in-out infinite; }
+  @keyframes st-blink { 50% { opacity: .3; } }
+  .st-name { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(1.9rem, 3vw, 2.4rem); line-height: 1; color: #1f1d1e; }
+  .st-addr { margin: .45rem 0 1.1rem; font-size: .9rem; color: rgba(31, 29, 30, .62); }
+  .st-btns { display: grid; gap: .5rem; margin-top: auto; }
+  .st-btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; height: 2.85rem; padding: 0 1.25rem; border-radius: .75rem; border: 0; cursor: pointer;
+    font: 500 1rem/1 var(--_typography---font--primary-family); transition: background .25s, color .25s, transform .25s; }
+  .st-btn img { width: 1.15rem; height: auto; transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
+  .st-btn-main { background: #401f28; color: #fff; }
+  .st-btn-main:hover { background: #2b141b; }
+  .st-btn-main:hover img { transform: scale(1.25) rotate(-10deg); }
+  .st-btn-soft { background: #f1ecec; color: #1f1d1e; }
+  .st-btn-soft:hover { background: #e6dcde; }
+  .st-btn:active { transform: scale(.98); }
+  .st-note { margin: .75rem 0 0; font-size: .75rem; line-height: 1.4; color: rgba(31, 29, 30, .5); }
+  .st-card-img { border-radius: .8rem; overflow: hidden; background: #e9e4e5; }
+  .st-card-img img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 60% 30%; }
+
+  /* the pin */
+  .st-pin { position: relative; display: flex; flex-direction: column; align-items: center; pointer-events: none; }
+  .st-bub { position: relative; z-index: 1; display: grid; place-items: center; width: 3rem; height: 3rem; border-radius: 50% 50% 50% 0; transform: rotate(-45deg);
+    background: #fff; box-shadow: 0 0 0 3px #401f28, 0 12px 30px rgba(0, 0, 0, .45); }
+  .st-bub img { width: 1.7rem; transform: rotate(45deg); }
+  .st-pulse { position: absolute; z-index: 0; left: 50%; bottom: -.6rem; width: 1.4rem; height: .55rem; margin-left: -.7rem; border-radius: 50%; background: rgba(201, 138, 154, .55);
+    animation: st-pulse 2.2s ease-out infinite; }
+  @keyframes st-pulse { from { transform: scale(.6); opacity: 1; } to { transform: scale(4); opacity: 0; } }
+  .st-lbl { position: absolute; top: calc(100% + .9rem); white-space: nowrap; padding: .35rem .7rem; border-radius: .5rem; background: #fff; color: #1f1d1e;
+    font: 500 .8rem/1 var(--_typography---font--primary-family); box-shadow: 0 6px 20px rgba(0, 0, 0, .35); }
+
+  /* map attribution: small and quiet, out of the card's way */
+  .st .maplibregl-ctrl-bottom-right, .st .mapboxgl-ctrl-bottom-right { z-index: 3; }
+  .st .maplibregl-ctrl-attrib, .st .mapboxgl-ctrl-attrib { background: rgba(255, 255, 255, .7) !important; font-size: 10px; }
+
+  @media (max-width: 767px) {
+    .st-zoom { display: none; }
+    .st-ui { padding: 0 .75rem .75rem; }
+    .st-h { font-size: 3.25rem; margin-bottom: .8rem; }
+    .st-card { grid-template-columns: 1fr; width: 100%; }
+    .st-card-img { display: none; }
+  }
+  @media (prefers-reduced-motion: reduce) { .st-card, .st-dot, .st-pulse { animation: none; } }
+</style>
