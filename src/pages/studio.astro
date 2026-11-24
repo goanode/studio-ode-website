@@ -8,7 +8,7 @@ import { MAPBOX_TOKEN } from "../config";
 //    (the exact address isn't known yet), and "Le studio" + the card (Bientôt, Réserve ta place) come in.
 // With a Mapbox token (src/config.ts) the map is Mapbox (light-v11, recoloured); without one, MapLibre + OpenFreeMap
 // (positron, recoloured the same way). Change LILLE once the address is known.
-const LILLE = [3.0573, 50.6292];
+const LILLE = [3.072, 50.6292];
 const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp";
 ---
 
@@ -52,7 +52,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
             <div class="st-img"><img src="/images/pole-flow-p-500.webp" alt="Danseuse à la barre au studio Ode" loading="lazy" width="500" height="605" /></div>
           </article>
         </div>
-        <p class="st-coord">Lille · 50°37′ N · 3°03′ E</p>
+        <p class="st-coord">Lille · 50°37′ N · 3°04′ E</p>
       </div>
     </section>
   </main>
@@ -79,7 +79,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
     // the studio view: Lille from above, tilted; the pin sits above the card
     const view = () => {
       const h = el.clientHeight;
-      return { center: LILLE, zoom: small() ? 14 : 14.6, pitch: 55, bearing: -15, padding: { top: 0, left: 0, right: 0, bottom: Math.round(h * (small() ? 0.36 : 0.1)) } };
+      return { center: LILLE, zoom: small() ? 13.1 : 13.8, pitch: 55, bearing: -15, padding: { top: 0, left: 0, right: 0, bottom: Math.round(h * (small() ? 0.36 : 0.1)) } };
     };
 
     // a soft circle around the centre: the address isn't final yet
@@ -147,11 +147,11 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
         const hk = useMapbox ? "height" : "render_height", bk = useMapbox ? "min_height" : "render_min_height";
         const labels = map.getStyle().layers.find((l) => l.type === "symbol" && l.layout && l.layout["text-field"] && (l.layout.visibility || "visible") === "visible");
         map.addLayer({
-          id: "ode-3d", type: "fill-extrusion", source: src, "source-layer": "building", minzoom: 13,
+          id: "ode-3d", type: "fill-extrusion", source: src, "source-layer": "building", minzoom: 12.5,
           ...(useMapbox ? { filter: ["==", "extrude", "true"] } : {}),
           paint: {
             "fill-extrusion-color": C.roof,
-            "fill-extrusion-height": ["interpolate", ["linear"], ["zoom"], 13, 0, 14.4, ["coalesce", ["get", hk], 10]],
+            "fill-extrusion-height": ["interpolate", ["linear"], ["zoom"], 12.5, 0, 13.6, ["coalesce", ["get", hk], 10]],
             "fill-extrusion-base": ["coalesce", ["get", bk], 0],
             "fill-extrusion-opacity": 0.95,
             "fill-extrusion-vertical-gradient": true,
@@ -160,18 +160,18 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       };
 
       const area = () => {
-        map.addSource("ode-area", { type: "geojson", data: circle(LILLE, 0.85) });
-        map.addSource("ode-core", { type: "geojson", data: circle(LILLE, 0.45) });
+        map.addSource("ode-area", { type: "geojson", data: circle(LILLE, 2) });
+        map.addSource("ode-core", { type: "geojson", data: circle(LILLE, 1) });
         map.addLayer({ id: "ode-area-fill", type: "fill", source: "ode-area", paint: { "fill-color": C.wine, "fill-opacity": 0.07 } });
         map.addLayer({ id: "ode-core-fill", type: "fill", source: "ode-core", paint: { "fill-color": C.wine, "fill-opacity": 0.05 } });
         map.addLayer({ id: "ode-area-line", type: "line", source: "ode-area", paint: { "line-color": C.wine, "line-opacity": 0.6, "line-width": 2, "line-dasharray": [2.5, 2.2] } });
       };
 
-      // the pin: appears as the flight nears Lille, then stays, however far you zoom out
+      // the pin: on the globe from the start, and it stays at every zoom
       const pin = document.getElementById("st-pin");
       new gl.Marker({ element: pin, anchor: "bottom" }).setLngLat(LILLE).addTo(map);
-      const showPin = () => { if (map.getZoom() > 8) pin.classList.add("on"); };
-      map.on("zoom", showPin);
+      const showPin = () => pin.classList.add("on");
+      map.once("load", showPin);
 
       // the globe turns slowly, then flies down to Lille; the intro words make way for the title and card
       let spinning = !reduce, flown = false;
