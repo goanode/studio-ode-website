@@ -37,7 +37,7 @@ const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === 
     <ul>
       {sheetLinks.map((l, i) => <li style={`--i:${i}`}><a href={l.href} class:list={{ on: l.on }} aria-current={l.on ? "page" : undefined}><span class="onav-icw" aria-hidden="true"><img class="onav-ic" src={l.icon} alt="" loading="lazy" /></span><span class="w"><span class="wi">{l.label}</span></span></a></li>)}
     </ul>
-    <p class="onav-blurb">Ode, le nouveau studio de pole dance à Lille. Ouverture en 2027, 50 places fondatrices, gratuites et sans engagement.</p>
+    <p class="onav-blurb">Ode, le nouveau studio de pole dance à Lille. Ouverture à l’été 2027, 50 places fondatrices, sans engagement.</p>
     <span class="onav-num" aria-hidden="true"></span>
   </div>
   <div class="onav-foot">
