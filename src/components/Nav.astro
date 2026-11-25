@@ -90,8 +90,8 @@ const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === 
   .onav-icw { display: inline-block; width: 0; margin-right: 0; opacity: 0; transform: scale(.4) rotate(-25deg); transition: width .45s cubic-bezier(.65, 0, .35, 1), margin .45s cubic-bezier(.65, 0, .35, 1), opacity .25s, transform .55s cubic-bezier(.3, 1.6, .5, 1); }
   .onav-ic { display: block; width: 100%; height: auto; filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 22%)); }
   /* the pin is taller than the other icons: a bit narrower so it matches their size */
-  .onav-ic[src*="ode-icon-pin"] { width: 78%; margin: 0 auto; }
-  .onav-lh[src*="ode-icon-pin"] { width: .8rem; }
+  .onav-ic[src*="ode-icon-pin"] { width: 60%; margin: 0 auto; }
+  .onav-lh[src*="ode-icon-pin"] { width: .62rem; top: -.5rem; right: -.75rem; }
   /* active = hovered, or (nothing hovered) the current page, or (no current page) the first link */
   .onav-sheet li a:is(:hover, :focus-visible), .onav-sheet ul:not(:hover) a.on, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child a { color: #401f28; }
   .onav-sheet li a:is(:hover, :focus-visible) .onav-icw, .onav-sheet ul:not(:hover) a.on .onav-icw, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child .onav-icw { width: .66em; margin-right: .19em; opacity: 1; transform: none; }

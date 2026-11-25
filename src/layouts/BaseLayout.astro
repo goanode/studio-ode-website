@@ -339,10 +339,11 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       .u-theme-dark { --_theme---button-primary--background: #401f28; --_theme---button-primary--background-hover: #2b141b; --_theme---button-primary--text-hover: #fff; }
       /* Brand signature: a small chrome heart at the top right of each page's main title (one per page), and burgundy label dots */
       .ode-th { position: relative; display: inline-block; }
-      /* title icons: sparkle (Concept), book (Figures), question mark (Questions?), heart elsewhere; --icon-k keeps them visually the same size as the heart */
+      /* title icons: sparkle (Concept), book (Figures), question mark (Questions?), pin (Le studio), heart elsewhere; --icon-k keeps them visually the same size as the heart */
       .ode-icon-sparkle { --icon-k: .95; }
       .ode-icon-book { --icon-k: 1.05; right: -.55em; }
       .ode-icon-question { --icon-k: .62; right: -.32em; top: -.22em; }
+      .ode-icon-pin { --icon-k: .62; right: -.36em; top: -.22em; }
       .ode-title-heart { position: absolute; right: -.4em; top: -.1em; width: calc((var(--icon-base, max(.34em, 1.5rem)) + 15px) * var(--icon-k, 1)); height: auto; pointer-events: none; transform: rotate(12deg); filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 25%)); animation: ode-heart-in .75s cubic-bezier(.3, 1.8, .5, 1) var(--heart-delay, .4s) both; }
       @keyframes ode-heart-in { from { opacity: 0; transform: translateY(.25em) rotate(-30deg) scale(.3); } }
       @media (prefers-reduced-motion: reduce) { .ode-title-heart { animation: none; } }
