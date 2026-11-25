@@ -9,11 +9,11 @@ const links = [
   { label: "Concept", href: "/concept", on: path === "/concept", icon: "/images/ode-icon-sparkle-s.webp" },
   { label: "Communauté", href: "/communaute", on: path === "/communaute", icon: "/images/ode-heart-s.webp" },
   { label: "Figures", href: "/figures", on: path === "/figures" || path.startsWith("/figures/"), icon: "/images/ode-icon-book-s.webp" },
-  { label: "Le studio", href: "/studio", on: path === "/studio", icon: "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp" },
+  { label: "Le studio", href: "/studio", on: path === "/studio", icon: "/images/ode-icon-pin-s.webp" },
 ];
 const HEART = "/images/ode-heart-s.webp";
 // the full-screen menu also starts with Accueil (chrome envelope)
-const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === "/index", icon: "/images/Glanzende-chromen-envelop-met-hartzegel-p-300.webp" }, ...links];
+const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === "/index", icon: "/images/ode-icon-home-s.webp" }, ...links];
 ---
 <a href="#main" class="onav-skip">Aller au contenu</a>
 <header class:list={["onav", lightText ? "is-light" : "is-dark"]} data-onav data-base={lightText ? "light" : "dark"}>
@@ -89,6 +89,9 @@ const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === 
   .onav-sheet li a { display: flex; align-items: center; font-family: var(--_typography---font--secondary-family); font-weight: var(--_typography---font--primary-medium); font-size: 3.75rem; line-height: 1.02; letter-spacing: -.03em; white-space: nowrap; color: inherit; text-decoration: none; transition: color .35s, opacity .35s; }
   .onav-icw { display: inline-block; width: 0; margin-right: 0; opacity: 0; transform: scale(.4) rotate(-25deg); transition: width .45s cubic-bezier(.65, 0, .35, 1), margin .45s cubic-bezier(.65, 0, .35, 1), opacity .25s, transform .55s cubic-bezier(.3, 1.6, .5, 1); }
   .onav-ic { display: block; width: 100%; height: auto; filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 22%)); }
+  /* the pin is taller than the other icons: a bit narrower so it matches their size */
+  .onav-ic[src*="ode-icon-pin"] { width: 78%; margin: 0 auto; }
+  .onav-lh[src*="ode-icon-pin"] { width: .8rem; }
   /* active = hovered, or (nothing hovered) the current page, or (no current page) the first link */
   .onav-sheet li a:is(:hover, :focus-visible), .onav-sheet ul:not(:hover) a.on, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child a { color: #401f28; }
   .onav-sheet li a:is(:hover, :focus-visible) .onav-icw, .onav-sheet ul:not(:hover) a.on .onav-icw, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child .onav-icw { width: .66em; margin-right: .19em; opacity: 1; transform: none; }
