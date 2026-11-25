@@ -19,7 +19,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       <div class="st-haze" aria-hidden="true"></div>
 
       <!-- the pin is a map marker (moved into the map by the script) -->
-      <div class="st-pin" id="st-pin" role="button" tabindex="0" aria-label="Zoomer sur le studio"><div class="st-pin-in" aria-hidden="true">
+      <div class="st-pin" id="st-pin" role="button" tabindex="0" aria-label="Revenir au studio"><div class="st-pin-in" aria-hidden="true">
         <span class="st-lbl">Ode · bientôt à Lille</span>
         <span class="st-drop"><img src={HEART} alt="" /></span>
         <span class="st-pulse"></span>
@@ -76,11 +76,17 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
     // "Ode Argent": brushed silver like the studio walls, white streets, the only colour is the burgundy studio area
     const C = { land: "#efeded", block: "#e4e1e2", edge: "#d6d1d3", street: "#ffffff", casing: "#d1ccce", water: "#d7d5d9", park: "#e9e7e5", rail: "#c4bfc1", label: "#8a8486", halo: "#f3f1f1", wine: "#401f28", roof: "#ebe8e9" };
 
-    // the studio view: Lille from above, tilted; the pin sits above the card
-    const view = () => {
-      const h = el.clientHeight;
-      return { center: LILLE, zoom: small() ? 11.7 : 12.4, pitch: 55, bearing: -15, padding: { top: 0, left: 0, right: 0, bottom: Math.round(h * (small() ? 0.36 : 0.1)) } };
+    // the area where the studio will be: a 5 km circle. The address isn't known, so the map never zooms in closer
+    // than the zoom where the whole circle still fits on screen (otherwise the pin would look like an exact street).
+    const AREA_KM = 5;
+    const padBottom = () => Math.round(el.clientHeight * (small() ? 0.36 : 0.1));
+    const fitZoom = () => {
+      const avail = Math.min(el.clientWidth * 0.9, (el.clientHeight - padBottom()) * 1.35);   // tilted 55°: the circle looks flatter
+      const metresPerPx = (2 * AREA_KM * 1000 * 1.08) / avail;
+      return Math.log2((40075016.686 * Math.cos((LILLE[1] * Math.PI) / 180)) / (512 * metresPerPx));
     };
+    // the studio view: Lille from above, tilted, the whole circle in view; the pin sits above the card
+    const view = () => ({ center: LILLE, zoom: Math.min(small() ? 11.7 : 12.4, fitZoom()), pitch: 55, bearing: -15, padding: { top: 0, left: 0, right: 0, bottom: padBottom() } });
 
     // a soft circle around the centre: the address isn't final yet
     const circle = ([lng, lat], km, n = 96) => ({
@@ -160,7 +166,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       };
 
       const area = () => {
-        map.addSource("ode-area", { type: "geojson", data: circle(LILLE, 5) });
+        map.addSource("ode-area", { type: "geojson", data: circle(LILLE, AREA_KM) });
         map.addSource("ode-core", { type: "geojson", data: circle(LILLE, 2.5) });
         map.addLayer({ id: "ode-area-fill", type: "fill", source: "ode-area", paint: { "fill-color": C.wine, "fill-opacity": 0.07 } });
         map.addLayer({ id: "ode-core-fill", type: "fill", source: "ode-core", paint: { "fill-color": C.wine, "fill-opacity": 0.05 } });
@@ -197,13 +203,15 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       });
       ["mousedown", "touchstart", "wheel"].forEach((ev) => el.addEventListener(ev, () => { if (!flown) fly(4000); else spinning = false; }, { passive: true }));
       document.querySelectorAll("[data-zoom]").forEach((b) => b.addEventListener("click", () => map.easeTo({ zoom: map.getZoom() + +b.dataset.zoom, duration: 400 })));
-      // click the pin: fly back to the studio view; already there, zoom in closer on the pin
+      // never closer than the whole circle (kept up to date when the window changes size)
+      const capZoom = () => map.setMaxZoom(fitZoom());
+      map.on("load", capZoom);
+      addEventListener("resize", capZoom);
+      // click the pin: fly back to the studio view, the whole circle in sight
       const toPin = (e) => {
         e.stopPropagation();
-        const v = view(), near = Math.abs(map.getZoom() - v.zoom) < 0.4 && map.project(LILLE).dist(map.project(map.getCenter())) < el.clientHeight * 0.3;
         spinning = false; flown = true; section.classList.add("is-arrived");
-        if (near) map.flyTo({ center: LILLE, zoom: Math.min(map.getZoom() + 2, 16.5), pitch: 60, bearing: v.bearing, padding: v.padding, duration: reduce ? 0 : 1800, essential: true });
-        else map.flyTo({ ...v, duration: reduce ? 0 : 2400, curve: 1.4, essential: true });
+        map.flyTo({ ...view(), duration: reduce ? 0 : 2400, curve: 1.4, essential: true });
       };
       pin.addEventListener("click", toPin);
       pin.addEventListener("keydown", (e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toPin(e); } });
