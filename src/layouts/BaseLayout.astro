@@ -343,7 +343,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       .ode-icon-sparkle { --icon-k: .95; }
       .ode-icon-book { --icon-k: 1.05; right: -.55em; }
       .ode-icon-question { --icon-k: .62; right: -.32em; top: -.22em; }
-      .ode-icon-pin { --icon-k: .62; right: -.36em; top: -.22em; }
+      .ode-icon-pin { --icon-k: .62; right: auto; left: calc(100% + .06em); top: -.22em; }
       .ode-title-heart { position: absolute; right: -.4em; top: -.1em; width: calc((var(--icon-base, max(.34em, 1.5rem)) + 15px) * var(--icon-k, 1)); height: auto; pointer-events: none; transform: rotate(12deg); filter: drop-shadow(0 .06em .1em rgb(0 0 0 / 25%)); animation: ode-heart-in .75s cubic-bezier(.3, 1.8, .5, 1) var(--heart-delay, .4s) both; }
       @keyframes ode-heart-in { from { opacity: 0; transform: translateY(.25em) rotate(-30deg) scale(.3); } }
       @media (prefers-reduced-motion: reduce) { .ode-title-heart { animation: none; } }

@@ -33,7 +33,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
 
       <!-- 1 · intro over the globe -->
       <div class="st-intro" aria-hidden="true">
-        <p class="st-intro-h"><span class="ode-th">Le studio arrive à Lille<img class="ode-title-heart ode-icon-pin" src="/images/ode-icon-pin-s.webp" alt="" /></span></p>
+        <p class="st-intro-h">Le studio arrive à <span class="ode-th">Lille<img class="ode-title-heart ode-icon-pin" src="/images/ode-icon-pin-s.webp" alt="" /></span></p>
         <p class="st-intro-p">Ouverture à l’été 2027. On t’y emmène.</p>
       </div>
 
@@ -177,6 +177,8 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       const pin = document.getElementById("st-pin");
       new gl.Marker({ element: pin, anchor: "bottom" }).setLngLat(LILLE).addTo(map);
       const showPin = () => pin.classList.add("on");
+      // map credits stay as the small (i) button until tapped, so they never sit on the words
+      map.once("load", () => el.querySelectorAll(".maplibregl-compact-show, .mapboxgl-compact-show").forEach((c) => c.classList.remove("maplibregl-compact-show", "mapboxgl-compact-show")));
       map.once("load", showPin);
 
       // the globe turns slowly, then flies down to Lille; the intro words make way for the title and card
@@ -304,7 +306,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
 
   @media (max-width: 767px) {
     .st-zoom, .st-coord, .st-img { display: none; }
-    .st-intro { bottom: 2.5rem; }
+    .st-intro { bottom: 4.25rem; }
     .st-ui { padding: 0 .875rem 1rem; }
     .st-left { width: 100%; gap: .875rem; }
     .st-h { font-size: 3.75rem; margin-left: .25rem; }
