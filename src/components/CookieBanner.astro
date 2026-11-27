@@ -1,9 +1,9 @@
 ---
-// Cookie banner (CNIL): Google Tag Manager (→ Google Analytics) only loads after "Accepter", and only on the real
+// Cookie banner (CNIL): Google Analytics only loads after "Accepter", and only on the real
 // domain (studio-ode.fr), so staging visits are never counted. "Refuser" is as visible as "Accepter".
 // The choice is kept 6 months in localStorage ("odeConsent"); any element with [data-cookie-settings] (the footer's
 // "Cookies" link) opens the banner again. Withdrawing consent deletes the Google Analytics cookies.
-const GTM_ID = "GTM-N8KCSBNR";
+const GA_ID = "G-L4RGBZPCJV";   // Google Analytics 4 measurement ID
 const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
 ---
 <div class="ock" id="ock" role="dialog" aria-modal="false" aria-labelledby="ock-h" aria-describedby="ock-p" hidden>
@@ -15,19 +15,21 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
   </div>
 </div>
 
-<script is:inline define:vars={{ GTM_ID, HOSTS }}>
+<script is:inline define:vars={{ GA_ID, HOSTS }}>
   (() => {
     const KEY = "odeConsent", SIX_MONTHS = 1000 * 60 * 60 * 24 * 182;
     const box = document.getElementById("ock");
     const read = () => { try { const v = JSON.parse(localStorage.getItem(KEY) || "null"); return v && Date.now() - v.t < SIX_MONTHS ? v.c : null; } catch { return null; } };
     const save = (c) => { try { localStorage.setItem(KEY, JSON.stringify({ c, t: Date.now() })); } catch {} };
 
-    const loadGTM = () => {
-      if (window.__odeGTM || !HOSTS.includes(location.hostname)) return;
-      window.__odeGTM = true;
+    const loadGA = () => {
+      if (window.__odeGA || !HOSTS.includes(location.hostname)) return;
+      window.__odeGA = true;
       window.dataLayer = window.dataLayer || [];
-      window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
-      const s = document.createElement("script"); s.async = true; s.src = `https://www.googletagmanager.com/gtm.js?id=${GTM_ID}`;
+      window.gtag = function () { window.dataLayer.push(arguments); };
+      window.gtag("js", new Date());
+      window.gtag("config", GA_ID);
+      const s = document.createElement("script"); s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
       document.head.appendChild(s);
     };
     // refusing after accepting: remove the Google Analytics cookies (_ga, _ga_XXXX) on this domain and its parent
@@ -42,14 +44,14 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
     const hide = () => { box.classList.remove("on"); setTimeout(() => { if (!box.classList.contains("on")) box.hidden = true; }, 450); };
 
     const choice = read();
-    if (choice === "granted") loadGTM();
+    if (choice === "granted") loadGA();
     else if (choice === null) setTimeout(show, 1200);   // let the page's own entrance play first
 
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-ock]"); if (!b) return;
       const c = b.dataset.ock, before = read();
       save(c); hide();
-      if (c === "granted") loadGTM();
+      if (c === "granted") loadGA();
       else if (before === "granted") { clearGA(); location.reload(); }   // the tag is already running: reload without it
     });
     document.addEventListener("click", (e) => { if (e.target.closest("[data-cookie-settings]")) { e.preventDefault(); show(); } });
