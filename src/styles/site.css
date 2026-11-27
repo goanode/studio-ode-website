@@ -2836,7 +2836,7 @@ figure {
 .card_primary_title.is-yearly { display: flex; }
 .card_primary_per { font-size: .45em; font-weight: 400; letter-spacing: 0; opacity: .65; white-space: nowrap; }
 
-/* class cards: a short description (3 lines at most) opens under the title on hover; always shown on touch screens.
+/* class cards: a short description (3 lines at most) opens under the title on hover, or on tap on touch screens.
    It opens by growing a grid row from 0 to the text's own height, so nothing is ever clipped. */
 .card_classes_desc { display: grid; grid-template-rows: 0fr; flex-shrink: 0; margin: calc(-1 * var(--_spacing---space--4)) 0 0; max-width: 26em; opacity: 0; transform: translateY(.5rem);
   font-size: .875rem; line-height: 1.45; color: var(--swatch--light-100);
@@ -2844,7 +2844,9 @@ figure {
 .card_classes_content p.card_classes_desc::before, .card_classes_content p.card_classes_desc::after { content: none !important; display: none !important; }  /* the site's rich-text clearfix would add grid rows */
 .card_classes_desc > span { min-height: 0; overflow: hidden; }
 .card_classes_desc > span::after { content: ""; display: block; height: .15em; }
-.card_classes_wrap:hover .card_classes_desc, .card_classes_wrap:focus-within .card_classes_desc { grid-template-rows: 1fr; margin-top: 0; opacity: .92; transform: none; transition-delay: .15s; }
-@media (hover: none) { .card_classes_desc { grid-template-rows: 1fr; margin-top: 0; opacity: .92; transform: none; } }
+@media (hover: hover) { .card_classes_wrap:hover .card_classes_desc, .card_classes_wrap:focus-within .card_classes_desc { grid-template-rows: 1fr; margin-top: 0; opacity: .92; transform: none; transition-delay: .15s; } }
+/* touch screens: a tap on the card opens it (another tap, or tapping another card, closes it) — see index.astro */
+.card_classes_wrap.is-open .card_classes_desc { grid-template-rows: 1fr; margin-top: 0; opacity: .92; transform: none; transition-delay: .05s; }
+@media (hover: none) { .card_classes_wrap { cursor: pointer; -webkit-tap-highlight-color: transparent; } }
 @media (min-width: 768px) and (max-width: 1279px) { .card_classes_desc { font-size: .78rem; line-height: 1.4; } }
 @media (prefers-reduced-motion: reduce) { .card_classes_desc { transition: none; } }

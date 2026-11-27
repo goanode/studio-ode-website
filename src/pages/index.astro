@@ -1183,6 +1183,17 @@ import WaitlistModal from "../components/WaitlistModal.astro";
   });
   </script>
   <script is:inline>
+  // class cards on touch screens: tap a card to open its description, tap again (or another card) to close it.
+  // A swipe through the slider doesn't count as a tap (Swiper swallows the click after a drag).
+  if (matchMedia("(hover: none)").matches) {
+    const cards = [...document.querySelectorAll("#cours .card_classes_wrap")];
+    cards.forEach((c) => c.addEventListener("click", () => {
+      const open = !c.classList.contains("is-open");
+      cards.forEach((x) => x.classList.toggle("is-open", x === c && open));
+    }));
+  }
+  </script>
+  <script is:inline>
 gsap.registerPlugin(ScrollTrigger);
 const splitTypes = document.querySelectorAll('.reveal-type');
 splitTypes.forEach((char,i) => {
