@@ -1,0 +1,113 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import WaitlistModal from "../components/WaitlistModal.astro";
+// Confidentialité & mentions légales: who runs the site (prelaunch: Justine, for the Ode project), what is collected
+// (waitlist: first name + e-mail → Brevo; Google Analytics only after consent), cookies, rights, host.
+// Update EDITOR / the "Éditeur" block once the company exists (name, legal form, address, SIRET).
+const UPDATED = "27 novembre 2026";
+const CONTACT = "bonjour@studio-ode.fr";
+---
+
+<BaseLayout title="Confidentialité & mentions légales — Studio Ode" description="Comment Ode utilise tes données : inscription à la liste des fondatrices, e-mails, cookies et mesure d’audience. Tes droits et comment nous contacter." wfPage="6a96e3c256f4431a13f9f238">
+  <main id="main" class="page_main">
+    <article class="lg">
+      <header class="lg-head">
+        <p class="lg-eyebrow"><span class="lg-dot" aria-hidden="true"></span>Mis à jour le {UPDATED}</p>
+        <h1 class="lg-h"><span class="ode-th">Confidentialité<img class="ode-title-heart" src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></span></h1>
+        <p class="lg-lead">Ode est un studio de pole dance en cours de création à Lille. On collecte le minimum, on te dit pourquoi, et tu gardes la main sur tes données.</p>
+        <nav class="lg-toc" aria-label="Sur cette page">
+          <a href="#editeur">Éditeur</a><a href="#donnees">Tes données</a><a href="#cookies">Cookies</a><a href="#droits">Tes droits</a><a href="#hebergement">Hébergement</a>
+        </nav>
+      </header>
+
+      <section id="editeur" class="lg-s">
+        <h2>Qui est derrière ce site</h2>
+        <p>Le site studio-ode.fr est édité par <strong>Justine</strong>, porteuse du projet Ode (studio de pole dance en cours de création, Lille). La société n’est pas encore immatriculée&nbsp;: ses informations (forme, adresse, numéro SIRET) seront ajoutées ici dès sa création.</p>
+        <p>Justine est la responsable du traitement de tes données et la directrice de la publication. Contact&nbsp;: <a href={`mailto:${CONTACT}`}>{CONTACT}</a>.</p>
+      </section>
+
+      <section id="donnees" class="lg-s">
+        <h2>Tes données, et ce qu’on en fait</h2>
+        <h3>Quand tu réserves ta place</h3>
+        <p>Le formulaire «&nbsp;Réserve ta place&nbsp;» te demande ton <strong>prénom</strong> et ton <strong>adresse e-mail</strong> (et, si tu cliques depuis une formule, le nom de cette formule). On s’en sert pour&nbsp;:</p>
+        <ul>
+          <li>t’envoyer la confirmation de ta place de fondatrice&nbsp;;</li>
+          <li>te prévenir de l’ouverture du studio, de son adresse et de tes avantages fondatrices (premier cours offert, -15&nbsp;% sur ta formule)&nbsp;;</li>
+          <li>t’envoyer de temps en temps des nouvelles d’Ode.</li>
+        </ul>
+        <p>Base légale&nbsp;: ton <strong>consentement</strong>, donné en t’inscrivant. Tu peux le retirer à tout moment avec le lien «&nbsp;Se désinscrire&nbsp;» en bas de chaque e-mail, ou en nous écrivant.</p>
+        <p>Durée de conservation&nbsp;: tant que tu restes inscrite, et au plus <strong>3 ans</strong> après notre dernier contact avec toi. Si tu te désinscris, on garde seulement ton adresse dans une liste d’exclusion, pour ne plus jamais t’écrire.</p>
+        <h3>Qui y a accès</h3>
+        <p>Seulement l’équipe Ode, et les services qui nous aident à faire tourner le site&nbsp;:</p>
+        <ul>
+          <li><strong>Brevo</strong> (Sendinblue SAS, France)&nbsp;: stocke la liste des inscrites et envoie nos e-mails&nbsp;;</li>
+          <li><strong>Cloudflare</strong>&nbsp;: héberge le site et transmet le formulaire à Brevo&nbsp;;</li>
+          <li><strong>Google</strong> (Google Ireland Ltd)&nbsp;: mesure d’audience, uniquement si tu acceptes les cookies (voir plus bas).</li>
+        </ul>
+        <p>On ne vend ni ne loue jamais tes données. Certains de ces services peuvent traiter des données hors de l’Union européenne (aux États-Unis)&nbsp;; ces transferts sont encadrés par le cadre de protection des données UE–États-Unis (Data Privacy Framework) ou par les clauses contractuelles types de la Commission européenne.</p>
+      </section>
+
+      <section id="cookies" class="lg-s">
+        <h2>Cookies</h2>
+        <p><strong>Sans ton accord, on ne dépose aucun cookie de suivi.</strong> Le site garde seulement de petites informations techniques indispensables à son fonctionnement (par exemple pour l’animation de la navigation, ou pour se souvenir de ton choix sur les cookies).</p>
+        <p>Si tu cliques sur «&nbsp;Accepter&nbsp;», on active <strong>Google Analytics</strong>, pour une seule finalité&nbsp;: la <strong>mesure d’audience</strong> (combien de personnes visitent le site, quelles pages, depuis quel type d’appareil), afin de l’améliorer. Pas de publicité, pas de profil.</p>
+        <div class="lg-table" role="region" aria-label="Cookies utilisés" tabindex="0">
+          <table>
+            <thead><tr><th>Cookie</th><th>Service</th><th>Rôle</th><th>Durée</th></tr></thead>
+            <tbody>
+              <tr><td><code>_ga</code></td><td>Google Analytics</td><td>Distingue les visiteurs (identifiant aléatoire)</td><td>13 mois</td></tr>
+              <tr><td><code>_ga_L4RGBZPCJV</code></td><td>Google Analytics</td><td>Garde l’état de ta visite</td><td>13 mois</td></tr>
+              <tr><td><code>odeConsent</code> (stockage local)</td><td>Ode</td><td>Se souvient de ton choix (accepter ou refuser)</td><td>6 mois</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Ton choix est conservé <strong>6 mois</strong>, puis on te le redemande. Tu peux changer d’avis à tout moment&nbsp;:</p>
+        <p><button type="button" class="lg-btn" data-cookie-settings>Gérer mes cookies</button></p>
+        <p>Si tu retires ton accord, les cookies Google Analytics sont supprimés. Refuser ne change rien à ton accès au site.</p>
+      </section>
+
+      <section id="droits" class="lg-s">
+        <h2>Tes droits</h2>
+        <p>Tu peux à tout moment demander à <strong>accéder</strong> à tes données, les <strong>corriger</strong>, les <strong>supprimer</strong>, en <strong>limiter</strong> l’utilisation, t’y <strong>opposer</strong> ou les <strong>récupérer</strong>. Écris-nous à <a href={`mailto:${CONTACT}`}>{CONTACT}</a>&nbsp;: on te répond dans un délai d’un mois.</p>
+        <p>Si tu estimes que tes droits ne sont pas respectés, tu peux adresser une réclamation à la <a href="https://www.cnil.fr/fr/plaintes" target="_blank" rel="noopener">CNIL</a>.</p>
+      </section>
+
+      <section id="hebergement" class="lg-s">
+        <h2>Hébergement</h2>
+        <p>Le site est hébergé par <strong>Cloudflare, Inc.</strong>, 101 Townsend St, San Francisco, CA 94107, États-Unis — <a href="https://www.cloudflare.com" target="_blank" rel="noopener">cloudflare.com</a>.</p>
+        <p>Les textes, photos et visuels du site sont la propriété d’Ode&nbsp;; merci de ne pas les réutiliser sans notre accord.</p>
+      </section>
+    </article>
+  </main>
+  <WaitlistModal slot="after-footer" />
+</BaseLayout>
+
+<style is:global>
+  .lg { box-sizing: border-box; width: 100%; max-width: 46rem; margin: 0 auto; padding: calc(var(--nav--height-total) + 4rem) var(--site--margin, 1.5rem) 6rem; color: #3b3b3b; font-family: var(--_typography---font--primary-family), sans-serif; }
+  .lg-head { margin-bottom: 3.5rem; }
+  .lg-eyebrow { display: inline-flex; align-items: center; gap: .5rem; margin: 0 0 1.25rem; font-size: .6875rem; letter-spacing: .14em; text-transform: uppercase; color: #401f28; }
+  .lg-dot { width: .45rem; height: .45rem; border-radius: 50%; background: #401f28; }
+  .lg-h { margin: 0; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.25rem, 8vw, 6rem); line-height: .95; letter-spacing: -.03em; color: #1f1d1e; }
+  .lg-lead { overflow-wrap: anywhere; margin: 1.5rem 0 0; max-width: 34rem; font-size: 1.125rem; line-height: 1.6; color: #4a4547; }
+  .lg-toc { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+  .lg-toc a { padding: .5rem .9rem; border: 1px solid rgb(31 29 30 / 14%); border-radius: 9999px; font-size: .8125rem; color: #1f1d1e; text-decoration: none; transition: background-color .3s, color .3s, border-color .3s; }
+  .lg-toc a:hover, .lg-toc a:focus-visible { background: #401f28; border-color: #401f28; color: #fff; }
+  .lg-s { padding: 2.5rem 0; border-top: 1px solid rgb(31 29 30 / 10%); scroll-margin-top: calc(var(--nav--height-total) + 1rem); }
+  .lg-s h2 { margin: 0 0 1.25rem; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(2rem, 4vw, 2.75rem); line-height: 1.05; letter-spacing: -.02em; color: #1f1d1e; }
+  .lg-s h3 { margin: 1.75rem 0 .625rem; font-size: .75rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: #401f28; }
+  .lg-s p, .lg-s li { font-size: 1rem; line-height: 1.7; }
+  .lg-s p { margin: 0 0 1rem; }
+  .lg-s ul { margin: 0 0 1rem; padding-left: 1.25rem; list-style: disc; }
+  .lg-s li { display: list-item; margin-bottom: .375rem; }
+  .lg-s li::marker { color: #401f28; }
+  .lg-s strong { opacity: 1; font-weight: 600; color: #1f1d1e; }
+  .lg-s a { color: #401f28; text-decoration: underline; text-underline-offset: .15em; }
+  .lg-table { overflow-x: auto; margin: 1.25rem 0 1.5rem; border: 1px solid rgb(31 29 30 / 10%); border-radius: .875rem; }
+  .lg-table table { width: 100%; border-collapse: collapse; font-size: .875rem; }
+  .lg-table th, .lg-table td { padding: .75rem 1rem; text-align: left; vertical-align: top; border-bottom: 1px solid rgb(31 29 30 / 8%); }
+  .lg-table th { font-size: .6875rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: #6b6567; background: #f6f2f3; }
+  .lg-table tr:last-child td { border-bottom: 0; }
+  .lg-table code { font-size: .8125rem; color: #401f28; white-space: nowrap; }
+  .lg-btn { display: inline-flex; align-items: center; height: 2.75rem; padding: 0 1.5rem; border: 0; border-radius: 9999px; background: #401f28; color: #fff; font: inherit; font-size: .8125rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; cursor: pointer; transition: background-color .3s; }
+  .lg-btn:hover, .lg-btn:focus-visible { background: #2b141b; }
+</style>

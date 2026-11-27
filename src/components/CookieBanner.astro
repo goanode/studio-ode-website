@@ -8,7 +8,7 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
 ---
 <div class="ock" id="ock" role="dialog" aria-modal="false" aria-labelledby="ock-h" aria-describedby="ock-p" hidden>
   <p class="ock-h" id="ock-h">Un petit cookie&nbsp;?<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" /></p>
-  <p class="ock-p" id="ock-p">On aimerait utiliser Google Analytics pour savoir comment le site est visité et l’améliorer. Uniquement si tu es d’accord&nbsp;: tu peux changer d’avis à tout moment via «&nbsp;Cookies&nbsp;» en bas de page.</p>
+  <p class="ock-p" id="ock-p">On aimerait utiliser Google Analytics pour savoir comment le site est visité et l’améliorer. Uniquement si tu es d’accord&nbsp;: tu peux changer d’avis à tout moment via «&nbsp;Cookies&nbsp;» en bas de page. <a href="/confidentialite#cookies">En savoir plus</a></p>
   <div class="ock-btns">
     <button type="button" class="ock-btn" data-ock="denied">Refuser</button>
     <button type="button" class="ock-btn" data-ock="granted">Accepter</button>
@@ -28,7 +28,7 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
       window.dataLayer = window.dataLayer || [];
       window.gtag = function () { window.dataLayer.push(arguments); };
       window.gtag("js", new Date());
-      window.gtag("config", GA_ID);
+      window.gtag("config", GA_ID, { cookie_expires: 60 * 60 * 24 * 395 });   // 13 months, as the CNIL recommends
       const s = document.createElement("script"); s.async = true; s.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
       document.head.appendChild(s);
     };
@@ -69,6 +69,7 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
   .ock-h { position: relative; display: inline-block; margin: 0 0 .625rem; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: 1.625rem; line-height: 1; letter-spacing: -.02em; }
   .ock-h img { position: absolute; right: -2rem; top: -.75rem; width: 1.5rem; height: auto; transform: rotate(12deg); filter: drop-shadow(0 2px 3px rgb(0 0 0 / 25%)); }
   .ock-p { margin: 0 0 1rem; font-size: .8125rem; line-height: 1.5; color: #4a4547; }
+  .ock-p a { color: #401f28; text-decoration: underline; text-underline-offset: .15em; white-space: nowrap; }
   .ock-btns { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
   .ock-btn { display: inline-flex; align-items: center; justify-content: center; padding: 0 1rem; text-align: center; height: 2.625rem; border-radius: 9999px; border: 1px solid #401f28; background: transparent; color: #401f28; font: inherit; font-size: .8125rem; font-weight: 500; letter-spacing: .06em; text-transform: uppercase; cursor: pointer; transition: background-color .3s, color .3s; }
   .ock-btn:hover, .ock-btn:focus-visible { background: #401f28; color: #fff; }

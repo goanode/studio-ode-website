@@ -20,7 +20,7 @@
           <label class="wl-f"><span class="u-sr-only">Prénom</span><input name="name" type="text" required autocomplete="given-name" placeholder="Prénom" /></label>
           <label class="wl-f"><span class="u-sr-only">E-mail</span><input name="email" type="email" required inputmode="email" autocomplete="email" placeholder="E-mail" /></label>
           <button type="submit" class="wl-btn">Réserver ma place<img src="/images/ode-heart-s.webp" alt="" aria-hidden="true" loading="lazy" /></button>
-          <p class="wl-fine">En t’inscrivant, tu acceptes de recevoir les nouvelles d’Ode (ouverture, avantages fondatrices). Désinscription en un clic.</p>
+          <p class="wl-fine">En t’inscrivant, tu acceptes de recevoir les nouvelles d’Ode (ouverture, avantages fondatrices). Désinscription en un clic. <a href="/confidentialite#donnees">Confidentialité</a></p>
         </form>
         <!-- after signing up: chrome heart, a clear "it's reserved", the three founder perks and a close button -->
         <div class="w-form-done wl-msg" role="status">
@@ -141,6 +141,7 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
   .wl-btn:hover img, .wl-btn:focus-visible img { opacity: 1; transform: translateY(-.25rem) rotate(12deg) scale(1); }
   .wl-btn:focus-visible, .wl-x:focus-visible { outline: 2px solid #fff; outline-offset: 3px; }
   .wl-fine { margin: .5rem auto 0; max-width: 20rem; font-size: .6875rem; line-height: 1.45; color: rgb(255 255 255 / 55%); }
+  .wl-fine a { color: inherit; text-decoration: underline; text-underline-offset: .15em; }
   .wl-body.is-done .wl-h, .wl-body.is-done .wl-h ~ .wl-lead { display: none; }
   .wl .wl-msg { padding: 0; background: none; color: #fff; }
   .wl .wl-msg { text-align: center; }
