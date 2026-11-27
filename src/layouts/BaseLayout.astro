@@ -94,6 +94,16 @@ import CookieBanner from "../components/CookieBanner.astro";
       <slot name="after-footer" />
     </div>
     <CookieBanner />
+    {/* Cloudflare Web Analytics: cookieless visit counter (no consent needed), only on the real domain so staging isn't counted.
+        Token: Cloudflare dashboard → Web Analytics → studio-ode.fr → Manage site (the "token" in the JS snippet). */}
+    <script is:inline>
+      (() => {
+        const CF_TOKEN = "";
+        if (!CF_TOKEN || !["studio-ode.fr", "www.studio-ode.fr"].includes(location.hostname)) return;
+        const s = document.createElement("script"); s.defer = true; s.src = "https://static.cloudflareinsights.com/beacon.min.js";
+        s.setAttribute("data-cf-beacon", JSON.stringify({ token: CF_TOKEN })); document.body.appendChild(s);
+      })();
+    </script>
 
     <!-- Interaction & animation libraries (self-hosted copies of what Webflow loaded from CDNs) -->
     <script is:inline src="/vendor/gsap.min.js"></script>
