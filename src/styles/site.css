@@ -2821,6 +2821,9 @@ figure {
 /* Formules during the prelaunch: "Ouverture été 2027" label, founder discount, note under the cards */
 .ode-founder { margin: .5rem 0 1rem; font-size: .875rem; opacity: .85; }
 .ode-founder b { font-weight: 500; opacity: 1; color: inherit; }
+.ode-fp.is-monthly, .ode-fp.is-6monthly { display: none; }   /* annual shown first, like the main price; the period switch swaps them */
+.ode-fp-off { opacity: .7; }
+.ode-founder b.ode-fp { font-size: 1.15em; font-weight: 600; }
 .ode-formules-note { margin: 1.5rem auto 0; max-width: 38rem; font-size: .875rem; line-height: 1.5; text-align: center; opacity: .75; }
 
 /* homepage line "Les 50 premières inscrites…": two lines at most */

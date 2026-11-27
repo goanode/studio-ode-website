@@ -676,6 +676,11 @@ import WaitlistModal from "../components/WaitlistModal.astro";
           el.style.display = (key === selected) ? 'flex' : 'none';
         });
       });
+      // founder prices follow the same switch
+      var fp = { 'Yearly': '.ode-fp.is-yearly', '6-Monthly': '.ode-fp.is-6monthly', 'Monthly': '.ode-fp.is-monthly' };
+      Object.keys(fp).forEach(function (key) {
+        document.querySelectorAll(fp[key]).forEach(function (el) { el.style.display = (key === selected) ? 'inline' : 'none'; });
+      });
     });
   });
   });
@@ -693,7 +698,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">115 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">109 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-yearly">99 €<span class="card_primary_per">/ mois</span></h3>
-                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b>-15&nbsp;% supplémentaires</b></p>
+                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b class="ode-fp is-monthly">98&nbsp;€</b><b class="ode-fp is-6monthly">93&nbsp;€</b><b class="ode-fp is-yearly">84&nbsp;€</b><span class="ode-fp-per"> / mois</span> <span class="ode-fp-off">(-15&nbsp;%)</span></p>
                             <div class="card_primary_text w-richtext">
                               <p>Ce qui est inclus :</p>
                             </div>
@@ -751,7 +756,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">149 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">145 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-yearly">135 €<span class="card_primary_per">/ mois</span></h3>
-                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b>-15&nbsp;% supplémentaires</b></p>
+                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b class="ode-fp is-monthly">127&nbsp;€</b><b class="ode-fp is-6monthly">123&nbsp;€</b><b class="ode-fp is-yearly">115&nbsp;€</b><span class="ode-fp-per"> / mois</span> <span class="ode-fp-off">(-15&nbsp;%)</span></p>
                             <div class="card_primary_text w-richtext">
                               <p>Ce qui est inclus :</p>
                             </div>
@@ -818,7 +823,7 @@ import WaitlistModal from "../components/WaitlistModal.astro";
                             <h3 class="card_primary_title u-text-style-h4 is-monthly">225 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-6monthly">215 €<span class="card_primary_per">/ mois</span></h3>
                             <h3 class="card_primary_title u-text-style-h4 is-yearly">199 €<span class="card_primary_per">/ mois</span></h3>
-                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b>-15&nbsp;% supplémentaires</b></p>
+                            <p class="ode-founder">Tarif fondatrice&nbsp;: <b class="ode-fp is-monthly">191&nbsp;€</b><b class="ode-fp is-6monthly">183&nbsp;€</b><b class="ode-fp is-yearly">169&nbsp;€</b><span class="ode-fp-per"> / mois</span> <span class="ode-fp-off">(-15&nbsp;%)</span></p>
                             <div class="card_primary_text w-richtext">
                               <p>Ce qui est inclus :</p>
                             </div>
