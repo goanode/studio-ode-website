@@ -12,7 +12,7 @@ const LILLE = [3.09, 50.655];
 const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.webp";
 ---
 
-<BaseLayout title="Le studio à Lille — Studio Ode" description="Ode ouvre son studio de pole dance à Lille à l’été 2027. L’adresse sera dévoilée bientôt : réserve ta place parmi les 50 fondatrices pour être prévenue en premier." wfPage="6a96e3c256f4431a13f9f238" footer={false}>
+<BaseLayout viewTransition="studio-title" title="Le studio à Lille — Studio Ode" description="Ode ouvre son studio de pole dance à Lille à l’été 2027. L’adresse sera dévoilée bientôt : réserve ta place parmi les 50 fondatrices pour être prévenue en premier." wfPage="6a96e3c256f4431a13f9f238" footer={false}>
   <main id="main" class="page_main">
     <section class="st" aria-labelledby="st-title">
       <div class="st-map" id="st-map" role="region" aria-label="Carte : le studio Ode ouvrira à Lille"></div>
@@ -40,7 +40,7 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
       <!-- 2 · over Lille -->
       <div class="st-ui">
         <div class="st-left">
-          <h1 id="st-title" class="st-h"><span class="ode-th">Le studio<img class="ode-title-heart ode-icon-pin" src="/images/ode-icon-pin-s.webp" alt="" aria-hidden="true" /></span></h1>
+          <h1 id="st-title" class="st-h"><span class="ode-th"><span id="studio-title" class="vt-title">Le studio</span><img class="ode-title-heart ode-icon-pin" src="/images/ode-icon-pin-s.webp" alt="" aria-hidden="true" /></span></h1>
           <article class="st-card">
             <div class="st-body">
               <p class="st-tag"><span class="st-dot" aria-hidden="true"></span>Bientôt</p>
@@ -57,6 +57,13 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
     </section>
   </main>
   <WaitlistModal slot="after-footer" />
+  <Fragment slot="head">
+    <script is:inline>
+      // arriving from the navbar "Le studio": the clicked word grows into the title, so the title is on screen from the start
+      // (instead of waiting for the map to reach Lille) and the intro words under the globe step aside to make room for it
+      addEventListener("pagereveal", (e) => { if (e.viewTransition && e.viewTransition.types && e.viewTransition.types.has("from-nav")) document.documentElement.classList.add("st-from-nav"); });
+    </script>
+  </Fragment>
 </BaseLayout>
 
 <script is:inline define:vars={{ MAPBOX_TOKEN, LILLE }}>
@@ -276,6 +283,11 @@ const HEART = "/images/Glanzend-chromen-hart-op-transparante-achtergrond-p-300.w
   .st.is-arrived .st-h { opacity: 1; transform: none; transition-delay: .2s; }
   .st.is-arrived .st-card { opacity: 1; transform: none; transition-delay: .45s; }
   .st.is-arrived .st-coord { opacity: 1; transform: none; transition-delay: .7s; }
+  /* arriving from the navbar: the title is already there (it grew out of the clicked word), no intro words */
+  .vt-title { view-transition-name: studio-title; }
+  html.st-from-nav .st-h { opacity: 1; transform: none; transition: none; }
+  html.st-from-nav .st-intro { display: none; }
+  html.st-from-nav .st-h { --heart-delay: 1.4s; }
   .st-h { margin: 0; align-self: flex-start; font-family: var(--_typography---font--secondary-family); font-weight: 500; font-size: clamp(3.75rem, 8.6vw, 7.75rem); line-height: .92; letter-spacing: -.03em; color: #1f1d1e; }
 
   .st-card { display: grid; grid-template-columns: minmax(0, 1fr) 13rem; gap: 1rem; width: 37.5rem; max-width: 100%; padding: .875rem; border-radius: 1rem;

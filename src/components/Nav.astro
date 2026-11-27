@@ -148,10 +148,10 @@ const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === 
 </style>
 
 <script is:inline>
-// clicking Concept, Communauté or Figures in the navbar (or the menu): the clicked word glides and grows into the
+// clicking Concept, Communauté, Figures or Le studio in the navbar (or the menu): the clicked word glides and grows into the
 // page title, like the "Découvrir" links on the homepage (the homepage's own handler steps aside when this is set)
 (() => {
-  const VT = { "/concept": "concept-title", "/communaute": "communaute-title", "/figures": "figures-title" };
+  const VT = { "/concept": "concept-title", "/communaute": "communaute-title", "/figures": "figures-title", "/studio": "studio-title" };
   const key = (u) => { try { return new URL(u, location.href).pathname.replace(/\.html$/, "").replace(/\/$/, ""); } catch { return ""; } };
   document.addEventListener("click", (e) => {
     const a = e.target.closest && e.target.closest(".onav-links a, .onav-sheet a");
