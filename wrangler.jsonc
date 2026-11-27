@@ -17,7 +17,7 @@
   // Waitlist → Brevo. The API key is a secret: set BREVO_API_KEY in the Cloudflare dashboard, never here.
   "vars": {
     // Brevo: Contacts → Lists, the ID of the "Fondatrices" list
-    "BREVO_LIST_ID": "",
+    "BREVO_LIST_ID": "3",
     // Brevo: Contacts → Settings, the first-name attribute (PRENOM on French accounts, FIRSTNAME on English ones)
     "BREVO_NAME_ATTRIBUTE": "PRENOM",
     // who gets the "Nouvelle fondatrice" heads-up (leave empty to turn it off), and the verified Brevo sender it comes from
