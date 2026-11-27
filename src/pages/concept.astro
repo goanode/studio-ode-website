@@ -30,6 +30,12 @@ const COL: [string, number, number, number, number, boolean, boolean, number][] 
   [I.r5, 1140, 560, 120, 160, true, false, 1.4],
   [I.r1, 1300, 700, 160, 200, true, true, 1.1],
 ];
+// descriptions for the main collage photos (the small faded ones stay decorative)
+const ALT: Record<string, string> = {
+  "/images/aerial-invert-p-800.webp": "Danseuse en inversion à la barre, figure de pole dance au studio Ode à Lille",
+  "/images/communaute-p-800.webp": "Danseuse en body bordeaux qui monte à la barre de pole dance",
+  "/images/ea27f15c4ddd5e50ea8bd0309f3aae76-p-800.webp": "Danseuse repliée tête en bas sur la barre, en pleine figure de pole dance",
+};
 const pct = (x: number, total: number) => `${((x / total) * 100).toFixed(3)}%`;
 const PILLARS = [
   ["Incarner", "Une place essentielle pour la posture, l’attitude et la présence scénique. Prendre confiance, oser, t’affirmer : gagner en assurance dans ta façon de marcher, de bouger et d’occuper l’espace."],
@@ -49,7 +55,7 @@ const cset = (src: string) => {
 const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((c) => !c[2]).sort((a, b) => b[0] - a[0]).slice(0, 2).map((c) => c[1]));
 ---
 
-<BaseLayout viewTransition="concept-title" title="Concept — Studio Ode" description="Le concept du studio de pole dance Ode à Lille : incarner, explorer, renforcer, assouplir. Posture, présence scénique, workshops cabaret et tango, en petit groupe." wfPage="6adb80ddd07ffba4e0c0cb69">
+<BaseLayout viewTransition="concept-title" title="Concept : cours de pole dance en petit groupe à Lille — Studio Ode" description="Le concept du studio de pole dance Ode à Lille : incarner, explorer, renforcer, assouplir. Posture, présence scénique, workshops cabaret et tango, en petit groupe." wfPage="6adb80ddd07ffba4e0c0cb69">
   <main id="main" class="page_main cv">
     <section class="intro u-theme-light" aria-label="Concept">
       <div class="stage">
@@ -57,16 +63,17 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         <div class="col">
           {COL.map(([src, x, y, w, h, faded, hm, depth], i) => (
             <figure class:list={["cf", { faded, hm }]} data-depth={depth} data-side={x + w / 2 < 720 ? -1 : 1} style={`--x:${pct(x, 1440)};--y:${pct(y, 900)};--w:${pct(w, 1440)};--h:${pct(h, 900)}`}>
-              <img src={src} srcset={cset(src)} sizes={`(max-width: 767px) 40vw, ${(w / 14.4).toFixed(1)}vw`} alt="" decoding="async" loading={hm ? "lazy" : undefined} fetchpriority={lead.has(i) ? "high" : undefined} />
+              <img src={src} srcset={cset(src)} sizes={`(max-width: 767px) 40vw, ${(w / 14.4).toFixed(1)}vw`} alt={faded ? "" : ALT[src] ?? ""} decoding="async" loading={hm ? "lazy" : undefined} fetchpriority={lead.has(i) ? "high" : undefined} />
             </figure>
           ))}
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(1030, 1440)};--y:${pct(60, 900)};--w:${pct(260, 1440)};--h:${pct(400, 900)}`}></span>
         <div class="center">
           <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
+          <p class="sub">Pole dance à Lille en petit groupe&nbsp;: technique, flow, souplesse et renforcement.</p>
         </div>
         <figure class="grow">
-          <img src={I.big} alt="Élève au studio Ode" />
+          <img src={I.big} alt="Danseuse en arabesque contre la barre au studio de pole dance Ode à Lille" />
           <span class="dim" aria-hidden="true"></span>
         </figure>
         <div class="pil u-theme-dark" aria-label="Nos quatre piliers">
@@ -74,7 +81,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
             {PILLARS.map(([name]) => <li class="w"><span class="ode-th">{name}<img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></li>)}
           </ul></div>
           <div class="para">
-            {PILLARS.map(([name, text]) => <p><span class="sr">{name} : </span>{text}</p>)}
+            {PILLARS.map(([name, text]) => <><h2 class="sr">{name}</h2><p>{text}</p></>)}
           </div>
           <div class="b-pil">
             <div data-wf--button-main--variant="secondary" data-trigger="hover focus" class="button_main_wrap">
