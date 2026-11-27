@@ -2853,3 +2853,7 @@ figure {
 @media (hover: none) { .card_classes_wrap { cursor: pointer; -webkit-tap-highlight-color: transparent; } }
 @media (min-width: 768px) and (max-width: 1279px) { .card_classes_desc { font-size: .78rem; line-height: 1.4; } }
 @media (prefers-reduced-motion: reduce) { .card_classes_desc { transition: none; } }
+
+/* hero, top right: one complete sentence, on 2 lines */
+.u-text.ode-intro2 { width: 28rem; min-width: 0; max-width: 100%; margin-left: auto; text-align: right; text-wrap: balance; }
+@media (max-width: 767px) { .u-text.ode-intro2 { width: 100%; } }
