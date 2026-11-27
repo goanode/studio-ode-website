@@ -92,6 +92,8 @@ const sheetLinks = [{ label: "Accueil", href: "/", on: path === "/" || path === 
   /* the pin is taller than the other icons: a bit narrower so it matches their size */
   .onav-ic[src*="ode-icon-pin"] { width: 60%; margin: 0 auto; }
   .onav-lh[src*="ode-icon-pin"] { width: .62rem; top: -.5rem; right: -.75rem; }
+  /* the heart image has empty space around it (the heart fills ~58% of its width): shown bigger so it matches the others */
+  .onav-lh[src*="ode-heart"] { width: 1.75rem; top: -.85rem; right: -1.3rem; }
   /* active = hovered, or (nothing hovered) the current page, or (no current page) the first link */
   .onav-sheet li a:is(:hover, :focus-visible), .onav-sheet ul:not(:hover) a.on, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child a { color: #401f28; }
   .onav-sheet li a:is(:hover, :focus-visible) .onav-icw, .onav-sheet ul:not(:hover) a.on .onav-icw, .onav-sheet ul:not(:hover):not(:has(a.on)) li:first-child .onav-icw { width: .66em; margin-right: .19em; opacity: 1; transform: none; }
