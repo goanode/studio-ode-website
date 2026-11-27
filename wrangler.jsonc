@@ -19,7 +19,7 @@
     // Brevo: Contacts → Lists, the ID of the "Fondatrices" list
     "BREVO_LIST_ID": "3",
     // Brevo: Contacts → Settings, the first-name attribute (PRENOM on French accounts, FIRSTNAME on English ones)
-    "BREVO_NAME_ATTRIBUTE": "PRENOM",
+    "BREVO_NAME_ATTRIBUTE": "FIRSTNAME",
     // who gets the "Nouvelle fondatrice" heads-up (leave empty to turn it off), and the verified Brevo sender it comes from
     "NOTIFY_EMAIL": "",
     "SENDER_EMAIL": "bonjour@studio-ode.fr"
