@@ -21,6 +21,7 @@ interface Props {
 
 const { title, description, wfPage, flutedGlass = false, viewTransition, footer = true } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
+import CookieBanner from "../components/CookieBanner.astro";
 ---
 
 <!doctype html>
@@ -92,6 +93,7 @@ const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefin
       {footer && <Footer />}
       <slot name="after-footer" />
     </div>
+    <CookieBanner />
 
     <!-- Interaction & animation libraries (self-hosted copies of what Webflow loaded from CDNs) -->
     <script is:inline src="/vendor/gsap.min.js"></script>
