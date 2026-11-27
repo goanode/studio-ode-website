@@ -22,7 +22,7 @@ interface Props {
 const { title, description, wfPage, flutedGlass = false, viewTransition, footer = true } = Astro.props;
 const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site) : undefined;
 // share preview image (WhatsApp, Instagram, Messenger…): needs a full address; staging until `site` is set to the real domain
-const ogImage = new URL("/og-ode-v2.jpg", Astro.site ?? "https://studio-ode-website.goanrobert.workers.dev").href;
+const ogImage = new URL("/og-ode-v3.jpg", Astro.site ?? "https://studio-ode-website.goanrobert.workers.dev").href;
 import CookieBanner from "../components/CookieBanner.astro";
 ---
 
@@ -52,7 +52,7 @@ import CookieBanner from "../components/CookieBanner.astro";
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="ODE — Studio de pole dance · Lille" />
+    <meta property="og:image:alt" content="ODE, studio de pole dance à Lille" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content={ogImage} />
     {description && <meta name="twitter:description" content={description} />}
