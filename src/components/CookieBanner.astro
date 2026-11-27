@@ -45,7 +45,7 @@ const HOSTS = ["studio-ode.fr", "www.studio-ode.fr"];
 
     const choice = read();
     if (choice === "granted") loadGA();
-    else if (choice === null) setTimeout(show, 1200);   // let the page's own entrance play first
+    else if (choice === null) setTimeout(show, 2200);   // let the page's own entrance play first
 
     box.addEventListener("click", (e) => {
       const b = e.target.closest("[data-ock]"); if (!b) return;
