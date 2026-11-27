@@ -1,5 +1,4 @@
 ---
-import { WEB3FORMS_ACCESS_KEY } from "../config";
 // Waitlist window (design D2): a centred split window over the blurred page. Left: a still of the fluted-glass photo
 // with a round close button. Right: burgundy panel with the Freight title, one line of perks,
 // first name + e-mail in translucent pills, a white button and the consent line. On phones the photo is a strip on top.
@@ -15,10 +14,7 @@ import { WEB3FORMS_ACCESS_KEY } from "../config";
       <h2 class="wl-h">Réserve ta place</h2>
       <p class="wl-lead" tabindex="-1" autofocus>Les 50 premières inscrites deviennent fondatrices&nbsp;: premier cours offert, -15&nbsp;% sur ta formule et place réservée à l’ouverture.</p>
       <div class="w-form">
-        <form id="waitlist-form" name="waitlist" method="POST" action="https://api.web3forms.com/submit" data-waitlist-form="" class="wl-form">
-          <input type="hidden" name="access_key" value={WEB3FORMS_ACCESS_KEY}>
-          <input type="hidden" name="subject" value="Nouvelle fondatrice — Ode">
-          <input type="hidden" name="from_name" value="Ode website">
+        <form id="waitlist-form" name="waitlist" method="POST" action="/api/waitlist" data-waitlist-form="" class="wl-form">
           <input type="hidden" name="formule" value="" data-wl-plan>
           <input type="checkbox" name="botcheck" class="u-display-none" tabindex="-1" autocomplete="off" aria-hidden="true">
           <label class="wl-f"><span class="u-sr-only">Prénom</span><input name="name" type="text" required autocomplete="given-name" placeholder="Prénom" /></label>
@@ -181,7 +177,8 @@ modalSystem.list[modalId] = { open: openModal, close: closeModal };
 
 
 <script>
-  // Waitlist form: sends each sign-up to your inbox via Web3Forms (https://web3forms.com).
+  // Waitlist form: sends each sign-up to /api/waitlist (worker/index.js), which adds her to the Brevo list;
+  // Brevo then sends the confirmation e-mail.
   // Listening on the form itself stops webflow.js (which listens on document) from taking over.
   document.querySelectorAll<HTMLFormElement>("form[data-waitlist-form]").forEach((form) => {
     const wrap = form.closest(".w-form");

@@ -1,13 +1,27 @@
-// Cloudflare Workers config: serves the static Astro build from ./dist
+// Cloudflare Workers config: serves the static Astro build from ./dist, plus /api/waitlist (worker/index.js)
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "studio-ode-website",
   "compatibility_date": "2026-11-01",
+  "main": "worker/index.js",
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
+    // the waitlist form posts here; everything else is the static site
+    "run_worker_first": ["/api/*"],
     // Show our own 404 page for unknown URLs
     "not_found_handling": "404-page",
     // /concept serves concept.html
     "html_handling": "auto-trailing-slash"
+  },
+  // Waitlist → Brevo. The API key is a secret: set BREVO_API_KEY in the Cloudflare dashboard, never here.
+  "vars": {
+    // Brevo: Contacts → Lists, the ID of the "Fondatrices" list
+    "BREVO_LIST_ID": "",
+    // Brevo: Contacts → Settings, the first-name attribute (PRENOM on French accounts, FIRSTNAME on English ones)
+    "BREVO_NAME_ATTRIBUTE": "PRENOM",
+    // who gets the "Nouvelle fondatrice" heads-up (leave empty to turn it off), and the verified Brevo sender it comes from
+    "NOTIFY_EMAIL": "",
+    "SENDER_EMAIL": "bonjour@studio-ode.fr"
   }
 }

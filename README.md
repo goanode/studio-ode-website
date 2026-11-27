@@ -19,6 +19,8 @@ src/
   components/Nav.astro        top banner, desktop + mobile navigation
   components/Footer.astro     footer
   components/WaitlistModal.astro  "Join the waitlist" side panel + form
+worker/index.js               Cloudflare Worker: static site + /api/waitlist (→ Brevo)
+email/                        confirmation e-mail templates (paste into Brevo)
   pages/index.astro           home  →  /
   pages/concept.astro         concept  →  /concept
   pages/404.astro             not-found page
@@ -35,8 +37,10 @@ public/
   Each page passes its original Webflow page id (`wfPage`) to the layout so webflow.js can find that page's interactions.
 - **Hosting**: Cloudflare Workers (static assets), configured in `wrangler.jsonc`. Build command `npm run build`, deploy command `npx wrangler deploy`.
   Staging URL: https://studio-ode-website.goanrobert.workers.dev/
-- **Waitlist form** sends each sign-up by email through [Web3Forms](https://web3forms.com) (free, 250 submissions/month).
-  The access key lives in `src/config.ts`.
+- **Waitlist form** posts to `/api/waitlist` (`worker/index.js`), which adds each sign-up to a [Brevo](https://www.brevo.com) list
+  with her first name. A Brevo automation ("contact added to list") sends the confirmation e-mail (templates in `email/`).
+  Settings are the `vars` in `wrangler.jsonc` (list ID, first-name attribute, optional "Nouvelle fondatrice" notification);
+  the Brevo API key is a secret, `BREVO_API_KEY`, set in Cloudflare (Workers → studio-ode-website → Settings → Variables and secrets).
 - **Staging mode**: `public/_headers` and `public/robots.txt` tell search engines not to index the site.
   Remove/relax both on launch day.
 - **Fonts**: PP Mori is self-hosted. Instrument Sans and the other Google fonts load from Google.
