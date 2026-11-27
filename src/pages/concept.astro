@@ -69,7 +69,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
         </div>
         <span class="slot" aria-hidden="true" style={`--x:${pct(1030, 1440)};--y:${pct(60, 900)};--w:${pct(260, 1440)};--h:${pct(400, 900)}`}></span>
         <div class="center">
-          <h1 class="ttl"><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
+          <h1 class="ttl"><span class="ttl-k">Studio de pole dance · Lille</span><span class="ode-th"><span id="concept-title" class="vt-title">Concept</span><img class="ode-title-heart ode-icon-sparkle" src="/images/ode-icon-sparkle-s.webp" alt="" aria-hidden="true" /></span></h1>
           <p class="sub">Pole dance à Lille en petit groupe&nbsp;: technique, flow, souplesse et renforcement.</p>
         </div>
         <figure class="grow">
@@ -256,6 +256,8 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .center { position: absolute; left: 50%; top: 53%; z-index: 2; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: min(1.5rem, 2.5vh); text-align: center; }
   .ttl { margin: 0; padding-bottom: .12em; font-size: min(9.375rem, 15vh); line-height: 1; white-space: nowrap; color: var(--ink); }
   .vt-title { view-transition-name: concept-title; }
+  /* small label above the big title, part of the H1 (tells Google what the page is about) */
+  .ttl-k { display: block; margin: 0 0 min(1rem, 1.8vh); font-family: var(--_typography---font--primary-family), sans-serif; font-size: .75rem; font-weight: 500; line-height: 1; letter-spacing: .16em; text-transform: uppercase; color: #6b6667; }
   /* short line under the big title (2 lines max) */
   .sub { width: 30rem; max-width: calc(100vw - 3rem); margin: 0; text-align: center; text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; color: #6b6667; }
   @media (max-width: 767px) { .center { top: 54.5%; gap: 1rem; } .sub { font-size: .9375rem; } }
