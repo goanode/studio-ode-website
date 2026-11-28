@@ -288,7 +288,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
   .cf.faded img { opacity: .35; }
   .cf img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 30%; display: block; }
   .center { position: absolute; left: 50%; top: 50%; z-index: 2; transform: translate(-50%, -50%); display: flex; flex-direction: column; align-items: center; gap: 1.5rem; text-align: center; }
-  .ttl { margin-top: 0; font-size: 9.375rem; line-height: 1; white-space: nowrap; }
+  .ttl { margin-top: 0; font-size: min(7rem, 11.5vh); line-height: 1; white-space: nowrap; }
   .vt-title { view-transition-name: figures-title; }
   :global(html.vt-in) .ttl { --heart-delay: 1.4s; }
   .intro { width: 30rem; max-width: calc(100vw - 3rem); text-wrap: balance; font-size: var(--_typography---font-size--text-main); line-height: 1.5; }
@@ -368,7 +368,7 @@ const lead = new Set(COL.map((c, i) => [c[3] * c[4], i, c[6]] as const).filter((
     .cf:nth-child(6) { --mx: -6%; --my: 66%; --mw: 20%; --mh: 13%; }
     .cf:nth-child(8) { --mx: 22%; --my: 68%; --mw: 36%; --mh: 17%; }
     .cf:nth-child(10) { --mx: 62%; --my: 79%; --mw: 22%; --mh: 9%; }
-    .ttl { font-size: 4.375rem; }
+    .ttl { font-size: 3.75rem; }
     /* mobile toolbar: search + icon-only view switch on one line, each filter group one swipeable row */
     .bar { flex-direction: column; align-items: stretch; gap: 1rem; margin-top: 1.5rem; }
     .h2 { font-size: 2.25rem; }
